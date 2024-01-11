@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { StatusBar, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { Provider } from 'react-redux'
+import { Provider, useSelector } from 'react-redux'
 import store from '@redux/store'
 
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -71,12 +71,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     const router = useRouter()
-    const { isLoaded, isSignedIn } = useAuth()
-    useEffect(() => {
-        if (isLoaded && !isSignedIn) {
-            router.push('/(modals)/settings')
-        }
-    }, [isLoaded])
+    // const { isLoaded, isSignedIn } = useAuth()
 
     return (
         <Provider store={store}>

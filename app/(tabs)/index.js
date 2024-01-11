@@ -4,29 +4,16 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'expo-router'
 import { defaultStyles } from '@constants/Styles'
+import { useSelector } from 'react-redux'
 
 export default function TabOneScreen() {
+    const user = useSelector(state => state.user)
     const [data, setData] = useState()
-    const fetchData = async () => {
-        try {
-            let { data } = await axios.get('http://192.168.1.24:8080/api/auth')
-            setData(data.name)
-        } catch (e) {
-            console.error(e.message)
-        }
-    }
-    useEffect(() => {
-        fetchData()
-    }, [])
 
     return (
         <View style={styles.container}>
-            <Link href={'/(modals)/login'}>
-                <Text>{data}</Text>
-            </Link>
-            <TouchableOpacity style={defaultStyles.btn} onPress={fetchData}>
-                <Text style={defaultStyles.btnText}>Click me</Text>
-            </TouchableOpacity>
+            <Text>Trang chủ</Text>
+            <Text>{user.isLoggedIn ? 'Đã đăng nhập' : 'Chưa đăng nhập'}</Text>
         </View>
     )
 }

@@ -2,42 +2,47 @@ import { useAuth, useUser } from '@clerk/clerk-expo'
 import Colors from '@constants/Colors'
 import { defaultStyles } from '@constants/Styles'
 import { Ionicons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
+import userSlice from '@redux/userSlice'
+import { Link, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Button, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useDispatch, useSelector } from 'react-redux'
 // import * as ImagePicker from 'expo-image-picker'
 
 const Page = () => {
-    const { signOut, isSignedIn } = useAuth()
-    const { user } = useUser()
-    const [firstName, setFirstName] = useState(user?.firstName)
-    const [lastName, setLastName] = useState(user?.lastName)
-    const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress)
+    const router = useRouter()
+    const dispatch = useDispatch()
+    // const { signOut, isSignedIn } = useAuth()
+    // const { user } = useUser()
+    // const [firstName, setFirstName] = useState(user?.firstName)
+    // const [lastName, setLastName] = useState(user?.lastName)
+    // const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress)
     const [edit, setEdit] = useState(false)
+    const user = useSelector(state => state.user)
+    const { isLoggedIn } = user
+    // useEffect(() => {
+    //     if (!user) return
+    //     setFirstName(user.firstName)
+    //     setLastName(user.lastName)
+    //     setEmail(user.emailAddresses[0].emailAddress)
+    // }, [user])
 
-    useEffect(() => {
-        if (!user) return
-        setFirstName(user.firstName)
-        setLastName(user.lastName)
-        setEmail(user.emailAddresses[0].emailAddress)
-    }, [user])
-
-    const onSaveUser = async () => {
-        try {
-            if (!firstName || !lastName) return
-            await user?.update({
-                firstName,
-                lastName,
-            })
-        } catch (e) {
-            console.error(JSON.stringify(e, null, 2))
-        } finally {
-            setEdit(false)
-        }
-    }
+    // const onSaveUser = async () => {
+    //     try {
+    //         if (!firstName || !lastName) return
+    //         await user?.update({
+    //             firstName,
+    //             lastName,
+    //         })
+    //     } catch (e) {
+    //         console.error(JSON.stringify(e, null, 2))
+    //     } finally {
+    //         setEdit(false)
+    //     }
+    // }
 
     // const onCaptureImage = async () => {
     //     const result = await ImagePicker.launchImageLibraryAsync({
@@ -58,7 +63,9 @@ const Page = () => {
         <SafeAreaView style={defaultStyles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>Profile</Text>
-                <Ionicons name='notifications-outline' size={26} />
+                <Link href={'/(modals)/settings'} asChild>
+                    <Ionicons name='ios-settings-outline' size={26} />
+                </Link>
             </View>
 
             {user && (
@@ -72,14 +79,14 @@ const Page = () => {
                                 <View style={styles.editRow}>
                                     <TextInput
                                         placeholder='Last name'
-                                        value={lastName || ''}
-                                        onChangeText={setLastName}
+                                        // value={lastName || ''}
+                                        // onChangeText={setLastName}
                                         style={[defaultStyles.inputField, { width: 100 }]}
                                     />
                                     <TextInput
                                         placeholder='First name'
-                                        value={firstName || ''}
-                                        onChangeText={setFirstName}
+                                        // value={firstName || ''}
+                                        // onChangeText={setFirstName}
                                         style={[defaultStyles.inputField, { width: 100 }]}
                                     />
                                     <TouchableOpacity onPress={onSaveUser}>
@@ -90,7 +97,7 @@ const Page = () => {
                         ) : (
                             <View style={styles.editRow}>
                                 <Text style={{ fontFamily: 'mon-b', fontSize: 22 }}>
-                                    {lastName} {firstName}
+                                    {/* {lastName} {firstName} */}
                                 </Text>
                                 <TouchableOpacity onPress={() => setEdit(true)}>
                                     <Ionicons name='create-outline' size={24} color={Colors.dark} />
@@ -98,16 +105,18 @@ const Page = () => {
                             </View>
                         )}
                     </View>
-                    <Text>{email}</Text>
-                    <Text>Since {user?.createdAt?.toLocaleDateString()}</Text>
+                    {/* <Text>{email}</Text> */}
+                    {/* <Text>Since {user?.createdAt?.toLocaleDateString()}</Text> */}
                 </View>
             )}
 
-            {isSignedIn && <Button color={Colors.dark} title='Log out' onPress={() => signOut()} />}
-            {!isSignedIn && (
-                <Link href={'/(modals)/login'} asChild>
-                    <Button title='Log In' color={Colors.dark} />
-                </Link>
+            {isLoggedIn && (
+                <Button color={Colors.dark} title='Log out' onPress={() => dispatch(userSlice.actions.logout())} />
+            )}
+            {!isLoggedIn && (
+                <TouchableOpacity style={defaultStyles.primaryBtn} onPress={() => router.push('/(modals)/login')}>
+                    <Text style={defaultStyles.btnText}>Đăng nhập</Text>
+                </TouchableOpacity>
             )}
         </SafeAreaView>
     )
@@ -116,12 +125,14 @@ const Page = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 24,
+        backgroundColor: Colors.white,
     },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 24,
+        paddingVertical: 24,
     },
     headerText: {
         fontFamily: 'mon-b',

@@ -10,6 +10,8 @@ import { Link, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import googleIcon from '@assets/icons/google.png'
 import facebookIcon from '@assets/icons/facebook.png'
+import { useDispatch, useSelector } from 'react-redux'
+import userSlice, { loginWithPassword } from '@redux/userSlice'
 
 const Strategy = {
     Google: 'oauth_google',
@@ -18,14 +20,17 @@ const Strategy = {
 }
 
 const Page = () => {
-    const [hidePassword, setHidePassword] = useState(true)
     useWarmUpBrowser()
+    const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
+    const [hidePassword, setHidePassword] = useState(true)
     const router = useRouter()
+    const [email, setEmail] = useState('vn.quyensinh@gmail.com')
+    const [password, setPassword] = useState('123')
 
     const { startOAuthFlow: appleAuth } = useOAuth({ strategy: 'oauth_apple' })
     const { startOAuthFlow: googleAuth } = useOAuth({ strategy: 'oauth_google' })
     const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: 'oauth_facebook' })
-
     const onSelectAuth = async strategy => {
         const selectedAuth = {
             [Strategy.Google]: googleAuth,
@@ -39,11 +44,23 @@ const Page = () => {
             if (createdSessionId) {
                 setActive({ session: createdSessionId })
                 router.replace('(tabs)')
+                dispatch(userSlice.actions.login())
             }
         } catch (e) {
             console.error('OAuth error: ' + e)
         }
     }
+
+    const handleLoginWithPassword = () => {
+        if (!email || !password) return
+        dispatch(loginWithPassword({ email, password }))
+    }
+    const { isLoggedIn } = user
+    useEffect(() => {
+        if (isLoggedIn) {
+            router.replace('/')
+        }
+    }, [isLoggedIn])
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
@@ -51,7 +68,12 @@ const Page = () => {
                     <Text style={styles.label}>
                         Tài khoản<Text style={styles.redStar}>*</Text>
                     </Text>
-                    <TextInput autoCapitalize='none' style={[defaultStyles.inputField]} />
+                    <TextInput
+                        autoCapitalize='none'
+                        style={[defaultStyles.inputField]}
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                    />
                 </View>
                 <View>
                     <Text style={styles.label}>
@@ -61,6 +83,8 @@ const Page = () => {
                         autoCapitalize='none'
                         secureTextEntry={hidePassword}
                         style={[defaultStyles.inputField]}
+                        value={password}
+                        onChangeText={text => setPassword(text)}
                     />
                     <Pressable style={styles.hidePasswordBtn} onPress={() => setHidePassword(!hidePassword)}>
                         {hidePassword ? (
@@ -70,9 +94,12 @@ const Page = () => {
                         )}
                     </Pressable>
                 </View>
-                <TouchableOpacity style={[defaultStyles.btn]}>
+                <TouchableOpacity onPress={handleLoginWithPassword} style={[defaultStyles.btn]}>
                     <Text style={defaultStyles.btnText}>Đăng nhập</Text>
                 </TouchableOpacity>
+
+                {user.status == 'error' && <Text style={textStyles.small}>Lỗi rồi </Text>}
+                {user.status == 'success' && <Text style={textStyles.small}>{user.accessToken}</Text>}
 
                 <View style={styles.separatorView}>
                     <View style={styles.seperatorLine} />

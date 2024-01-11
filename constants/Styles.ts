@@ -5,7 +5,8 @@ import { StyleSheet } from 'react-native'
 export const defaultStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FDFFFF',
+        backgroundColor: '#FFF',
+        paddingHorizontal: 24,
     },
     inputField: {
         height: 44,
@@ -66,6 +67,11 @@ export const defaultStyles = StyleSheet.create({
 export const textStyles = StyleSheet.create({
     small: {
         fontSize: 14,
+        color: Colors.bodyText,
+        fontFamily: 'mon-sb',
+    },
+    medium: {
+        fontSize: 16,
         color: Colors.bodyText,
         fontFamily: 'mon-sb',
     },
