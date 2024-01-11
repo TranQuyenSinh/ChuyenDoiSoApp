@@ -17,6 +17,7 @@ module.exports = function (api) {
                         '@styles': './styles',
                         '@utils': './utils',
                         '@assets': './assets',
+                        '@redux': './redux',
                     },
                     extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 },

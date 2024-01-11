@@ -5,6 +5,8 @@ import * as SecureStore from 'expo-secure-store'
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
 import { StatusBar, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { Provider } from 'react-redux'
+import store from '@redux/store'
 
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -72,17 +74,25 @@ function RootLayoutNav() {
     const { isLoaded, isSignedIn } = useAuth()
     useEffect(() => {
         if (isLoaded && !isSignedIn) {
-            router.push('/(modals)/login')
+            router.push('/(modals)/settings')
         }
     }, [isLoaded])
 
     return (
-        <>
+        <Provider store={store}>
             <StatusBar barStyle={'dark-content'} />
             <Stack>
                 <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
                 <Stack.Screen
                     name='(modals)/login'
+                    options={{
+                        presentation: 'modal',
+                        animation: 'slide_from_right',
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name='(modals)/settings'
                     options={{
                         presentation: 'modal',
                         animation: 'slide_from_right',
@@ -123,6 +133,6 @@ function RootLayoutNav() {
                     }}
                 /> */}
             </Stack>
-        </>
+        </Provider>
     )
 }

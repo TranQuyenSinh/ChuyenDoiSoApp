@@ -9,7 +9,8 @@
             "@services/*": ["services/*"],
             "@styles/*": ["styles/*"],
             "@utils/*": ["utils/*"],
-            "@assets/*": ["assets/*"]
+            "@assets/*": ["assets/*"],
+            "@redux/*": ["redux/*"]
         }
     }
 }
