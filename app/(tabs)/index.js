@@ -12,7 +12,7 @@ export default function TabOneScreen() {
 
     return (
         <View style={styles.container}>
-            <Text>Trang chủ</Text>
+            <Text style={{ fontSize: 20 }}>{user?.userProfile?.email}</Text>
             <Text>{user.isLoggedIn ? 'Đã đăng nhập' : 'Chưa đăng nhập'}</Text>
         </View>
     )

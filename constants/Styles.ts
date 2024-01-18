@@ -75,6 +75,11 @@ export const textStyles = StyleSheet.create({
         color: Colors.bodyText,
         fontFamily: 'mon-sb',
     },
+    large: {
+        fontSize: 20,
+        color: Colors.bodyText,
+        fontFamily: 'mon-b',
+    },
 })
 
 export const linkStyles = StyleSheet.create({

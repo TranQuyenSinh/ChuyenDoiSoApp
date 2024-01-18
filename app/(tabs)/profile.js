@@ -2,6 +2,7 @@ import { useAuth, useUser } from '@clerk/clerk-expo'
 import Colors from '@constants/Colors'
 import { defaultStyles } from '@constants/Styles'
 import { Ionicons } from '@expo/vector-icons'
+import { useDangNhap } from '@hooks/useDangNhap'
 import userSlice from '@redux/userSlice'
 import { Link, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
@@ -23,12 +24,7 @@ const Page = () => {
     const [edit, setEdit] = useState(false)
     const user = useSelector(state => state.user)
     const { isLoggedIn } = user
-    // useEffect(() => {
-    //     if (!user) return
-    //     setFirstName(user.firstName)
-    //     setLastName(user.lastName)
-    //     setEmail(user.emailAddresses[0].emailAddress)
-    // }, [user])
+    const { logOut } = useDangNhap()
 
     // const onSaveUser = async () => {
     //     try {
@@ -110,11 +106,9 @@ const Page = () => {
                 </View>
             )}
 
-            {isLoggedIn && (
-                <Button color={Colors.dark} title='Log out' onPress={() => dispatch(userSlice.actions.logout())} />
-            )}
+            {isLoggedIn && <Button color={Colors.dark} title='Log out' onPress={logOut} />}
             {!isLoggedIn && (
-                <TouchableOpacity style={defaultStyles.primaryBtn} onPress={() => router.push('/(modals)/login')}>
+                <TouchableOpacity style={defaultStyles.primaryBtn} onPress={() => router.push('(modals)/login')}>
                     <Text style={defaultStyles.btnText}>Đăng nhập</Text>
                 </TouchableOpacity>
             )}

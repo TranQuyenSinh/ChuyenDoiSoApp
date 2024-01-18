@@ -1,72 +1,47 @@
-import { Image, Keyboard, Pressable, Text, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native'
-import { TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { useState, useEffect } from 'react'
+
+import { Link, useRouter } from 'expo-router'
+import * as WebBrowser from 'expo-web-browser'
+import { useDispatch, useSelector } from 'react-redux'
+import { TextInput, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native'
+import { Text, View, Image, Keyboard, Pressable, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 
 import Colors from '@constants/Colors'
-import { useOAuth } from '@clerk/clerk-expo'
 import { Ionicons } from '@expo/vector-icons'
-import { defaultStyles, linkStyles, textStyles } from '@constants/Styles'
-import useWarmUpBrowser from '@hooks/useWarmUpBrowser'
-import { Link, useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
 import googleIcon from '@assets/icons/google.png'
 import facebookIcon from '@assets/icons/facebook.png'
-import { useDispatch, useSelector } from 'react-redux'
-import userSlice, { loginWithPassword } from '@redux/userSlice'
-
-const Strategy = {
-    Google: 'oauth_google',
-    Facebook: 'oauth_facebook',
-    Apple: 'oauth_apple',
-}
+import useWarmUpBrowser from '@hooks/useWarmUpBrowser'
+import { useAuth, useUser, useOAuth } from '@clerk/clerk-expo'
+import { linkStyles, textStyles, defaultStyles } from '@constants/Styles'
+import userSlice, { loginWithOAuth, loginWithPassword } from '@redux/userSlice'
+import * as SecureStore from 'expo-secure-store'
+import { useDangNhap } from '@hooks/useDangNhap'
+import Constants from '@constants/Constants'
 
 const Page = () => {
-    useWarmUpBrowser()
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
-    const [hidePassword, setHidePassword] = useState(true)
     const router = useRouter()
+    const userStore = useSelector(state => state.user)
+    const { isLoggedIn, status } = userStore
+
+    const [hidePassword, setHidePassword] = useState(true)
     const [email, setEmail] = useState('vn.quyensinh@gmail.com')
     const [password, setPassword] = useState('123')
 
-    const { startOAuthFlow: appleAuth } = useOAuth({ strategy: 'oauth_apple' })
-    const { startOAuthFlow: googleAuth } = useOAuth({ strategy: 'oauth_google' })
-    const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: 'oauth_facebook' })
-    const onSelectAuth = async strategy => {
-        const selectedAuth = {
-            [Strategy.Google]: googleAuth,
-            [Strategy.Apple]: appleAuth,
-            [Strategy.Facebook]: facebookAuth,
-        }[strategy]
+    const { loginOAuth, loginWithPassword } = useDangNhap()
 
-        try {
-            const { createdSessionId, setActive } = await selectedAuth()
-            console.log(createdSessionId)
-            if (createdSessionId) {
-                setActive({ session: createdSessionId })
-                router.replace('(tabs)')
-                dispatch(userSlice.actions.login())
-            }
-        } catch (e) {
-            console.error('OAuth error: ' + e)
-        }
-    }
-
-    const handleLoginWithPassword = () => {
-        if (!email || !password) return
-        dispatch(loginWithPassword({ email, password }))
-    }
-    const { isLoggedIn } = user
     useEffect(() => {
         if (isLoggedIn) {
-            router.replace('/')
+            router.push('(tabs)')
         }
     }, [isLoggedIn])
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
                 <View>
                     <Text style={styles.label}>
-                        Tài khoản<Text style={styles.redStar}>*</Text>
+                        {status}
+                        <Text style={styles.redStar}>*</Text>
                     </Text>
                     <TextInput
                         autoCapitalize='none'
@@ -94,12 +69,9 @@ const Page = () => {
                         )}
                     </Pressable>
                 </View>
-                <TouchableOpacity onPress={handleLoginWithPassword} style={[defaultStyles.btn]}>
+                <TouchableOpacity onPress={() => loginWithPassword(email, password)} style={[defaultStyles.btn]}>
                     <Text style={defaultStyles.btnText}>Đăng nhập</Text>
                 </TouchableOpacity>
-
-                {user.status == 'error' && <Text style={textStyles.small}>Lỗi rồi </Text>}
-                {user.status == 'success' && <Text style={textStyles.small}>{user.accessToken}</Text>}
 
                 <View style={styles.separatorView}>
                     <View style={styles.seperatorLine} />
@@ -108,16 +80,19 @@ const Page = () => {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <TouchableOpacity style={defaultStyles.secondaryBtn} onPress={() => onSelectAuth(Strategy.Google)}>
-                        <Image source={googleIcon} style={defaultStyles.buttonIcon} />
-                        <Text style={styles.btnOtherText}>Google</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity
+                        style={[defaultStyles.secondaryBtn, { flex: 1 }]}
+                        onPress={() => loginOAuth(Constants.Strategy.Google)}>
+                        <Image source={googleIcon} style={defaultStyles.buttonIcon} />
+                        <Text style={styles.btnOtherText}>Tài khoản Google</Text>
+                    </TouchableOpacity>
+                    {/* Login Facebook */}
+                    {/* <TouchableOpacity
                         style={defaultStyles.secondaryBtn}
                         onPress={() => onSelectAuth(Strategy.Facebook)}>
                         <Image source={facebookIcon} style={defaultStyles.buttonIcon} />
                         <Text style={styles.btnOtherText}>Facebook</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <View style={{ alignItems: 'center' }}>
                     <Text style={textStyles.small}>

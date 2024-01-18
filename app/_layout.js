@@ -70,30 +70,21 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-    const router = useRouter()
-    // const { isLoaded, isSignedIn } = useAuth()
-
     return (
         <Provider store={store}>
             <StatusBar barStyle={'dark-content'} />
             <Stack>
-                <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+                <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
+                <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_left' }} />
+
                 <Stack.Screen
-                    name='(modals)/login'
+                    name='[...missing]'
                     options={{
-                        presentation: 'modal',
-                        animation: 'slide_from_right',
+                        animation: 'none',
                         headerShown: false,
                     }}
                 />
-                <Stack.Screen
-                    name='(modals)/settings'
-                    options={{
-                        presentation: 'modal',
-                        animation: 'slide_from_right',
-                        headerShown: false,
-                    }}
-                />
+
                 {/* <Stack.Screen
                     name='listing/[id]'
                     options={{
