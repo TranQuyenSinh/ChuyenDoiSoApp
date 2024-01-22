@@ -6,7 +6,8 @@ export const defaultStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
+        paddingBottom: 60,
     },
     inputField: {
         height: 44,
@@ -52,15 +53,14 @@ export const defaultStyles = StyleSheet.create({
     },
     footer: {
         position: 'absolute',
-        height: 100,
+        height: 50,
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#fff',
+        elevation: 10,
+        backgroundColor: Colors.white,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderTopColor: Colors.placeHolder,
-        borderTopWidth: StyleSheet.hairlineWidth,
     },
 })
 
@@ -79,6 +79,11 @@ export const textStyles = StyleSheet.create({
         fontSize: 20,
         color: Colors.bodyText,
         fontFamily: 'mon-b',
+    },
+    mutedSmall: {
+        fontSize: 14,
+        color: 'grey',
+        fontFamily: 'mon',
     },
 })
 

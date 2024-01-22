@@ -54,8 +54,6 @@ export const useDangNhap = prop => {
         try {
             const { createdSessionId, setActive } = await selectedAuth()
             if (createdSessionId) {
-                console.log('===> OAuth thành công')
-                console.log('===> Email khi mới oauth: ', user?.emailAddresses[0]?.emailAddress)
                 setActive({ session: createdSessionId })
                 setTypeAuth('google')
             }
@@ -69,7 +67,7 @@ export const useDangNhap = prop => {
 
     useEffect(() => {
         if (user) {
-            console.log('===> Email khi đã có user: ', user?.emailAddresses[0]?.emailAddress)
+            console.log('===> Email user login: ', user?.emailAddresses[0]?.emailAddress)
 
             dispatch(
                 loginOAuthAction({
@@ -87,8 +85,6 @@ export const useDangNhap = prop => {
     useEffect(() => {
         if (status === 'require_password_to_create' && user) {
             // lưu lại google userInfo
-            console.log('dispath save state login oauth')
-            console.log(providerName, JSON.stringify(user))
             dispatch(
                 loginSlice.actions.setState({
                     providerName,

@@ -16,14 +16,19 @@ export default function TabLayout() {
                 tabBarActiveTintColor: Colors.primary,
                 tabBarLabelStyle: {
                     fontFamily: 'mon-sb',
+                    fontSize: 13,
+                },
+                tabBarStyle: {
+                    height: 55,
                 },
                 headerTitleAlign: 'center',
             }}>
             <Tabs.Screen
                 name='index'
                 options={{
-                    tabBarLabel: 'Explore',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='search' color={color} size={size} />,
+                    headerShown: false,
+                    tabBarLabel: 'Tin tức',
+                    tabBarIcon: ({ color, size }) => <Ionicons name='home-sharp' color={color} size={size} />,
                 }}
             />
             <Tabs.Screen

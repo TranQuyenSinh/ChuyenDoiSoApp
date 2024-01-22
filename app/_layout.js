@@ -7,7 +7,7 @@ import { StatusBar, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { Provider, useSelector } from 'react-redux'
 import store from '@redux/store'
-
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 const tokenCache = {
@@ -71,21 +71,23 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     return (
-        <Provider store={store}>
-            <StatusBar barStyle={'dark-content'} />
-            <Stack>
-                <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
-                <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_left' }} />
+        <BottomSheetModalProvider>
+            <Provider store={store}>
+                <StatusBar barStyle={'dark-content'} />
+                <Stack>
+                    <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
+                    <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_right' }} />
+                    {/* <Stack.Screen name='news/[id]' options={{ headerShown: false, animation: 'fade' }} /> */}
 
-                <Stack.Screen
-                    name='[...missing]'
-                    options={{
-                        animation: 'none',
-                        headerShown: false,
-                    }}
-                />
+                    <Stack.Screen
+                        name='[...missing]'
+                        options={{
+                            animation: 'none',
+                            headerShown: false,
+                        }}
+                    />
 
-                {/* <Stack.Screen
+                    {/* <Stack.Screen
                     name='listing/[id]'
                     options={{
                         title: '',
@@ -118,7 +120,8 @@ function RootLayoutNav() {
                         ),
                     }}
                 /> */}
-            </Stack>
-        </Provider>
+                </Stack>
+            </Provider>
+        </BottomSheetModalProvider>
     )
 }
