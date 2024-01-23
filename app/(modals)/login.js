@@ -40,7 +40,7 @@ const Page = () => {
             <View style={styles.container}>
                 <View>
                     <Text style={styles.label}>
-                        {status}
+                        Email
                         <Text style={styles.redStar}>*</Text>
                     </Text>
                     <TextInput

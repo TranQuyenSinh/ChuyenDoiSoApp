@@ -36,3 +36,17 @@ export const getTinTucByLinhVuc = async linhVucId => {
         return []
     }
 }
+
+export const timKiemTinTucByTuKhoa = async tuKhoa => {
+    try {
+        console.log('===> Từ khóa: ', tuKhoa)
+        let { data } = await axios.get('/api/tintuc/timkiem-tintuc', {
+            params: { tuKhoa },
+        })
+        return data
+    } catch (err) {
+        let { code, message } = err.response?.data
+        console.error('Lỗi tìm kiếm tin bằng từ khóa: ', message)
+        return []
+    }
+}

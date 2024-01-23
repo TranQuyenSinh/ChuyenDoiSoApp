@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'expo-router'
 import { Image, Pressable, SafeAreaView, Text } from 'react-native'
 import { View, StyleSheet } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, RefreshControl } from 'react-native-gesture-handler'
 import { getTinTucByLinhVuc } from '@services/tinTucServices'
 import moment from '@utils/moment'
 import { Ionicons } from '@expo/vector-icons'
@@ -13,13 +13,17 @@ import { textStyles } from '@constants/Styles'
 const ListNews = ({ linhVucId }) => {
     const router = useRouter()
     const [news, setNews] = useState([])
-    useEffect(() => {
-        ;(async () => {
-            if (!linhVucId) return
-            let news = await getTinTucByLinhVuc(linhVucId)
+    const [refresing, setRefresing] = useState(false)
 
-            setNews(news)
-        })()
+    const fetchData = async () => {
+        if (!linhVucId) return
+        setRefresing(true)
+        let news = await getTinTucByLinhVuc(linhVucId)
+        setNews(news)
+        setRefresing(false)
+    }
+    useEffect(() => {
+        fetchData()
     }, [linhVucId])
 
     return (
@@ -30,8 +34,10 @@ const ListNews = ({ linhVucId }) => {
             {/* Danh sách tin tức */}
             <View style={styles.container}>
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={news}
+                    keyExtractor={item => item.id}
+                    refreshControl={<RefreshControl refreshing={refresing} onRefresh={fetchData} />}
+                    showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => {
                         return <News key={item.id} item={item} />
                     }}
@@ -41,7 +47,7 @@ const ListNews = ({ linhVucId }) => {
     )
 }
 
-const News = ({ item }) => {
+export const News = ({ item }) => {
     const router = useRouter()
     return (
         <Pressable key={item.id} onPress={() => router.push(`/news/${item.id}`)} style={styles.newsContainer}>
