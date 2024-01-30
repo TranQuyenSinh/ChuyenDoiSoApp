@@ -17,12 +17,12 @@ export default function TrangTin() {
 
     const [linhVucs, setLinhVucs] = useState([])
     const [index, setIndex] = useState(0)
-    const [searchKey, setSearchKey] = useState('dịch vụ123')
+    const [searchKey, setSearchKey] = useState('')
 
     useEffect(() => {
         ;(async () => {
             let linhVucs = await getLinhVucs()
-            setLinhVucs(linhVucs?.map(item => ({ key: item.id, title: item.tenLinhVuc })))
+            setLinhVucs(linhVucs?.map(item => ({ key: item.id, title: item.tenlinhvuc })))
         })()
     }, [])
 
@@ -56,7 +56,7 @@ export default function TrangTin() {
                                 fontSize: 16,
                                 color: '#000',
                             }}
-                            tabStyle={{ flex: 1, width: 'auto' }}
+                            tabStyle={{ width: 'auto' }}
                             activeColor={Colors.default}
                             style={styles.tabBar}
                             scrollEnabled

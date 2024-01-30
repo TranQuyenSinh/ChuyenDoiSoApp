@@ -1,6 +1,6 @@
 export default {
     Strategy: {
         Google: 'oauth_google',
-        // Facebook: 'oauth_facebook',
+        Facebook: 'oauth_facebook',
     },
 }

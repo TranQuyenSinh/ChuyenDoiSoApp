@@ -108,7 +108,7 @@ const Page = () => {
 
             {isLoggedIn && <Button color={Colors.dark} title='Log out' onPress={logOut} />}
             {!isLoggedIn && (
-                <TouchableOpacity style={defaultStyles.primaryBtn} onPress={() => router.push('(modals)/login')}>
+                <TouchableOpacity style={defaultStyles.primaryBtn} onPress={() => router.push('/auth/login')}>
                     <Text style={defaultStyles.btnText}>Đăng nhập</Text>
                 </TouchableOpacity>
             )}

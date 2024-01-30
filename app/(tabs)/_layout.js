@@ -28,40 +28,32 @@ export default function TabLayout() {
                 options={{
                     headerShown: false,
                     tabBarLabel: 'Tin tức',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='home-sharp' color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => <Ionicons name='newspaper-outline' color={color} size={size} />,
                 }}
             />
             <Tabs.Screen
-                name='wishlists'
+                name='survey'
                 options={{
-                    tabBarLabel: 'Wish lists',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='heart-outline' color={color} size={size} />,
-                }}
-            />
-            <Tabs.Screen
-                name='trips'
-                options={{
-                    tabBarLabel: 'Trips',
-                    tabBarIcon: ({ color, size }) => <FontAwesome5 name='airbnb' color={color} size={size} />,
+                    headerShown: false,
+                    tabBarLabel: 'Đánh giá',
+                    tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />,
                 }}
             />
             <Tabs.Screen
                 name='inbox'
                 options={{
-                    tabBarLabel: 'Inbox',
+                    tabBarLabel: 'Thông báo',
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name='message-outline' color={color} size={size} />
+                        <Ionicons name='notifications-outline' color={color} size={size} />
                     ),
                 }}
             />
             <Tabs.Screen
                 name='profile'
                 options={{
-                    tabBarLabel: 'Profile',
+                    tabBarLabel: 'Menu',
                     headerShown: false,
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name='person-circle-outline' color={color} size={size} />
-                    ),
+                    tabBarIcon: ({ color, size }) => <Ionicons name='menu-outline' color={color} size={size} />,
                 }}
             />
         </Tabs>

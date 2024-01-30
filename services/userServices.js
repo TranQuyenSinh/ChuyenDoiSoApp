@@ -1,12 +1,11 @@
 import { axios } from '@utils/axios'
 
-export const createOAuthPassword = async userInfo => {
+export const dangKyUser = async userInfo => {
     try {
-        await axios.post('/api/auth/create-oauth-password', userInfo)
-        return Promise.resolve()
+        await axios.post('/api/auth/register', userInfo)
     } catch (error) {
-        console.log('error when creating OAuth password')
-        // let { code, message } = error.response?.data
-        // return Promise.reject({ code, message })
+        let { code, message } = error.response?.data
+        console.log('Lỗi đăng ký tài khoản: ', message)
+        return Promise.reject({ code, message })
     }
 }

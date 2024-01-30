@@ -1,16 +1,18 @@
 import originAxios from 'axios'
-// import { store } from './redux/store'
 
 export const axios = originAxios.create({
     baseURL: `http://${process.env.EXPO_PUBLIC_HOST}:8080` || 'https://localhost:8080',
     timeout: 2000,
 })
 
-// authAxios.interceptors.request.use(config => {
-//     let accessToken = store.getState().user.currentUser?.accessToken
-//     config.headers['Authorization'] = 'Bearer ' + accessToken
-//     return config
-// })
+export const authAxios = originAxios.create({
+    baseURL: `http://${process.env.EXPO_PUBLIC_HOST}:8080` || 'https://localhost:8080',
+    timeout: 2000,
+})
+
+export const setTokenAuthAxios = token => {
+    authAxios.defaults.headers.common.Authorization = `Bearer ${token}`
+}
 
 // authAxios.interceptors.response.use(
 //     response => {

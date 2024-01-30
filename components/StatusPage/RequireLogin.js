@@ -11,7 +11,7 @@ const RequireLogin = ({ message = 'Đăng nhập để sử dụng chức năng 
         <View style={[defaultStyles.container, styles.container]}>
             <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }}>{message}</Text>
             <Pressable
-                onPress={() => router.replace('(modals)/login')}
+                onPress={() => router.replace('auth/login')}
                 style={[defaultStyles.btn, { padding: 12, flexDirection: 'row', gap: 6, marginTop: 10 }]}>
                 <Text style={defaultStyles.btnText}>Đăng nhập ngay</Text>
             </Pressable>

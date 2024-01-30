@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { Provider, useSelector } from 'react-redux'
 import store from '@redux/store'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { useDangNhap } from '@hooks/useDangNhap'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 const tokenCache = {
@@ -63,7 +64,7 @@ export default function RootLayout() {
     }
 
     return (
-        <ClerkProvider publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY} tokenCache={tokenCache}>
+        <ClerkProvider publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
             <RootLayoutNav />
         </ClerkProvider>
     )
@@ -74,54 +75,28 @@ function RootLayoutNav() {
         <BottomSheetModalProvider>
             <Provider store={store}>
                 <StatusBar barStyle={'dark-content'} />
-                <Stack>
-                    <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
-                    <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_right' }} />
-                    {/* <Stack.Screen name='news/[id]' options={{ headerShown: false, animation: 'fade' }} /> */}
-
-                    <Stack.Screen
-                        name='[...missing]'
-                        options={{
-                            animation: 'none',
-                            headerShown: false,
-                        }}
-                    />
-
-                    {/* <Stack.Screen
-                    name='listing/[id]'
-                    options={{
-                        title: '',
-                        presentation: 'modal',
-                        animation: 'slide_from_right',
-                        headerTransparent: true,
-                    }}
-                />
-                <Stack.Screen
-                    name='(modals)/booking'
-                    options={{
-                        presentation: 'transparentModal',
-                        headerTransparent: true,
-                        headerBackVisible: false,
-                        animation: 'fade',
-                        headerTitle: () => <ModalHeaderText />,
-                        headerLeft: () => (
-                            <TouchableOpacity
-                                style={{
-                                    backgroundColor: '#fff',
-                                    borderColor: Colors.grey,
-                                    borderRadius: 20,
-                                    borderWidth: StyleSheet.hairlineWidth,
-                                    padding: 4,
-                                    elevation: 5,
-                                }}
-                                onPress={() => router.back()}>
-                                <Ionicons name='close-outline' size={22} />
-                            </TouchableOpacity>
-                        ),
-                    }}
-                /> */}
-                </Stack>
+                <BootstrapGate>
+                    <Stack>
+                        <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
+                        <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_right' }} />
+                        <Stack.Screen
+                            name='[...missing]'
+                            options={{
+                                animation: 'none',
+                                headerShown: false,
+                            }}
+                        />
+                    </Stack>
+                </BootstrapGate>
             </Provider>
         </BottomSheetModalProvider>
     )
+}
+
+function BootstrapGate({ children }) {
+    const { tryLoginSaved } = useDangNhap()
+    useEffect(() => {
+        tryLoginSaved()
+    }, [])
+    return children
 }

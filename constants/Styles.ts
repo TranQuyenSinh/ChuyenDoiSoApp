@@ -11,9 +11,9 @@ export const defaultStyles = StyleSheet.create({
     },
     inputField: {
         height: 44,
-        borderWidth: 1,
+        borderWidth: StyleSheet.hairlineWidth,
         borderColor: Colors.bodyText,
-        borderRadius: 6,
+        borderRadius: 8,
         padding: 10,
         backgroundColor: '#fff',
     },

@@ -7,6 +7,7 @@ import { defaultStyles, textStyles } from '@constants/Styles'
 import { useAuth } from '@clerk/clerk-expo'
 import { useDispatch } from 'react-redux'
 import userSlice from '@redux/userSlice'
+import PageHeader from '@components/View/PageHeader'
 
 const Settings = () => {
     const router = useRouter()
@@ -16,17 +17,12 @@ const Settings = () => {
     const handleSignOut = () => {
         signOut()
         dispatch(userSlice.actions.logout())
-        router.replace('/(modals)/login')
+        router.replace('/auth/login')
     }
     return (
         <View style={[defaultStyles.container, { gap: 16, paddingTop: 40 }]}>
             {/* Header */}
-            <View>
-                <TouchableOpacity style={styles.headerArrow} onPress={() => router.back()}>
-                    <Ionicons name='arrow-back-outline' size={24} color={Colors.bodyText} />
-                </TouchableOpacity>
-                <Text style={[textStyles.medium, { textAlign: 'center' }]}>Cài đặt</Text>
-            </View>
+            <PageHeader title={'Cài đặt'} />
             {/* Settings */}
             <View style={styles.row}>
                 <View style={styles.left}>
@@ -64,12 +60,6 @@ const Settings = () => {
 export default Settings
 
 const styles = StyleSheet.create({
-    headerArrow: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        zIndex: 999,
-    },
     container: {
         flex: 1,
         backgroundColor: Colors.white,
