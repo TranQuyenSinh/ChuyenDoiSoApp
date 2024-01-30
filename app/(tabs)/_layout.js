@@ -15,8 +15,8 @@ export default function TabLayout() {
             screenOptions={{
                 tabBarActiveTintColor: Colors.primary,
                 tabBarLabelStyle: {
-                    fontFamily: 'mon-sb',
-                    fontSize: 13,
+                    fontFamily: 'mon',
+                    fontSize: 12,
                 },
                 tabBarStyle: {
                     height: 55,
@@ -51,9 +51,9 @@ export default function TabLayout() {
             <Tabs.Screen
                 name='profile'
                 options={{
-                    tabBarLabel: 'Menu',
+                    tabBarLabel: 'Cài đặt',
                     headerShown: false,
-                    tabBarIcon: ({ color, size }) => <Ionicons name='menu-outline' color={color} size={size} />,
+                    tabBarIcon: ({ color, size }) => <Ionicons name='ios-settings-outline' color={color} size={size} />,
                 }}
             />
         </Tabs>

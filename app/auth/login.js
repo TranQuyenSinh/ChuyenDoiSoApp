@@ -68,11 +68,12 @@ const Page = () => {
                         <Text style={authStyles.redStar}>*</Text>
                     </Text>
                     <TextInput
-                        autoCapitalize='none'
                         style={[defaultStyles.inputField]}
-                        placeholder='Nhập email...'
                         value={email}
                         onChangeText={text => setEmail(text)}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        placeholder='Nhập email...'
                     />
                 </View>
                 <View>

@@ -91,6 +91,7 @@ export const loginWithOAuth = createAsyncThunk('user/login-oauth', async (userIn
         hoten: userInfo?.hoten,
         email: userInfo?.email,
     })
+    console.log('===> token', data.accessToken)
     console.log('===> OAuth server thành công')
     return data
 })

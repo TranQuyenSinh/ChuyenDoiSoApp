@@ -14,6 +14,7 @@ import userSlice, {
     loginWithPassword as loginPasswordAction,
 } from '@redux/userSlice'
 import { deleteSecureItem, getSecureItem, setSecureItem } from '@utils/secureStore'
+import { toast } from '@utils/toast'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -84,6 +85,7 @@ export const useDangNhap = () => {
         await signOut()
         dispatch(userSlice.actions.logout())
         await deleteSecureItem('save_auth')
+        toast('Đã đăng xuất tài khoản')
         console.log('===> User logout success')
     }
 
