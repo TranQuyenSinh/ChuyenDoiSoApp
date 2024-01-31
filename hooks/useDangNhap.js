@@ -53,8 +53,8 @@ export const useDangNhap = () => {
         }
     }
 
-    const tryLoginSaved = async () => {
-        let savedAuth = await getSecureItem('save_auth')
+    const tryLoginBySavedInfo = async secureItemName => {
+        let savedAuth = await getSecureItem(secureItemName)
         if (savedAuth?.type === 'oauth') {
             const { providerKey, hoten, email } = savedAuth
             dispatch(loginOAuthAction({ providerKey, hoten, email }))
@@ -84,7 +84,7 @@ export const useDangNhap = () => {
     const logOut = async () => {
         await signOut()
         dispatch(userSlice.actions.logout())
-        await deleteSecureItem('save_auth')
+        await deleteSecureItem(Constants.SecureStore.SavedAuth)
         toast('Đã đăng xuất tài khoản')
         console.log('===> User logout success')
     }
@@ -95,5 +95,5 @@ export const useDangNhap = () => {
         }
     }, [status])
 
-    return { loginWithPassword, loginOAuth, logOut, tryLoginSaved }
+    return { loginWithPassword, loginOAuth, logOut, tryLoginBySavedInfo }
 }

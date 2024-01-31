@@ -1,7 +1,8 @@
 import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
+import Constants from '@constants/Constants'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { axios } from '@utils/axios'
-import { setSecureItem } from '@utils/secureStore'
+import { getSecureItem, setSecureItem } from '@utils/secureStore'
 import { toast } from '@utils/toast'
 
 const userSlice = createSlice({
@@ -66,7 +67,11 @@ export const loginWithPassword = createAsyncThunk('user/login', async ({ email, 
             email,
             password,
         })
-        await setSecureItem('save_auth', {
+        const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
+        if (bioInfo?.email !== email) {
+            await setSecureItem(Constants.SecureStore.BioAuth, { isEnabled: false })
+        }
+        await setSecureItem(Constants.SecureStore.SavedAuth, {
             type: 'password',
             email,
             password,
@@ -85,14 +90,17 @@ export const loginWithOAuth = createAsyncThunk('user/login-oauth', async (userIn
         return
     }
     let { data } = await axios.post('/api/auth/login-oauth', userInfo)
-    await setSecureItem('save_auth', {
+    const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
+    if (bioInfo?.email !== userInfo?.email) {
+        await setSecureItem(Constants.SecureStore.BioAuth, { isEnabled: false })
+    }
+    await setSecureItem(Constants.SecureStore.SavedAuth, {
         type: 'oauth',
         providerKey: userInfo?.providerKey,
         hoten: userInfo?.hoten,
         email: userInfo?.email,
     })
-    console.log('===> token', data.accessToken)
-    console.log('===> OAuth server thành công')
+    console.log('===> login no password server thành công')
     return data
 })
 

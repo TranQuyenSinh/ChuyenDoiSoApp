@@ -9,6 +9,7 @@ import { Provider, useSelector } from 'react-redux'
 import store from '@redux/store'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useDangNhap } from '@hooks/useDangNhap'
+import Constants from '@constants/Constants'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 const tokenCache = {
@@ -94,9 +95,9 @@ function RootLayoutNav() {
 }
 
 function BootstrapGate({ children }) {
-    const { tryLoginSaved } = useDangNhap()
+    const { tryLoginBySavedInfo } = useDangNhap()
     useEffect(() => {
-        tryLoginSaved()
+        tryLoginBySavedInfo(Constants.SecureStore.SavedAuth)
     }, [])
     return children
 }

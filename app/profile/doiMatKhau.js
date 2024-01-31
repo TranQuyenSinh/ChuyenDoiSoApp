@@ -31,6 +31,7 @@ import NotFound from '@components/StatusPage/NotFound'
 import { toast } from '@utils/toast'
 import { getItemAsync, setItemAsync } from 'expo-secure-store'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
+import Constants from '@constants/Constants'
 const { width, height } = Dimensions.get('screen')
 
 const tabViewScene = [
@@ -38,7 +39,6 @@ const tabViewScene = [
     { key: 'formDaiDienDN', title: 'Đăng ký thông tin đại diện doanh nghiệp' },
 ]
 const DangKyDoanhNghiep = () => {
-    const dispatch = useDispatch()
     const router = useRouter()
     const navigation = useNavigation()
 
@@ -85,8 +85,8 @@ const DangKyDoanhNghiep = () => {
             toast('Đổi mật khẩu thành công')
 
             // Cập nhật secure store
-            const save_auth = await getSecureItem('save_auth')
-            await setSecureItem('save_auth', {
+            const save_auth = await getSecureItem(Constants.SecureStore.SavedAuth)
+            await setSecureItem(Constants.SecureStore.SavedAuth, {
                 type: 'password',
                 email: save_auth?.email,
                 password: newPassword,

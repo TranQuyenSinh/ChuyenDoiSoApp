@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import * as LocalAuthentication from 'expo-local-authentication'
+import { toast } from '@utils/toast'
+import { getSecureItem } from '@utils/secureStore'
+import { useDangNhap } from './useDangNhap'
+import Constants from '@constants/Constants'
 
 const authOptions = {
     promptMessage: 'Đăng nhập sinh trắc học',
@@ -8,96 +12,35 @@ const authOptions = {
 export default useSinhTracHoc = () => {
     const [isDeviceSupport, setIsDeviceSupport] = useState(false)
     const [isHasBiometric, setIsHasBiometric] = useState(false)
+    const [isBiometricEnabled, setIsBiometricEnabled] = useState(false)
+    const { tryLoginBySavedInfo } = useDangNhap()
 
     // array => [1, 2, 3] => 1: vân tay, 2: mặt, 3: mống mắt (android)
     // const [bioType, setBioType] = useState([])
 
     const bioAuthenticate = async () => {
         const result = await LocalAuthentication.authenticateAsync(authOptions)
-        return result.success
+        const success = result.success
+        if (success) {
+            tryLoginBySavedInfo(Constants.SecureStore.BioAuth)
+        }
+    }
+
+    const getBioSavedInfo = async () => {
+        const data = await getSecureItem(Constants.SecureStore.BioAuth)
+        return data
     }
 
     useEffect(() => {
         ;(async () => {
             const isSupport = await LocalAuthentication.hasHardwareAsync()
             const isHasBio = await LocalAuthentication.isEnrolledAsync()
-            // const bioTypeSupported = await LocalAuthentication.supportedAuthenticationTypesAsync()
-            // setBioType(bioTypeSupported)
+            const isBioEnabled = (await getSecureItem(Constants.SecureStore.BioAuth))?.isEnabled
+            setIsBiometricEnabled(isBioEnabled)
             setIsHasBiometric(isHasBio)
             setIsDeviceSupport(isSupport)
         })()
     }, [])
 
-    return [bioAuthenticate, isDeviceSupport, isHasBiometric]
-
-    // const username = 'tranquyensinh@gmail.com'
-    // const password = 'Anhzer020'
-    // await Keychain.setGenericPassword(username, password, CONFIG)
-    // const checkBioSupport = async () => {
-    //     try {
-    //         const bioType = await Keychain.getSupportedBiometryType({})
-    //         // setBioSupport(bioSupport)
-    //         console.log('Thiết bị có hỗ trợ')
-    //     } catch (error) {
-    //         console.log('Thiết bị không hỗ trợ', error)
-    //     }
-    // }
-    // useEffect(() => {
-    //     checkBioSupport()
-    // }, [])
-    // return true
-    // const [bioSupport, setBioSupport] = useState(false)
-    // const [preLog, setPreLog] = useState(false)
-    // const [error, setError] = useState();
-    // const [loading, setLoading] = useState(false);
-
-    // const checkUserStatus = async () => {
-    //     try {
-    //         const credentials = await Keychain.getGenericPassword(CONFIG)
-    //     } catch (error) {
-    //         console.log("Keychain couldn't be accessed!", error)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     checkBioSupport()
-    // }, [])
-
-    // useEffect(() => {
-    //     if (preLog) {
-    //         login()
-    //     }
-    // }, [bioSupport])
-
-    // const checkBioSupport = async () => {
-    //     try {
-    //         const bioSupport = await Keychain.getSupportedBiometryType()
-    //         setBioSupport(bioSupport)
-    //     } catch (error) {
-    //         console.log('Thiết bị không hỗ trợ')
-    //     }
-    // }
-
-    // const getUserData = async () => {
-    //     try {
-    //         const credential = await Keychain.getGenericPassword(CONFIG)
-    //         if (credential) {
-    //             tryLogin(credential.username, credential.password)
-    //         } else {
-    //             setLoading(false)
-    //         }
-    //     } catch (e) {
-    //         console.log("Keychain couldn't be accessed!", error)
-    //         setLoading(false)
-    //     }
-    // }
-
-    // const tryLogin = async () => {
-    //     try {
-    //         // login API
-    //         // axios.get(...);
-    //     }catch(e) {
-
-    //     }
-    // }
+    return { bioAuthenticate, isDeviceSupport, isHasBiometric, isBiometricEnabled }
 }

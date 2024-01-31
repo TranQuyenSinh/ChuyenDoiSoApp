@@ -24,7 +24,7 @@ const Page = () => {
     const [hidePassword, setHidePassword] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [bioAuthenticate, isDeviceSupport, isHasBiometric] = useSinhTracHoc()
+    const { isDeviceSupport, isHasBiometric, isBiometricEnabled, bioAuthenticate } = useSinhTracHoc()
     const { loginOAuth, loginWithPassword } = useDangNhap()
 
     useEffect(() => {
@@ -42,15 +42,11 @@ const Page = () => {
             Alert.alert('Thiết bị của bạn chưa đăng ký sinh trắc học')
             return
         }
-        let isSuccess = await bioAuthenticate()
-        if (isSuccess) {
-            // truy xuất userinfo trong device
-            // result = call api auth với userinfo
-            // success => redirect to /
-            // false => process fail case
-
-            router.replace('/')
+        if (!isBiometricEnabled) {
+            Alert.alert('Bạn chưa thiết lập đăng nhập sinh trắc học')
+            return
         }
+        await bioAuthenticate()
     }
     useLayoutEffect(() => {
         navigation.setOptions({

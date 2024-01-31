@@ -28,7 +28,17 @@ export default function TabLayout() {
                 options={{
                     headerShown: false,
                     tabBarLabel: 'Tin tức',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='newspaper-outline' color={color} size={size} />,
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return (
+                            <>
+                                {focused ? (
+                                    <Ionicons name='newspaper-sharp' color={color} size={size} />
+                                ) : (
+                                    <Ionicons name='newspaper-outline' color={color} size={size} />
+                                )}
+                            </>
+                        )
+                    },
                 }}
             />
             <Tabs.Screen
@@ -36,16 +46,35 @@ export default function TabLayout() {
                 options={{
                     headerShown: false,
                     tabBarLabel: 'Đánh giá',
-                    tabBarIcon: ({ color, size }) => <Ionicons name='reader-outline' color={color} size={size} />,
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return (
+                            <>
+                                {focused ? (
+                                    <Ionicons name='reader-sharp' color={color} size={size} />
+                                ) : (
+                                    <Ionicons name='reader-outline' color={color} size={size} />
+                                )}
+                            </>
+                        )
+                    },
                 }}
             />
             <Tabs.Screen
                 name='inbox'
                 options={{
+                    headerShown: false,
                     tabBarLabel: 'Thông báo',
-                    tabBarIcon: ({ color, size }) => (
-                        <Ionicons name='notifications-outline' color={color} size={size} />
-                    ),
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return (
+                            <>
+                                {focused ? (
+                                    <Ionicons name='notifications-sharp' color={color} size={size} />
+                                ) : (
+                                    <Ionicons name='notifications-outline' color={color} size={size} />
+                                )}
+                            </>
+                        )
+                    },
                 }}
             />
             <Tabs.Screen
@@ -53,7 +82,17 @@ export default function TabLayout() {
                 options={{
                     tabBarLabel: 'Cài đặt',
                     headerShown: false,
-                    tabBarIcon: ({ color, size }) => <Ionicons name='ios-settings-outline' color={color} size={size} />,
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return (
+                            <>
+                                {focused ? (
+                                    <Ionicons name='ios-settings-sharp' color={color} size={size} />
+                                ) : (
+                                    <Ionicons name='ios-settings-outline' color={color} size={size} />
+                                )}
+                            </>
+                        )
+                    },
                 }}
             />
         </Tabs>
