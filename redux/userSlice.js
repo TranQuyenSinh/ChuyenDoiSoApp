@@ -56,6 +56,7 @@ const userSlice = createSlice({
                     state.OAuthLoading = 'idle'
                     state.currentRequestId = undefined
                     console.log('===> OAuth server thất bại')
+                    console.log('===> ', JSON.stringify(action))
                 }
             })
     },
@@ -89,14 +90,13 @@ export const loginWithOAuth = createAsyncThunk('user/login-oauth', async (userIn
     if (OAuthLoading !== 'pending' || currentRequestId !== requestId) {
         return
     }
-    let { data } = await axios.post('/api/auth/login-oauth', userInfo)
+    let { data } = await axios.post('/api/auth/login-no-password', userInfo)
     const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
     if (bioInfo?.email !== userInfo?.email) {
         await setSecureItem(Constants.SecureStore.BioAuth, { isEnabled: false })
     }
     await setSecureItem(Constants.SecureStore.SavedAuth, {
         type: 'oauth',
-        providerKey: userInfo?.providerKey,
         hoten: userInfo?.hoten,
         email: userInfo?.email,
     })

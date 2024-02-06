@@ -11,8 +11,3 @@ export const doiMatKhau = async (currentPassword, newPassword) => {
         return { result: false, message }
     }
 }
-
-export const checkUserHasPassword = async () => {
-    let { data } = await authAxios.get('/api/account/has-password')
-    return data
-}

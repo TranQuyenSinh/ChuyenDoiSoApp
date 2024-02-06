@@ -10,8 +10,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { textStyles } from '@constants/Styles'
 import background from '@assets/images/phieu1_bg.jpg'
 import dangKySlice, { fetchTinhThanh } from '@redux/dangKySlice'
-import DaiDienDoanhNghiepForm from '@components/DangKy/DaiDienDoanhNghiepForm'
-import ThongTinDoanhNghiepForm from '@components/DangKy/ThongTinDoanhNghiepForm'
+import DaiDienDoanhNghiepForm from '@components/Form/DaiDienDoanhNghiepForm'
+import ThongTinDoanhNghiepForm from '@components/Form/ThongTinDoanhNghiepForm'
 const { width, height } = Dimensions.get('screen')
 
 const tabViewScene = [
@@ -23,7 +23,7 @@ const DangKyDoanhNghiep = () => {
     const router = useRouter()
     const navigation = useNavigation()
     const { pageIndex } = useSelector(state => state.dangKy)
-    const { setPageIndex } = dangKySlice.actions
+    const { setPageIndex, resetAllForm } = dangKySlice.actions
 
     const handleChangeIndex = pageIndex => {
         dispatch(setPageIndex({ pageIndex }))
@@ -37,23 +37,28 @@ const DangKyDoanhNghiep = () => {
     }
 
     useEffect(() => {
+        dispatch(resetAllForm())
         dispatch(fetchTinhThanh())
     }, [])
 
-    useEffect(() => {
-        const event = navigation.addListener('beforeRemove', e => {
-            e.preventDefault()
-            Alert.alert('Xác nhận thoát đăng ký?', 'Bạn chưa hoàn tất quá trình đăng ký, xác nhận thoát?', [
-                {
-                    text: 'Thoát',
-                    style: 'destructive',
-                    onPress: () => navigation.dispatch(e.data.action),
-                },
-                { text: 'Tiếp tục đăng ký', style: 'cancel', onPress: () => {} },
-            ])
-        })
-        return event
-    }, [navigation])
+    // useEffect(() => {
+    //     const event = navigation.addListener('beforeRemove', e => {
+    //         if (isCompleted) {
+    //             navigation.dispatch(e.data.action)
+    //             return
+    //         }
+    //         e.preventDefault()
+    //         Alert.alert('Xác nhận thoát đăng ký?', 'Bạn chưa hoàn tất quá trình đăng ký, xác nhận thoát?', [
+    //             {
+    //                 text: 'Thoát',
+    //                 style: 'destructive',
+    //                 onPress: () => navigation.dispatch(e.data.action),
+    //             },
+    //             { text: 'Tiếp tục đăng ký', style: 'cancel', onPress: () => {} },
+    //         ])
+    //     })
+    //     return event
+    // }, [navigation])
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,

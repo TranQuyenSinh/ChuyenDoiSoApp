@@ -1,37 +1,18 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useState, useLayoutEffect } from 'react'
 
 import { useRouter, useNavigation } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { TabView, SceneMap } from 'react-native-tab-view'
-import {
-    Text,
-    Image,
-    Alert,
-    Pressable,
-    Dimensions,
-    StyleSheet,
-    View,
-    Keyboard,
-    TouchableWithoutFeedback,
-} from 'react-native'
+import { View, Keyboard, Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 
-import Colors from '@constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import { defaultStyles, textStyles } from '@constants/Styles'
-import background from '@assets/images/phieu1_bg.jpg'
-import dangKySlice, { fetchTinhThanh } from '@redux/dangKySlice'
-import DaiDienDoanhNghiepForm from '@components/DangKy/DaiDienDoanhNghiepForm'
-import ThongTinDoanhNghiepForm from '@components/DangKy/ThongTinDoanhNghiepForm'
-import TextInputBox from '@components/Input/InputBox'
-import PageHeader from '@components/View/PageHeader'
-import Button from '@components/Button'
-import { checkUserHasPassword, doiMatKhau } from '@services/accountServices'
-import Loading from '@components/StatusPage/Loading'
-import NotFound from '@components/StatusPage/NotFound'
 import { toast } from '@utils/toast'
-import { getItemAsync, setItemAsync } from 'expo-secure-store'
-import { getSecureItem, setSecureItem } from '@utils/secureStore'
+import Button from '@components/Button'
 import Constants from '@constants/Constants'
+import { defaultStyles } from '@constants/Styles'
+import PageHeader from '@components/View/PageHeader'
+import Loading from '@components/StatusPage/Loading'
+import TextInputBox from '@components/Input/InputBox'
+import { doiMatKhau } from '@services/accountServices'
+import NotFound from '@components/StatusPage/NotFound'
+import { getSecureItem, setSecureItem } from '@utils/secureStore'
 const { width, height } = Dimensions.get('screen')
 
 const tabViewScene = [
@@ -45,24 +26,10 @@ const DangKyDoanhNghiep = () => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
-    const [isHasPassword, setIsHasPassword] = useState(true)
     const [status, setStatus] = useState('idle')
 
-    useEffect(() => {
-        ;(async () => {
-            setStatus('loading')
-            try {
-                let isHasPassword = await checkUserHasPassword()
-                setIsHasPassword(isHasPassword)
-                setStatus('idle')
-            } catch (err) {
-                setStatus('error')
-            }
-        })()
-    }, [])
-
     const validate = () => {
-        if (!newPassword || !rePassword || (isHasPassword && !currentPassword)) {
+        if (!newPassword || !rePassword || !currentPassword) {
             toast('Nhập đầy đủ các trường')
             return false
         }
@@ -108,14 +75,14 @@ const DangKyDoanhNghiep = () => {
     }, [navigation])
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={[defaultStyles.container, { paddingTop: 40 }]}>
-                <PageHeader title={'Đổi mật khẩu'} />
-                {status === 'loading' && <Loading />}
-                {status === 'error' && <NotFound isShownBtn={false} message='Có lỗi xảy ra, vui lòng thử lại' />}
-                {status === 'idle' && (
-                    <View style={{ marginTop: 20, gap: 10 }}>
-                        {isHasPassword && (
+        <>
+            {status === 'loading' && <Loading />}
+            {status === 'error' && <NotFound message='Có lỗi xảy ra, vui lòng thử lại' />}
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                <View style={[defaultStyles.container, { paddingTop: 40 }]}>
+                    <PageHeader title={'Đổi mật khẩu'} />
+                    {status === 'idle' && (
+                        <View style={{ marginTop: 20, gap: 10 }}>
                             <TextInputBox
                                 value={currentPassword}
                                 onChangeText={setCurrentPassword}
@@ -123,26 +90,26 @@ const DangKyDoanhNghiep = () => {
                                 label={'Mật khẩu hiện tại'}
                                 placeholder='Nhập mật khẩu hiện tại'
                             />
-                        )}
-                        <TextInputBox
-                            value={newPassword}
-                            onChangeText={setNewPassword}
-                            inputProps={{ secureTextEntry: true }}
-                            label={'Mật khẩu mới'}
-                            placeholder='Nhập mật khẩu mới'
-                        />
-                        <TextInputBox
-                            value={rePassword}
-                            onChangeText={setRePassword}
-                            inputProps={{ secureTextEntry: true }}
-                            label={'Xác nhận mật khẩu mới'}
-                            placeholder='Nhập lại mật khẩu mới'
-                        />
-                        <Button text={'Đổi mật khẩu'} onPress={handleDoiMatKhau} />
-                    </View>
-                )}
-            </View>
-        </TouchableWithoutFeedback>
+                            <TextInputBox
+                                value={newPassword}
+                                onChangeText={setNewPassword}
+                                inputProps={{ secureTextEntry: true }}
+                                label={'Mật khẩu mới'}
+                                placeholder='Nhập mật khẩu mới'
+                            />
+                            <TextInputBox
+                                value={rePassword}
+                                onChangeText={setRePassword}
+                                inputProps={{ secureTextEntry: true }}
+                                label={'Xác nhận mật khẩu mới'}
+                                placeholder='Nhập lại mật khẩu mới'
+                            />
+                            <Button text={'Đổi mật khẩu'} onPress={handleDoiMatKhau} />
+                        </View>
+                    )}
+                </View>
+            </TouchableWithoutFeedback>
+        </>
     )
 }
 

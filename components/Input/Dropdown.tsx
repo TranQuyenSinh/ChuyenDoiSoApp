@@ -1,21 +1,33 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
-import AntDesign from '@expo/vector-icons/AntDesign'
-import Colors from '@constants/Colors'
 
-const DropdownComponent = ({ data, label = 'Chọn', placeholder = '', onSelectedChange }) => {
-    const [value, setValue] = useState(null)
-    const [isFocus, setIsFocus] = useState(false)
+interface DropdownProps {
+    data: any[]
+    value: string | undefined
+    label: string
+    placeholder: string
+    mode: 'auto' | 'default' | 'modal' | undefined
+    containerStyles: ViewStyle
+    onSelectedChange: (item: { label: any; value: any }) => void
+}
 
-    const renderLabel = () => {
-        return <Text style={[styles.label, isFocus && { color: 'blue' }]}>{label}</Text>
-    }
+const DropdownComponent = ({
+    data,
+    value: initialValue,
+    label = 'Chọn',
+    placeholder = '',
+    mode = 'modal',
+    onSelectedChange,
+    containerStyles,
+}: DropdownProps) => {
+    const [value, setValue] = useState(initialValue)
+
     return (
-        <View style={styles.container}>
-            {renderLabel()}
+        <View style={[styles.container, containerStyles]}>
+            <Text style={[styles.label]}>{label}</Text>
             <Dropdown
-                style={[styles.dropdown, isFocus && { borderColor: Colors.default }]}
+                style={[styles.dropdown]}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
@@ -23,22 +35,16 @@ const DropdownComponent = ({ data, label = 'Chọn', placeholder = '', onSelecte
                 data={data}
                 search={false}
                 maxHeight={300}
-                labelField='label'
-                valueField='value'
-                placeholder={!isFocus ? placeholder : '...'}
+                labelField={'label'}
+                valueField={'value'}
+                placeholder={placeholder}
                 searchPlaceholder='Search...'
                 value={value}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
                 onChange={item => {
                     setValue(item.value)
-                    setIsFocus(false)
-                    onSelectedChange(item)
+                    onSelectedChange && onSelectedChange(item)
                 }}
-                mode='modal'
-                // renderLeftIcon={() => (
-                //     <AntDesign style={styles.icon} color={isFocus ? 'blue' : 'black'} name='Safety' size={20} />
-                // )}
+                mode={mode}
             />
         </View>
     )

@@ -5,13 +5,21 @@ import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 
-const RequireLogin = ({ message = 'Đăng nhập để sử dụng chức năng này' }) => {
+interface RequireLoginProps {
+    message?: string
+    redirectHref?: any
+}
+
+const RequireLogin = ({
+    message = 'Đăng nhập để sử dụng chức năng này',
+    redirectHref = 'auth/login',
+}: RequireLoginProps) => {
     const router = useRouter()
     return (
         <View style={[defaultStyles.container, styles.container]}>
             <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }}>{message}</Text>
             <Pressable
-                onPress={() => router.replace('auth/login')}
+                onPress={() => router.replace(redirectHref)}
                 style={[defaultStyles.btn, { padding: 12, flexDirection: 'row', gap: 6, marginTop: 10 }]}>
                 <Text style={defaultStyles.btnText}>Đăng nhập ngay</Text>
             </Pressable>

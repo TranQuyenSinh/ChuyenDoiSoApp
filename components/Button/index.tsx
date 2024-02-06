@@ -1,18 +1,32 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Pressable, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import React, { ReactComponentElement, ReactElement, ReactNode } from 'react'
 import Colors from '@constants/Colors'
 import { LinearGradient } from 'expo-linear-gradient'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Ionicons } from '@expo/vector-icons'
 
-const Button = ({ onPress, text, btnStyles, textStyles }) => {
+interface ButtonProps {
+    onPress: () => void
+    text: string
+    btnStyles: ViewStyle
+    textStyles: TextStyle
+    renderIcon: ReactNode
+}
+
+const Button = ({ onPress, text, btnStyles, textStyles, renderIcon }: ButtonProps) => {
     return (
-        <Pressable style={[styles.defaultBtn, btnStyles]} onPress={onPress}>
+        <Pressable style={[styles.defaultBtn, { flexDirection: 'row', gap: 6 }, btnStyles]} onPress={onPress}>
+            {renderIcon}
             <Text style={[styles.defaultText, textStyles]}>{text}</Text>
         </Pressable>
     )
 }
 
-export const GradienButton = ({ onPress, text, btnStyles, textStyles, colors }) => {
+interface GradienButtonProps extends ButtonProps {
+    textStyles: ViewStyle
+    colors: string[]
+}
+
+export const GradienButton = ({ onPress, text, btnStyles, textStyles, colors }: GradienButtonProps) => {
     return (
         <LinearGradient
             style={[gradientStyles.btn, btnStyles]}
@@ -55,6 +69,6 @@ const gradientStyles = StyleSheet.create({
     text: {
         color: Colors.white,
         fontSize: 16,
-        fontWeight: 500,
+        fontWeight: '500',
     },
 })

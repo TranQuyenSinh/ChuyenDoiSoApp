@@ -27,6 +27,16 @@ export const inputStyles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
     },
+    countLabel: {
+        position: 'absolute',
+        backgroundColor: 'white',
+        right: 14,
+        top: -10,
+        zIndex: 999,
+        paddingHorizontal: 2,
+        fontSize: 12,
+        color: Colors.textGray,
+    },
     input: {
         fontSize: 16,
     },

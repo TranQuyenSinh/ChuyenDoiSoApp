@@ -1,6 +1,7 @@
 export default {
     default: '#1877F2',
     success: '#00966D',
+    danger: '#C30052',
     white: '#ffffff',
     textGray: '#8b8a8e',
     blueGray: '#354f5c',

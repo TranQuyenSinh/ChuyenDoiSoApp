@@ -1,36 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 import { useRouter, useNavigation } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { TabView, SceneMap } from 'react-native-tab-view'
-import {
-    Text,
-    Image,
-    Alert,
-    Pressable,
-    Dimensions,
-    StyleSheet,
-    View,
-    Keyboard,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-} from 'react-native'
+import { useDispatch } from 'react-redux'
+import { Text, Dimensions, StyleSheet, View, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 
 import Colors from '@constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import { defaultStyles, textStyles } from '@constants/Styles'
-import background from '@assets/images/phieu1_bg.jpg'
-import dangKySlice, { fetchTinhThanh } from '@redux/dangKySlice'
-import DaiDienDoanhNghiepForm from '@components/DangKy/DaiDienDoanhNghiepForm'
-import ThongTinDoanhNghiepForm from '@components/DangKy/ThongTinDoanhNghiepForm'
-import TextInputBox from '@components/Input/InputBox'
+import { defaultStyles } from '@constants/Styles'
 import PageHeader from '@components/View/PageHeader'
-import Button from '@components/Button'
-import { checkUserHasPassword, doiMatKhau } from '@services/accountServices'
-import Loading from '@components/StatusPage/Loading'
 import NotFound from '@components/StatusPage/NotFound'
-import { toast } from '@utils/toast'
-import { deleteItemAsync, getItemAsync, setItemAsync } from 'expo-secure-store'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
 import useSinhTracHoc from '@hooks/useSinhTracHoc'
 import { Switch } from 'react-native-gesture-handler'
@@ -76,12 +53,8 @@ const DangNhapSinhTracHoc = () => {
             <View style={[defaultStyles.container, { paddingTop: 40, backgroundColor: '#f2f2f2' }]}>
                 <PageHeader title={'Thiết lập sinh trắc học'} />
                 <View style={{ marginTop: 20, gap: 10, flex: 1 }}>
-                    {!isDeviceSupport && (
-                        <NotFound isShownBtn={false} message='Thiết bị của bạn không hỗ trợ sinh trắc học' />
-                    )}
-                    {!isHasBiometric && (
-                        <NotFound isShownBtn={false} message='Thiết bị của bạn chưa thiết lập sinh trắc học' />
-                    )}
+                    {!isDeviceSupport && <NotFound message='Thiết bị của bạn không hỗ trợ sinh trắc học' />}
+                    {!isHasBiometric && <NotFound message='Thiết bị của bạn chưa thiết lập sinh trắc học' />}
 
                     <TouchableOpacity
                         activeOpacity={0.9}

@@ -41,7 +41,7 @@ const Page = () => {
                     <SettingSection title={'Doanh nghiệp'}>
                         <SettingSectionItem
                             title={'Thông tin doanh nghiệp'}
-                            onPress={() => router.push('profile/thongTinDoanhNghiep')}
+                            onPress={() => router.push('profile/dangKyDoanhNghiep')}
                             renderIcon={() => <Ionicons name='business-outline' size={24} color={Colors.bodyText} />}
                         />
                     </SettingSection>

@@ -4,14 +4,23 @@ import { Text, View, Pressable, StyleSheet } from 'react-native'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { defaultStyles } from '@constants/Styles'
+import { ReactNode } from 'react'
+
+interface NotFoundProps {
+    message: string
+    btnText?: string
+    isShownBtn?: boolean
+    renderIcon?: () => ReactNode
+    redirectHref?: any
+}
 
 export default function NotFound({
     message = 'Có lỗi xảy ra',
-    isShownBtn = true,
     btnText = 'Vể trang chủ',
-    btnIcon = 'home-sharp',
+    renderIcon,
+    isShownBtn = false,
     redirectHref = '(tabs)',
-}) {
+}: NotFoundProps) {
     const router = useRouter()
     return (
         <View style={styles.container}>
@@ -20,7 +29,7 @@ export default function NotFound({
                 <Pressable
                     onPress={() => router.replace(redirectHref)}
                     style={[defaultStyles.btn, { padding: 12, flexDirection: 'row', gap: 6, marginTop: 10 }]}>
-                    <Ionicons name={btnIcon} size={24} color={Colors.white} />
+                    {renderIcon && renderIcon()}
                     <Text style={defaultStyles.btnText}>{btnText}</Text>
                 </Pressable>
             )}

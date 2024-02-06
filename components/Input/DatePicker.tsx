@@ -1,14 +1,27 @@
 import React, { useState } from 'react'
 
-import DatePickerOrgigin from 'react-native-modern-datepicker'
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
-
+// @ts-ignore
+import DatePickerOrigin from 'react-native-modern-datepicker'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { inputStyles } from './inputStyles'
+interface DateSelectProps {
+    value: string | Date
+    label: string
+    error: boolean
+    onSelectedChange: (text: string) => void
+    otherProps: DatePickerProps
+}
 
-export const DateSelect = ({ value = new Date().toISOString().substring(0, 10), label, error, onSelectedChange }) => {
-    const [isOpen, setIsOpen] = useState(false)
+export const DateSelect = ({
+    value = new Date().toISOString().substring(0, 10),
+    label,
+    error,
+    onSelectedChange,
+    otherProps,
+}: DateSelectProps) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     const toggle = () => {
         setIsOpen(!isOpen)
     }
@@ -17,18 +30,24 @@ export const DateSelect = ({ value = new Date().toISOString().substring(0, 10), 
             <View style={[inputStyles.inputContainer, error ? inputStyles.errorContainer : undefined]}>
                 <Text style={inputStyles.inputLabel}>{label}</Text>
                 <Pressable onPress={toggle}>
-                    <Text style={inputStyles.input}>{value}</Text>
+                    <Text style={inputStyles.input}>{value.toString()}</Text>
                 </Pressable>
-                <DatePicker isOpen={isOpen} toggle={toggle} onSelectedChange={onSelectedChange} />
+                <DatePicker {...otherProps} isOpen={isOpen} toggle={toggle} onSelectedChange={onSelectedChange} />
             </View>
         </>
     )
 }
 
-const DatePicker = ({ isOpen, toggle, onSelectedChange }) => {
+interface DatePickerProps {
+    isOpen: boolean
+    toggle: () => void
+    onSelectedChange: (e: any) => void
+}
+
+const DatePicker = ({ isOpen, toggle, onSelectedChange }: DatePickerProps) => {
     const today = new Date().toISOString().substring(0, 10)
 
-    const handleSelect = e => {
+    const handleSelect = (e: any) => {
         onSelectedChange(e)
         toggle()
     }
@@ -36,7 +55,7 @@ const DatePicker = ({ isOpen, toggle, onSelectedChange }) => {
         <Modal animationType='fade' transparent visible={isOpen}>
             <Pressable onPress={toggle} style={styles.centerdView}>
                 <Pressable onPress={e => e.stopPropagation()} style={styles.modalView}>
-                    <DatePickerOrgigin
+                    <DatePickerOrigin
                         current={today}
                         selected={today}
                         mode={'calendar'}

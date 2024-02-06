@@ -1,6 +1,5 @@
 import React from 'react'
-import { Redirect } from 'expo-router'
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import Colors from '@constants/Colors'
 
 const NotFound = () => {
