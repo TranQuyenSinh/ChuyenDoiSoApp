@@ -4,11 +4,11 @@ import { Dropdown } from 'react-native-element-dropdown'
 
 interface DropdownProps {
     data: any[]
-    value: string | undefined
-    label: string
-    placeholder: string
-    mode: 'auto' | 'default' | 'modal' | undefined
-    containerStyles: ViewStyle
+    value?: string | undefined
+    label?: string
+    placeholder?: string
+    mode?: 'auto' | 'default' | 'modal'
+    containerStyles?: ViewStyle
     onSelectedChange: (item: { label: any; value: any }) => void
 }
 

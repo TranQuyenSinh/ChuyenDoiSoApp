@@ -1,22 +1,18 @@
-import { View, Text, Button, TouchableOpacity, StyleSheet, Pressable, ScrollView } from 'react-native'
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import {
-    BottomSheetBackdrop,
-    BottomSheetModal,
-    BottomSheetModalProvider,
-    BottomSheetScrollView,
-    useBottomSheetModal,
-} from '@gorhom/bottom-sheet'
-import Colors from '@constants/Colors'
-import { Link } from 'expo-router'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { defaultStyles, textStyles } from '@constants/Styles'
-import { TextInput } from 'react-native-gesture-handler'
+import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react'
+
 import { useDispatch, useSelector } from 'react-redux'
+import { TextInput } from 'react-native-gesture-handler'
+import { View, Text, Pressable, StyleSheet } from 'react-native'
+
 import moment from '@utils/moment'
-import tinTucSlice, { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
-import PhanHoiBottomSheet from './PhanHoiBottomSheet'
+import Colors from '@constants/Colors'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { textStyles, defaultStyles } from '@constants/Styles'
 import RequireLogin from '@components/StatusPage/RequireLogin'
+import { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
+import { BottomSheetModal, BottomSheetBackdrop, useBottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
+
+import PhanHoiBottomSheet from './PhanHoiBottomSheet'
 
 const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
     const dispatch = useDispatch()

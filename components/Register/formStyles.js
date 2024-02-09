@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 
 export const formStyles = StyleSheet.create({
     container: {
-        paddingTop: 40,
+        paddingTop: 0,
         backgroundColor: '#fafafa',
         paddingHorizontal: 12,
     },

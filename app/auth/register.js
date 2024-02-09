@@ -1,36 +1,26 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 
+import { View } from 'react-native'
+import PagerView from 'react-native-pager-view'
+import { StyleSheet, Dimensions } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter, useNavigation } from 'expo-router'
-import { StyleSheet, Dimensions } from 'react-native'
-import { View } from 'react-native'
 
-import PageHeader from '@components/View/PageHeader'
-import { dangKyUser } from '@services/userServices'
-import { toast } from '@utils/toast'
-import PagerView from 'react-native-pager-view'
-import ThongTinDoanhNghiepForm from '@components/Form/ThongTinDoanhNghiepForm'
-import DaiDienDoanhNghiepForm from '@components/Form/DaiDienDoanhNghiepForm'
 import { fetchTinhThanh } from '@redux/dangKySlice'
-import TaiKhoanForm from '@components/Form/TaiKhoanForm'
-import Button from '@components/Button'
-import { formStyles } from '@components/Form/formStyles'
+import PageHeader from '@components/View/PageHeader'
+import TaiKhoanForm from '@components/Register/TaiKhoanForm'
+import { formStyles } from '@components/Register/formStyles'
+import DaiDienDoanhNghiepForm from '@components/Register/DaiDienDoanhNghiepForm'
+import ThongTinDoanhNghiepForm from '@components/Register/ThongTinDoanhNghiepForm'
 
 const { width, height } = Dimensions.get('screen')
 
 const Register = () => {
-    const router = useRouter()
     const dispatch = useDispatch()
     const navigation = useNavigation()
-    const { isLoggedIn } = useSelector(state => state.user)
 
     const pageRef = useRef(null)
 
-    const [hidePassword, setHidePassword] = useState(true)
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [rePassword, setRePassword] = useState('')
-    const [hoTen, setHoTen] = useState('')
     const [pageIndex, setPageIndex] = useState(0)
 
     const handleNextPage = () => {

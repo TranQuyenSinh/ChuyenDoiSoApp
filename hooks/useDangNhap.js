@@ -20,14 +20,12 @@ WebBrowser.maybeCompleteAuthSession()
 
 export const useDangNhap = () => {
     useWarmUpBrowser()
-    const router = useRouter()
     const dispatch = useDispatch()
 
-    const { user, isSignedIn, isLoaded } = useUser()
+    const { user, isSignedIn } = useUser()
     const { signOut } = useAuth()
 
     const userStore = useSelector(state => state.user)
-    const { status, errorMessage } = userStore
 
     const { startOAuthFlow: googleAuth } = useOAuth({ strategy: Constants.Strategy.Google })
     const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: Constants.Strategy.Facebook })
@@ -88,12 +86,6 @@ export const useDangNhap = () => {
         toast('Đã đăng xuất tài khoản')
         console.log('===> User logout success')
     }
-
-    useEffect(() => {
-        if (status === 'error' && errorMessage) {
-            ToastAndroid.showWithGravity(errorMessage, ToastAndroid.SHORT, ToastAndroid.BOTTOM)
-        }
-    }, [status])
 
     return { loginWithPassword, loginOAuth, logOut, tryLoginBySavedInfo }
 }

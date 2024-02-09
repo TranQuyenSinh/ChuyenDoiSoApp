@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import { Pressable, Text, View } from 'react-native'
+import { Text, View, Pressable } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
 
-import DropdownComponent from '@components/Input/Dropdown'
-import TextInputBox, { TextAreaInputBox } from '@components/Input/InputBox'
-import { formStyles } from './formStyles'
-import dangKySlice from '@redux/dangKySlice'
-import { useDispatch, useSelector } from 'react-redux'
+import moment from '@utils/moment'
+import Colors from '@constants/Colors'
 import Button from '@components/Button'
+import dangKySlice from '@redux/dangKySlice'
+import { Ionicons } from '@expo/vector-icons'
 import Loading from '@components/StatusPage/Loading'
 import { DateSelect } from '@components/Input/DatePicker'
-import moment from '@utils/moment'
-import { getLinhVuc, getLoaiHinhDN } from '@services/doanhNghiepServices'
-import { Ionicons } from '@expo/vector-icons'
-import Colors from '@constants/Colors'
-import { linkStyles } from '@constants/Styles'
+import DropdownComponent from '@components/Input/Dropdown'
+import { getLoaiHinhDN } from '@services/doanhNghiepServices'
+import TextInputBox, { TextAreaInputBox } from '@components/Input/InputBox'
 
+import { formStyles } from './formStyles'
 const loaiDienThoai = [
     { value: 'Di động', label: 'Di động' },
     { value: 'Bàn', label: 'Bàn' },
@@ -24,12 +23,9 @@ const loaiDienThoai = [
 
 const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
     const dispatch = useDispatch()
-    const { pageIndex, loading, tinhThanhs, formDN } = useSelector(state => state.dangKy)
-    const { setPageIndex, resetAllForm, setFormDN, addSoDienThoaiDN, removeSoDienThoaiDN, setSoDienThoaiDN } =
-        dangKySlice.actions
-    const [linhVucs, setLinhVucs] = useState([])
+    const { loading, tinhThanhs, formDN } = useSelector(state => state.dangKy)
+    const { setFormDN, addSoDienThoaiDN, removeSoDienThoaiDN, setSoDienThoaiDN } = dangKySlice.actions
     const [loaiHinhs, setLoaiHinhs] = useState([])
-
     const [localLoading, setLocalLoading] = useState(false)
 
     const handleChangeDate = date => {

@@ -6,14 +6,14 @@ import { inputStyles } from './inputStyles'
 
 interface TextInputBoxProps {
     label: string
-    placeholder: string
-    value: any
+    placeholder?: string
+    value?: any
     onChangeText: (text: string) => void
-    error: boolean
-    containerStyles: ViewStyle
-    isShownCount: boolean
-    maxLength: number
-    inputProps: TextInputProps
+    error?: boolean
+    containerStyles?: ViewStyle
+    isShownCount?: boolean
+    maxLength?: number
+    inputProps?: TextInputProps
 }
 
 const TextInputBox = ({
@@ -46,7 +46,7 @@ const TextInputBox = ({
             )}
 
             <TextInput
-                value={value}
+                value={value?.toString()}
                 onChangeText={handleChangeText}
                 style={inputStyles.input}
                 placeholder={placeholder}

@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import { ScrollView } from 'react-native-gesture-handler'
-import { Alert, Pressable, Text, View } from 'react-native'
-
-import Button from '@components/Button'
-import DropdownComponent from '@components/Input/Dropdown'
-import TextInputBox, { TextInputBoxWrapper } from '@components/Input/InputBox'
-import { formStyles } from './formStyles'
-import { useDispatch, useSelector } from 'react-redux'
-import dangKySlice, { dangKyDoanhNghiep } from '@redux/dangKySlice'
-import moment from '@utils/moment'
-import Loading from '@components/StatusPage/Loading'
-import { getLinhVuc } from '@services/doanhNghiepServices'
-import * as ImagePicker from 'expo-image-picker'
 import { Image } from 'react-native'
-import { axios } from '@utils/axios'
-import { Ionicons } from '@expo/vector-icons'
-import Colors from '@constants/Colors'
 import { useRouter } from 'expo-router'
+import * as ImagePicker from 'expo-image-picker'
+import { Text, View, Pressable } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler'
+
 import { toast } from '@utils/toast'
+import Colors from '@constants/Colors'
+import Button from '@components/Button'
+import { Ionicons } from '@expo/vector-icons'
+import Loading from '@components/StatusPage/Loading'
+import DropdownComponent from '@components/Input/Dropdown'
+import dangKySlice, { dangKyDoanhNghiep } from '@redux/dangKySlice'
+import TextInputBox, { TextInputBoxWrapper } from '@components/Input/InputBox'
+
+import { formStyles } from './formStyles'
+import useChonAnh from '@hooks/useChonAnh'
 
 const chucVuData = [
     { label: 'Giám đốc', value: 'Giám đốc' },
@@ -28,50 +27,22 @@ const chucVuData = [
 const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
     const router = useRouter()
     const dispatch = useDispatch()
-    const [status, requestPermission] = ImagePicker.useCameraPermissions()
-    const { pageIndex, loading, tinhThanhs, formDaiDienDN } = useSelector(state => state.dangKy)
-    const { setPageIndex, setFormDaiDienDN, resetAllForm } = dangKySlice.actions
+    const { loading, tinhThanhs, formDaiDienDN } = useSelector(state => state.dangKy)
+    const { setFormDaiDienDN, resetAllForm } = dangKySlice.actions
     const [isPosting, setIsPosting] = useState(false)
+    const { pickImageAsync } = useChonAnh()
 
     const handleChangeText = (text, field) => {
         dispatch(setFormDaiDienDN({ [field]: text }))
     }
 
-    const verifyPermission = async () => {
-        if (status.status == ImagePicker.PermissionStatus.DENIED) {
-            const permissionResponse = await ImagePicker.requestCameraPermissionsAsync()
-            return permissionResponse.granted
-        }
-        return true
-    }
-
     const pickImage = async (pickType, field) => {
-        const hasPermission = await verifyPermission()
-        if (!hasPermission) {
-            return
-        }
-        const pickImageOptions = {
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            cameraType: ImagePicker.CameraType.back,
-            quality: 1,
-        }
-        let { assets } =
-            pickType === 'camera'
-                ? await ImagePicker.launchCameraAsync(pickImageOptions)
-                : await ImagePicker.launchImageLibraryAsync(pickImageOptions)
-        if (assets) {
-            const uri = assets[0].uri
-            let name = uri.split('/').pop()
-            let match = /\.(\w+)$/.exec(name)
-            let type = match ? `image/${match[1]}` : `image`
-
-            dispatch(
-                setFormDaiDienDN({
-                    [field]: { uri, name, type },
-                })
-            )
-        }
+        const { uri, name, type } = await pickImageAsync(pickType)
+        dispatch(
+            setFormDaiDienDN({
+                [field]: { uri, name, type },
+            })
+        )
     }
 
     const handleDangKy = async () => {

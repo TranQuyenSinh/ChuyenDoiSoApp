@@ -79,7 +79,6 @@ function RootLayoutNav() {
                 <BootstrapGate>
                     <Stack>
                         <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
-                        <Stack.Screen name='(modals)' options={{ headerShown: false, animation: 'slide_from_right' }} />
                         <Stack.Screen
                             name='[...missing]'
                             options={{

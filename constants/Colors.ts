@@ -13,6 +13,10 @@ export default {
     secondaryButton: '#EEF1F4',
     buttonText: '#667080',
 
+    background: {
+        default: '#F2F2F2',
+    },
+
     error: {
         default: '#ED2E7E',
         dark: '#C30052',

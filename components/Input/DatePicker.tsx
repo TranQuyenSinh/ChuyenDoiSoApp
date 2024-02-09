@@ -6,12 +6,13 @@ import DatePickerOrigin from 'react-native-modern-datepicker'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { inputStyles } from './inputStyles'
+import moment from '@utils/moment'
 interface DateSelectProps {
-    value: string | Date
-    label: string
-    error: boolean
+    value?: string | Date | undefined
+    label?: string
+    error?: boolean
     onSelectedChange: (text: string) => void
-    otherProps: DatePickerProps
+    otherProps?: DatePickerProps
 }
 
 export const DateSelect = ({
@@ -30,7 +31,7 @@ export const DateSelect = ({
             <View style={[inputStyles.inputContainer, error ? inputStyles.errorContainer : undefined]}>
                 <Text style={inputStyles.inputLabel}>{label}</Text>
                 <Pressable onPress={toggle}>
-                    <Text style={inputStyles.input}>{value.toString()}</Text>
+                    <Text style={inputStyles.input}>{moment(value)?.format('DD/MM/YYYY').toString()}</Text>
                 </Pressable>
                 <DatePicker {...otherProps} isOpen={isOpen} toggle={toggle} onSelectedChange={onSelectedChange} />
             </View>

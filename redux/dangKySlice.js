@@ -114,15 +114,7 @@ const dangKySlice = createSlice({
 
 export const fetchTinhThanh = createAsyncThunk('fetchTinhThanh', async () => {
     const tinhThanhs = await layTinhThanh()
-    const tinhs = tinhThanhs?.map(tinh => {
-        const thanhPhos = tinh?.Districts?.map(thanhPho => ({
-            id: thanhPho.Id,
-            value: thanhPho.Name,
-            label: thanhPho.Name,
-        }))
-        return { id: tinh.Id, value: tinh.Name, label: tinh.Name, thanhPhos }
-    })
-    return tinhs
+    return tinhThanhs
 })
 
 export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_, { getState }) => {

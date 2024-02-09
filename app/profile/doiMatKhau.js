@@ -13,6 +13,7 @@ import TextInputBox from '@components/Input/InputBox'
 import { doiMatKhau } from '@services/accountServices'
 import NotFound from '@components/StatusPage/NotFound'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
+import Colors from '@constants/Colors'
 const { width, height } = Dimensions.get('screen')
 
 const tabViewScene = [
@@ -79,10 +80,10 @@ const DangKyDoanhNghiep = () => {
             {status === 'loading' && <Loading />}
             {status === 'error' && <NotFound message='Có lỗi xảy ra, vui lòng thử lại' />}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={[defaultStyles.container, { paddingTop: 40 }]}>
+                <View style={{ backgroundColor: Colors.white }}>
                     <PageHeader title={'Đổi mật khẩu'} />
                     {status === 'idle' && (
-                        <View style={{ marginTop: 20, gap: 10 }}>
+                        <View style={styles.container}>
                             <TextInputBox
                                 value={currentPassword}
                                 onChangeText={setCurrentPassword}
@@ -117,8 +118,9 @@ export default DangKyDoanhNghiep
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'transparent',
+        marginTop: 20,
+        gap: 10,
+        paddingHorizontal: 16,
     },
     background: {
         position: 'absolute',

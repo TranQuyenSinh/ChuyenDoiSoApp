@@ -4,10 +4,10 @@ import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import Colors from '@constants/Colors'
 
-const PageHeader = ({ title, style }) => {
+const PageHeader = ({ title, style = undefined }) => {
     const router = useRouter()
     return (
-        <View style={style}>
+        <View style={[styles.container, style]}>
             <TouchableOpacity style={styles.headerArrow} onPress={() => router.back()}>
                 <Ionicons name='chevron-back-outline' size={24} color={Colors.bodyText} />
             </TouchableOpacity>
@@ -19,6 +19,11 @@ const PageHeader = ({ title, style }) => {
 export default PageHeader
 
 const styles = StyleSheet.create({
+    container: {
+        marginHorizontal: 16,
+        marginTop: 40,
+        backgroundColor: 'transparent',
+    },
     headerArrow: {
         zIndex: 10,
         width: 'auto',

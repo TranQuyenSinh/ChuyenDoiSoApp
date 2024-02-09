@@ -1,29 +1,29 @@
-import { useAuth, useUser } from '@clerk/clerk-expo'
-import { GradienButton } from '@components/Button'
-import Colors from '@constants/Colors'
-import { defaultStyles, textStyles } from '@constants/Styles'
-import { Ionicons } from '@expo/vector-icons'
-import { useDangNhap } from '@hooks/useDangNhap'
-import userSlice from '@redux/userSlice'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Link, useRouter } from 'expo-router'
-import { useEffect, useState } from 'react'
-import { Button, Image, Pressable, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-
-import { Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useRouter } from 'expo-router'
+import { Image, Pressable, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import user_icon from '@assets/icons/user.png'
+import { ScrollView, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-// import * as ImagePicker from 'expo-image-picker'
+import Colors from '@constants/Colors'
+import { useDangNhap } from '@hooks/useDangNhap'
+import Button, { GradienButton } from '@components/Button'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
+import avatar_default from '@assets/icons/user.png'
+import { useEffect, useMemo, useRef } from 'react'
+import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
+import useChonAnh from '@hooks/useChonAnh'
+import { renewUserProfile } from '@redux/userSlice'
+import { doiAvatar } from '@services/accountServices'
+import { toast } from '@utils/toast'
 
 const Page = () => {
     const router = useRouter()
-    const { isLoggedIn } = useSelector(state => state.user)
+    const { isLoggedIn, userProfile } = useSelector(state => state.user)
     const { logOut } = useDangNhap()
 
     return (
-        <SafeAreaView style={{ backgroundColor: '#f2f2f2', flex: 1 }}>
+        <SafeAreaView style={{ backgroundColor: Colors.background.default, flex: 1 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>Cài đặt</Text>
@@ -41,7 +41,7 @@ const Page = () => {
                     <SettingSection title={'Doanh nghiệp'}>
                         <SettingSectionItem
                             title={'Thông tin doanh nghiệp'}
-                            onPress={() => router.push('profile/dangKyDoanhNghiep')}
+                            onPress={() => router.push('profile/thongTinDoanhNghiep')}
                             renderIcon={() => <Ionicons name='business-outline' size={24} color={Colors.bodyText} />}
                         />
                     </SettingSection>
@@ -74,55 +74,95 @@ const Page = () => {
     )
 }
 
-const SettingSection = ({ title, children, contentStyles, containerStyles }) => {
-    return (
-        <View style={[{ padding: 16 }, containerStyles]}>
-            <Text style={{ marginBottom: 12, fontSize: 15 }}>{title}</Text>
-            <View style={[{ backgroundColor: Colors.white, borderRadius: 6, elevation: 6 }, contentStyles]}>
-                {children}
-            </View>
-        </View>
-    )
-}
-
-const SettingSectionItem = ({ title, subTitle, onPress = () => {}, renderIcon }) => {
-    return (
-        <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={onPress}
-            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                {renderIcon && renderIcon()}
-                <View>
-                    <Text style={{ fontSize: 18 }}>{title}</Text>
-                    {subTitle && <Text style={{ fontSize: 14, color: Colors.textGray }}>{subTitle}</Text>}
-                </View>
-            </View>
-            <View>
-                <Ionicons name='chevron-forward-outline' size={24} color={Colors.bodyText} />
-            </View>
-        </TouchableOpacity>
-    )
-}
-
-const SettingSectionItemSeperator = () => {
-    return <View style={{ height: 1, backgroundColor: '#eeeeee' }} />
-}
-
 const ProfileItem = () => {
+    const dispatch = useDispatch()
+    const snapPoints = useMemo(() => ['15%'], [])
+    const modalRef = useRef(null)
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
+    const { pickImageAsync } = useChonAnh()
+
+    useEffect(() => {
+        console.log('===> ', userProfile)
+    }, [userProfile])
+
+    const handleChangeAvatar = async pickImageFrom => {
+        const imgInfo = await pickImageAsync(pickImageFrom)
+        const result = await doiAvatar(imgInfo)
+        if (result) {
+            toast('Thay đổi ảnh đại diện thành công')
+            dispatch(renewUserProfile())
+        } else {
+            toast('Có lỗi xảy ra')
+        }
+        modalRef.current?.dismiss()
+    }
     return (
         <>
             {isLoggedIn && userProfile && (
-                <SettingSection containerStyles={{ paddingTop: 0 }}>
-                    <SettingSectionItem
-                        title={'Trần Quyền Sinh'}
-                        subTitle={'Xem thông tin cá nhân'}
-                        renderIcon={() => (
-                            <Image source={user_icon} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                <>
+                    <SettingSection containerStyles={{ paddingTop: 0 }}>
+                        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', padding: 12 }}>
+                            <View>
+                                <Image
+                                    source={userProfile.image ? { uri: userProfile.image } : avatar_default}
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        borderRadius: 50,
+                                        resizeMode: 'cover',
+                                        borderWidth: 2,
+                                        borderColor: Colors.disableInput,
+                                    }}
+                                />
+                                <Pressable
+                                    onPress={() => modalRef.current?.present()}
+                                    style={{ position: 'absolute', bottom: 0, right: 0 }}>
+                                    <Ionicons name='camera-reverse-sharp' size={20} color={Colors.textGray} />
+                                </Pressable>
+                            </View>
+                            <View style={{ gap: 3 }}>
+                                <View style={{ flexDirection: 'row', gap: 3 }}>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{userProfile.name}</Text>
+                                    <MaterialCommunityIcons name='pencil' size={20} color={Colors.bodyText} />
+                                </View>
+                                <Text style={{ color: Colors.textGray }}>{userProfile.email}</Text>
+                            </View>
+                        </View>
+                    </SettingSection>
+                    <BottomSheetModal
+                        // onDismiss={() => toggle(false)}
+                        ref={modalRef}
+                        overDragResistanceFactor={0}
+                        snapPoints={snapPoints}
+                        backdropComponent={props => (
+                            <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />
                         )}
-                    />
-                </SettingSection>
+                        handleIndicatorStyle={{ display: 'none' }}
+                        backgroundStyle={{ backgroundColor: Colors.lightGrey }}>
+                        <View
+                            style={{
+                                flex: 1,
+                                marginBottom: 12,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: 16,
+                            }}>
+                            <Button
+                                onPress={() => handleChangeAvatar('galery')}
+                                text='Thư viện'
+                                renderIcon={<Ionicons name='image-sharp' size={24} color={Colors.white} />}
+                                btnStyles={{ minWidth: 120 }}
+                            />
+                            <Button
+                                onPress={() => handleChangeAvatar('camera')}
+                                text='Máy ảnh'
+                                renderIcon={<Ionicons name='camera-sharp' size={24} color={Colors.white} />}
+                                btnStyles={{ minWidth: 120 }}
+                            />
+                        </View>
+                    </BottomSheetModal>
+                </>
             )}
         </>
     )
