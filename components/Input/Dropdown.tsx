@@ -1,6 +1,65 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
+import { inputStyles } from './inputStyles'
+
+interface ValidateDropdownProps {
+    field: any
+    form: any
+    data: any[]
+    value?: string | undefined
+    label?: string
+    placeholder?: string
+    mode?: 'auto' | 'default' | 'modal'
+    containerStyles?: ViewStyle
+    onSelectedChange: (name: string, item: { label: any; value: any }) => void
+}
+
+export const ValidateDropdownComponent = ({
+    data,
+    label = 'Chọn',
+    placeholder = '',
+    mode = 'modal',
+    onSelectedChange,
+    containerStyles,
+    field: { name, onChange, value },
+    form: { errors },
+}: ValidateDropdownProps) => {
+    const hasError = !!errors[name]
+
+    const handleChange = (name: string) => (item: { value: string; label: string }) => {
+        // sự kiện change text của thư viện
+        onChange(name)(item.value?.toString())
+        // sự kiện change text từ props
+        onSelectedChange && onSelectedChange(name, item)
+    }
+
+    return (
+        <View style={[styles.container, containerStyles]}>
+            <Text style={[styles.label]}>{label}</Text>
+            <Dropdown
+                style={[styles.dropdown, hasError && { borderColor: 'red' }]}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                search={false}
+                maxHeight={300}
+                labelField={'label'}
+                valueField={'value'}
+                placeholder={placeholder}
+                searchPlaceholder='Search...'
+                value={data?.find(x => x.value === value)?.value}
+                onChange={item => {
+                    handleChange(name)(item)
+                }}
+                mode={mode}
+            />
+            {hasError && <Text style={inputStyles.errorText}>{errors[name]}</Text>}
+        </View>
+    )
+}
 
 interface DropdownProps {
     data: any[]

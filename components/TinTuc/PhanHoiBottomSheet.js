@@ -25,7 +25,6 @@ const PhanHoiBottomSheet = ({ isOpen, toggle, replyComment, dispatch }) => {
         if (isOpen) modalRef.current?.present()
     }, [isOpen])
     const handleThemBinhLuan = async () => {
-        console.log('===> bắt đấu them binh luan noi dung la: ', cmtText)
         if (!cmtText) return
         await dispatch(themBinhLuan({ noiDung: cmtText, binhLuanChaId: replyComment.id })).unwrap()
         setCmtText('')
@@ -55,10 +54,7 @@ const PhanHoiBottomSheet = ({ isOpen, toggle, replyComment, dispatch }) => {
                     style={{ marginTop: 16 }}
                     contentContainerStyle={{ gap: 25, paddingBottom: 80 }}
                     showsVerticalScrollIndicator={false}
-                    scrollEnabled={true}
-                    refreshControl={() => {
-                        console.log('===> refresh')
-                    }}>
+                    scrollEnabled={true}>
                     {replyComment && (
                         <View style={styles.commentContainer}>
                             <View style={styles.commentBox}>

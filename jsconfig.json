@@ -10,7 +10,8 @@
             "@styles/*": ["styles/*"],
             "@utils/*": ["utils/*"],
             "@assets/*": ["assets/*"],
-            "@redux/*": ["redux/*"]
+            "@redux/*": ["redux/*"],
+            "@validateSchemas/*": ["validateSchemas/*"]
         }
     }
 }

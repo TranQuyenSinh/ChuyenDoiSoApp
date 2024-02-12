@@ -9,11 +9,13 @@ import Constants from '@constants/Constants'
 import { defaultStyles } from '@constants/Styles'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
-import TextInputBox from '@components/Input/InputBox'
+import TextInputBox, { ValidateInputBox } from '@components/Input/InputBox'
 import { doiMatKhau } from '@services/accountServices'
 import NotFound from '@components/StatusPage/NotFound'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
 import Colors from '@constants/Colors'
+import { Field, Form, Formik } from 'formik'
+import { doiMatKhauValidate } from '@validateSchemas/doiMatKhauValidate'
 const { width, height } = Dimensions.get('screen')
 
 const tabViewScene = [
@@ -23,30 +25,9 @@ const tabViewScene = [
 const DangKyDoanhNghiep = () => {
     const router = useRouter()
     const navigation = useNavigation()
-
-    const [currentPassword, setCurrentPassword] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [rePassword, setRePassword] = useState('')
     const [status, setStatus] = useState('idle')
 
-    const validate = () => {
-        if (!newPassword || !rePassword || !currentPassword) {
-            toast('Nhập đầy đủ các trường')
-            return false
-        }
-        if (newPassword !== rePassword) {
-            toast('Mật khẩu xác nhận không khớp')
-            return false
-        }
-        if (newPassword.length < 8) {
-            toast('Mật khẩu phải dài hơn 8 kí tự')
-            return false
-        }
-        return true
-    }
-
-    const handleDoiMatKhau = async () => {
-        if (!validate()) return
+    const handleDoiMatKhau = async ({ currentPassword, newPassword }) => {
         setStatus('loading')
         const { result, message } = await doiMatKhau(currentPassword, newPassword)
         if (result) {
@@ -66,7 +47,6 @@ const DangKyDoanhNghiep = () => {
             setStatus('idle')
         }
     }
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -84,28 +64,39 @@ const DangKyDoanhNghiep = () => {
                     <PageHeader title={'Đổi mật khẩu'} />
                     {status === 'idle' && (
                         <View style={styles.container}>
-                            <TextInputBox
-                                value={currentPassword}
-                                onChangeText={setCurrentPassword}
-                                inputProps={{ secureTextEntry: true }}
-                                label={'Mật khẩu hiện tại'}
-                                placeholder='Nhập mật khẩu hiện tại'
-                            />
-                            <TextInputBox
-                                value={newPassword}
-                                onChangeText={setNewPassword}
-                                inputProps={{ secureTextEntry: true }}
-                                label={'Mật khẩu mới'}
-                                placeholder='Nhập mật khẩu mới'
-                            />
-                            <TextInputBox
-                                value={rePassword}
-                                onChangeText={setRePassword}
-                                inputProps={{ secureTextEntry: true }}
-                                label={'Xác nhận mật khẩu mới'}
-                                placeholder='Nhập lại mật khẩu mới'
-                            />
-                            <Button text={'Đổi mật khẩu'} onPress={handleDoiMatKhau} />
+                            <Formik
+                                initialValues={{ currentPassword: '', newPassword: '', rePassword: '' }}
+                                onSubmit={handleDoiMatKhau}
+                                enableReinitialize={false}
+                                validationSchema={doiMatKhauValidate}>
+                                {({ handleSubmit, isValid }) => (
+                                    <>
+                                        <Field
+                                            name='currentPassword'
+                                            component={ValidateInputBox}
+                                            inputProps={{ secureTextEntry: true }}
+                                            label={'Mật khẩu hiện tại'}
+                                            placeholder='Nhập mật khẩu hiện tại'
+                                        />
+
+                                        <Field
+                                            name='newPassword'
+                                            component={ValidateInputBox}
+                                            inputProps={{ secureTextEntry: true }}
+                                            label={'Mật khẩu mới'}
+                                            placeholder='Nhập mật khẩu mới'
+                                        />
+                                        <Field
+                                            name='rePassword'
+                                            component={ValidateInputBox}
+                                            inputProps={{ secureTextEntry: true }}
+                                            label={'Xác nhận mật khẩu mới'}
+                                            placeholder='Nhập lại mật khẩu mới'
+                                        />
+                                        <Button disabled={!isValid} text={'Đổi mật khẩu'} onPress={handleSubmit} />
+                                    </>
+                                )}
+                            </Formik>
                         </View>
                     )}
                 </View>
@@ -119,7 +110,7 @@ export default DangKyDoanhNghiep
 const styles = StyleSheet.create({
     container: {
         marginTop: 20,
-        gap: 10,
+        gap: 16,
         paddingHorizontal: 16,
     },
     background: {

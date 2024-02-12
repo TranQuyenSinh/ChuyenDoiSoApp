@@ -6,7 +6,8 @@ import DatePickerOrigin from 'react-native-modern-datepicker'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { inputStyles } from './inputStyles'
-import moment from '@utils/moment'
+import moment from 'moment'
+import { ClerkLoading } from '@clerk/clerk-expo'
 interface DateSelectProps {
     value?: string | Date | undefined
     label?: string
@@ -15,13 +16,7 @@ interface DateSelectProps {
     otherProps?: DatePickerProps
 }
 
-export const DateSelect = ({
-    value = new Date().toISOString().substring(0, 10),
-    label,
-    error,
-    onSelectedChange,
-    otherProps,
-}: DateSelectProps) => {
+export const DateSelect = ({ value, label, error, onSelectedChange, otherProps }: DateSelectProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const toggle = () => {
         setIsOpen(!isOpen)
@@ -31,7 +26,11 @@ export const DateSelect = ({
             <View style={[inputStyles.inputContainer, error ? inputStyles.errorContainer : undefined]}>
                 <Text style={inputStyles.inputLabel}>{label}</Text>
                 <Pressable onPress={toggle}>
-                    <Text style={inputStyles.input}>{moment(value)?.format('DD/MM/YYYY').toString()}</Text>
+                    <Text style={inputStyles.input}>
+                        {moment(value || new Date(), 'DD/MM/YYYY')
+                            ?.format('DD/MM/YYYY')
+                            .toString()}
+                    </Text>
                 </Pressable>
                 <DatePicker {...otherProps} isOpen={isOpen} toggle={toggle} onSelectedChange={onSelectedChange} />
             </View>

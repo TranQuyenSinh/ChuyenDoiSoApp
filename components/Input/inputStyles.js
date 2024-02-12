@@ -6,7 +6,6 @@ export const inputStyles = StyleSheet.create({
         backgroundColor: Colors.white,
         paddingHorizontal: 16,
         borderRadius: 8,
-        marginVertical: 10,
         paddingVertical: 10,
         borderColor: '#c5d1f8',
         borderWidth: 1,
@@ -16,6 +15,9 @@ export const inputStyles = StyleSheet.create({
         shadowColor: 'red',
         borderWidth: 1,
         borderColor: 'red',
+    },
+    errorText: {
+        color: 'red',
     },
     inputLabel: {
         position: 'absolute',

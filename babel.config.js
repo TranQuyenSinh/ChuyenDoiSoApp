@@ -19,6 +19,7 @@ module.exports = function (api) {
                         '@utils': './utils',
                         '@assets': './assets',
                         '@redux': './redux',
+                        '@validateSchemas': './validateSchemas',
                     },
                     extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 },

@@ -19,7 +19,6 @@ const store = configureStore({
 
 const authTokenMiddleWare = api => next => action => {
     const response = next(action)
-    console.log('===> go to middleware')
     if (action.type === 'user/login-oauth/fulfilled' || action.type === 'user/login/fulfilled') {
         const token = api.getState().user.accessToken
         if (token) {

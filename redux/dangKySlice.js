@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { layTinhThanh } from '@services/commonServices'
+import { toast } from '@utils/toast'
 import { authAxios } from '@utils/axios'
-import moment from '@utils/moment'
+import { layTinhThanh } from '@services/commonServices'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 const dangKySlice = createSlice({
     name: 'dangKy',
     initialState: {
@@ -16,18 +17,17 @@ const dangKySlice = createSlice({
         },
 
         formDN: {
-            loaiHinhId: 1,
+            loaiHinhId: null,
             tenTiengViet: '',
             tenTiengAnh: '',
             tenVietTat: '',
-            // email: '',
             tinh: null,
             thanhPho: null,
             diaChi: '',
             maSoThue: '',
             fax: '',
             soLuongNhanSu: '',
-            ngayLap: moment(new Date()).format('DD/MM/YYYY'),
+            ngayLap: '',
             moTa: '',
             dienThoais: [
                 {
@@ -42,14 +42,13 @@ const dangKySlice = createSlice({
             tenNguoiDaiDien: '',
             dienThoai: '',
             email: '',
-            tinh: '',
-            thanhPho: '',
+            tinh: null,
+            thanhPho: null,
             diaChi: '',
             cccd: '',
-            // noiCap: '',
             imgMatTruoc: null,
             imgMatSau: null,
-            chucVu: '',
+            chucVu: null,
         },
     },
     reducers: {
@@ -59,22 +58,13 @@ const dangKySlice = createSlice({
             state.formDaiDienDN = dangKySlice.getInitialState().formDaiDienDN
         },
         setFormUser: (state, { payload }) => {
-            state.formUser = {
-                ...state.formUser,
-                ...payload,
-            }
+            state.formUser[payload.field] = payload.value
         },
         setFormDN: (state, { payload }) => {
-            state.formDN = {
-                ...state.formDN,
-                ...payload,
-            }
+            state.formDN[payload.field] = payload.value
         },
         setFormDaiDienDN: (state, { payload }) => {
-            state.formDaiDienDN = {
-                ...state.formDaiDienDN,
-                ...payload,
-            }
+            state.formDaiDienDN[payload.field] = payload.value
         },
 
         setSoDienThoaiDN: (state, { payload }) => {
@@ -109,6 +99,12 @@ const dangKySlice = createSlice({
                 state.tinhThanhs = []
                 console.log('===> Lỗi lấy tỉnh thành')
             })
+
+            // Đăng ký doanh nghiệp
+            .addCase(dangKyDoanhNghiep.rejected, (_, { payload }) => {
+                toast(payload?.message)
+                console.log('🚀 ~ Lỗi đăng ký doanh nghiệp: ', payload?.message)
+            })
     },
 })
 
@@ -117,7 +113,7 @@ export const fetchTinhThanh = createAsyncThunk('fetchTinhThanh', async () => {
     return tinhThanhs
 })
 
-export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_, { getState }) => {
+export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_, { getState, rejectWithValue }) => {
     try {
         const { name, email, password } = getState().dangKy.formUser
         const {
@@ -149,8 +145,8 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             moTa,
             dienThoais: dienThoaisDN,
         } = getState().dangKy.formDN
-        const fullDiaChiDD = `${diaChiDD}, ${thanhPhoDD?.label}, ${tinhDD?.label}`
-        const fullDiaChiDN = `${diaChiDN}, ${thanhPhoDN?.label}, ${tinhDN?.label}`
+        const fullDiaChiDD = `${diaChiDD}, ${thanhPhoDD}, ${tinhDD}`
+        const fullDiaChiDN = `${diaChiDN}, ${thanhPhoDN}, ${tinhDN}`
 
         const formData = new FormData()
 
@@ -190,11 +186,9 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
         await authAxios.post('/api/auth/register', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
-        return true
     } catch (error) {
-        console.log('===> Error: ', JSON.stringify(error))
-        console.log('===> Error: ', error)
-        return false
+        const errData = error?.response?.data
+        return rejectWithValue({ code: errData?.code, message: errData?.message })
     }
 })
 

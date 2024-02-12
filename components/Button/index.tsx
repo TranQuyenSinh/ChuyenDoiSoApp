@@ -10,11 +10,19 @@ interface ButtonProps {
     btnStyles: ViewStyle
     textStyles: TextStyle
     renderIcon: ReactNode
+    disabled?: boolean
 }
 
-const Button = ({ onPress, text, btnStyles, textStyles, renderIcon }: ButtonProps) => {
+const Button = ({ onPress, text, btnStyles, textStyles, renderIcon, disabled = false }: ButtonProps) => {
     return (
-        <Pressable style={[styles.defaultBtn, { flexDirection: 'row', gap: 6 }, btnStyles]} onPress={onPress}>
+        <Pressable
+            style={[
+                styles.defaultBtn,
+                { flexDirection: 'row', gap: 6 },
+                disabled && { backgroundColor: Colors.textGray },
+                btnStyles,
+            ]}
+            onPress={!disabled ? onPress : undefined}>
             {renderIcon}
             <Text style={[styles.defaultText, textStyles]}>{text}</Text>
         </Pressable>

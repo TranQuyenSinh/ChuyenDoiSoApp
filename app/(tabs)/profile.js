@@ -87,12 +87,14 @@ const ProfileItem = () => {
 
     const handleChangeAvatar = async pickImageFrom => {
         const imgInfo = await pickImageAsync(pickImageFrom)
-        const result = await doiAvatar(imgInfo)
-        if (result) {
-            toast('Thay đổi ảnh đại diện thành công')
-            dispatch(renewUserProfile())
-        } else {
-            toast('Có lỗi xảy ra')
+        if (imgInfo) {
+            const result = await doiAvatar(imgInfo)
+            if (result) {
+                toast('Thay đổi ảnh đại diện thành công')
+                dispatch(renewUserProfile())
+            } else {
+                toast('Có lỗi xảy ra')
+            }
         }
         modalRef.current?.dismiss()
     }

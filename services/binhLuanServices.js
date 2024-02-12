@@ -15,17 +15,14 @@ export const getBinhLuanByTinTucId = async tinTucId => {
 
 export const themBinhLuan = async ({ noiDung, tinTucId, userId, binhLuanChaId = null }) => {
     try {
-        console.log('===> POST data', JSON.stringify({ noiDung, tinTucId, userId, binhLuanChaId }))
         await axios.post('/api/binhluan', {
             noiDung,
             tinTucId,
             userId,
             binhLuanChaId,
         })
-        console.log('===> them bl xong')
         return Promise.resolve()
     } catch (err) {
-        console.log('===> Mã lỗi', JSON.stringify(err))
         let { code, message } = err.response?.data
         console.error('Lỗi bình luận: ', message)
         return Promise.reject()

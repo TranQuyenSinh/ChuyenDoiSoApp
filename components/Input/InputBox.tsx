@@ -1,8 +1,57 @@
-import { StyleSheet, Text, TextInput, TextInputProps, View, ViewStyle } from 'react-native'
-import React, { Children, ReactComponentElement, ReactNode, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
-import Colors from '@constants/Colors'
+import React, { useState, ReactNode } from 'react'
+import { Text, View, TextInput, ViewStyle, TextInputProps } from 'react-native'
 import { inputStyles } from './inputStyles'
+
+interface ValidateInputBoxProps {
+    containerStyles: ViewStyle
+    field: any
+    form: any
+    label: string
+    placeholder?: string
+    inputProps?: TextInputProps
+    onChangeText?: (name: string, text: string) => void
+}
+
+export const ValidateInputBox = (props: ValidateInputBoxProps) => {
+    const {
+        field: { name, onBlur, onChange, value },
+        form: { errors, touched, setFieldTouched },
+        containerStyles,
+        label,
+        placeholder = 'Aa',
+        inputProps,
+        onChangeText,
+    } = props
+
+    const hasError = errors[name] && touched[name]
+    const handleChange = (name: string) => (text: string) => {
+        // sự kiện change text của thư viện
+        onChange(name)(text)
+
+        // sự kiện change text từ props
+        onChangeText && onChangeText(name, text)
+    }
+    return (
+        <View style={{ gap: 2 }}>
+            <View style={[inputStyles.inputContainer, hasError && inputStyles.errorContainer, containerStyles]}>
+                <Text style={inputStyles.inputLabel}>{label}</Text>
+
+                <TextInput
+                    value={value}
+                    onChangeText={text => handleChange(name)(text)}
+                    style={inputStyles.input}
+                    placeholder={placeholder}
+                    onBlur={() => {
+                        setFieldTouched(name)
+                        onBlur(name)
+                    }}
+                    {...inputProps}
+                />
+            </View>
+            {hasError && <Text style={inputStyles.errorText}>{errors[name]}</Text>}
+        </View>
+    )
+}
 
 interface TextInputBoxProps {
     label: string
