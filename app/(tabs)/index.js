@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react'
 
+import { useRouter } from 'expo-router'
 import { TabBar, TabView } from 'react-native-tab-view'
-import { Text, View, StatusBar, TextInput, Pressable, Dimensions, StyleSheet } from 'react-native'
+import { StatusBar, Dimensions, StyleSheet } from 'react-native'
 
 import Colors from '@constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
 import ListNews from '@components/TinTuc/News'
 import Loading from '@components/StatusPage/Loading'
-import { getLinhVucs } from '@services/tinTucServices'
-import { textStyles, defaultStyles } from '@constants/Styles'
-import { useRouter } from 'expo-router'
 import SearchBar from '@components/TinTuc/SearchBar'
+import { getLinhVucs } from '@services/tinTucServices'
 
 export default function TrangTin() {
     const router = useRouter()

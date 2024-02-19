@@ -4,12 +4,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './userSlice'
 import tinTucSlice from './tinTucSlice'
 import dangKySlice from './dangKySlice'
+import doanhNghiepSlice from './doanhNghiepSlice'
 
 const store = configureStore({
     reducer: {
         user: userSlice.reducer,
         tinTuc: tinTucSlice.reducer,
         dangKy: dangKySlice.reducer,
+        doanhNghiep: doanhNghiepSlice.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({
@@ -17,17 +19,6 @@ const store = configureStore({
         }),
 })
 
-const authTokenMiddleWare = api => next => action => {
-    const response = next(action)
-    if (action.type === 'user/login-oauth/fulfilled' || action.type === 'user/login/fulfilled') {
-        const token = api.getState().user.accessToken
-        if (token) {
-            setTokenAuthAxios(token)
-        }
-    }
-
-    return response
-}
 store.subscribe(() => {
     const token = store.getState().user.accessToken
     if (token) {

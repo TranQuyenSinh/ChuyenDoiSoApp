@@ -7,9 +7,9 @@ import { Ionicons } from '@expo/vector-icons'
 interface ButtonProps {
     onPress: () => void
     text: string
-    btnStyles: ViewStyle
-    textStyles: TextStyle
-    renderIcon: ReactNode
+    btnStyles?: ViewStyle
+    textStyles?: TextStyle
+    renderIcon?: ReactNode
     disabled?: boolean
 }
 

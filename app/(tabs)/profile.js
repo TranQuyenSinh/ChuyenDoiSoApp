@@ -105,21 +105,24 @@ const ProfileItem = () => {
                     <SettingSection containerStyles={{ paddingTop: 0 }}>
                         <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', padding: 12 }}>
                             <View>
-                                <Image
-                                    source={userProfile.image ? { uri: userProfile.image } : avatar_default}
-                                    style={{
-                                        width: 60,
-                                        height: 60,
-                                        borderRadius: 50,
-                                        resizeMode: 'cover',
-                                        borderWidth: 2,
-                                        borderColor: Colors.disableInput,
-                                    }}
-                                />
-                                <Pressable
-                                    onPress={() => modalRef.current?.present()}
-                                    style={{ position: 'absolute', bottom: 0, right: 0 }}>
-                                    <Ionicons name='camera-reverse-sharp' size={20} color={Colors.textGray} />
+                                <Pressable onPress={() => modalRef.current?.present()}>
+                                    <Image
+                                        source={userProfile.image ? { uri: userProfile.image } : avatar_default}
+                                        style={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: 50,
+                                            resizeMode: 'cover',
+                                            borderWidth: 2,
+                                            borderColor: Colors.disableInput,
+                                        }}
+                                    />
+                                    <Ionicons
+                                        style={{ position: 'absolute', bottom: -8, right: -4 }}
+                                        name='camera-reverse-sharp'
+                                        size={20}
+                                        color={Colors.textGray}
+                                    />
                                 </Pressable>
                             </View>
                             <View style={{ gap: 3 }}>
