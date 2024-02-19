@@ -60,17 +60,17 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name='inbox'
+                name='expert'
                 options={{
                     headerShown: false,
-                    tabBarLabel: 'Thông báo',
+                    tabBarLabel: 'Chuyên gia',
                     tabBarIcon: ({ color, size, focused }) => {
                         return (
                             <>
                                 {focused ? (
-                                    <Ionicons name='notifications-sharp' color={color} size={size} />
+                                    <Ionicons name='people-sharp' color={color} size={size} />
                                 ) : (
-                                    <Ionicons name='notifications-outline' color={color} size={size} />
+                                    <Ionicons name='people-outline' color={color} size={size} />
                                 )}
                             </>
                         )

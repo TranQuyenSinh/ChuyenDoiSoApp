@@ -32,7 +32,7 @@ export const daiDienDoanhNghiepValidate = yup.object().shape({
 export const dangKyDoanhNghiepValidate = yup.object().shape({
     tenTiengViet: yup.string().required('Không được để trống'),
     tenTiengAnh: yup.string().required('Không được để trống'),
-    tenVietTat: yup.string().required('Không được để trống'),
+    // tenVietTat: yup.string().required('Không được để trống'),
     maSoThue: yup.string().required('Không được để trống'),
     soLuongNhanSu: yup.string().required('Không được để trống'),
     loaiHinhId: yup.string().required('Không được để trống'),

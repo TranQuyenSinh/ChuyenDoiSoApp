@@ -1,10 +1,13 @@
 import Colors from '@constants/Colors'
-import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
-export default function Loading() {
+interface LoadingProps {
+    containerStyles: ViewStyle
+}
+export default function Loading({ containerStyles }: LoadingProps) {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyles]}>
             <ActivityIndicator size={'large'} color={Colors.default} />
         </View>
     )
@@ -13,9 +16,7 @@ export default function Loading() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position: 'absolute',
         backgroundColor: '#0000001b',
-        top: 0,
         width,
         height: '100%',
         alignItems: 'center',

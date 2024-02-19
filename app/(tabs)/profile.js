@@ -16,6 +16,7 @@ import useChonAnh from '@hooks/useChonAnh'
 import { renewUserProfile } from '@redux/userSlice'
 import { doiAvatar } from '@services/accountServices'
 import { toast } from '@utils/toast'
+import TabPageHeader from '@components/View/TabPageHeader'
 
 const Page = () => {
     const router = useRouter()
@@ -25,9 +26,7 @@ const Page = () => {
     return (
         <SafeAreaView style={{ backgroundColor: Colors.background.default, flex: 1 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>Cài đặt</Text>
-                </View>
+                <TabPageHeader title={'Cài đặt'} />
                 <ProfileItem />
                 {!isLoggedIn && (
                     <GradienButton
@@ -103,19 +102,12 @@ const ProfileItem = () => {
             {isLoggedIn && userProfile && (
                 <>
                     <SettingSection containerStyles={{ paddingTop: 0 }}>
-                        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', padding: 12 }}>
+                        <View style={styles.profileContainer}>
                             <View>
                                 <Pressable onPress={() => modalRef.current?.present()}>
                                     <Image
                                         source={userProfile.image ? { uri: userProfile.image } : avatar_default}
-                                        style={{
-                                            width: 60,
-                                            height: 60,
-                                            borderRadius: 50,
-                                            resizeMode: 'cover',
-                                            borderWidth: 2,
-                                            borderColor: Colors.disableInput,
-                                        }}
+                                        style={styles.avatar}
                                     />
                                     <Ionicons
                                         style={{ position: 'absolute', bottom: -8, right: -4 }}
@@ -135,7 +127,6 @@ const ProfileItem = () => {
                         </View>
                     </SettingSection>
                     <BottomSheetModal
-                        // onDismiss={() => toggle(false)}
                         ref={modalRef}
                         overDragResistanceFactor={0}
                         snapPoints={snapPoints}
@@ -176,19 +167,21 @@ const ProfileItem = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 24,
         backgroundColor: Colors.white,
     },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: 24,
+    avatar: {
+        width: 60,
+        height: 60,
+        borderRadius: 50,
+        resizeMode: 'cover',
+        borderWidth: 2,
+        borderColor: Colors.disableInput,
     },
-    headerText: {
-        fontFamily: 'mon-b',
-        fontSize: 24,
-        paddingHorizontal: 16,
+    profileContainer: {
+        flexDirection: 'row',
+        gap: 12,
+        alignItems: 'center',
+        padding: 12,
     },
 })
 
