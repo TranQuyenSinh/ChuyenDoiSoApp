@@ -1,4 +1,4 @@
-import Button from '@components/Button'
+import Button from '@components/View/Button'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { ActivityIndicator, Dimensions, StyleSheet, Text, View } from 'react-native'

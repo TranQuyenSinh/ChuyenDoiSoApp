@@ -6,7 +6,7 @@ import { StyleSheet, ScrollView, Pressable } from 'react-native'
 import { Text, View } from 'react-native'
 
 import { linkStyles, textStyles } from '@constants/Styles'
-import Button from '@components/Button'
+import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
 import dangKySlice from '@redux/dangKySlice'
 import TextInputBox, { ValidateInputBox } from '@components/Input/InputBox'

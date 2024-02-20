@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 
 import moment from '@utils/moment'
 import Colors from '@constants/Colors'
-import Button from '@components/Button'
+import Button from '@components/View/Button'
 import dangKySlice from '@redux/dangKySlice'
 import { Ionicons } from '@expo/vector-icons'
 import Loading from '@components/StatusPage/Loading'

@@ -60,6 +60,24 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name='association'
+                options={{
+                    headerShown: false,
+                    tabBarLabel: 'Hiệp hội',
+                    tabBarIcon: ({ color, size, focused }) => {
+                        return (
+                            <>
+                                {focused ? (
+                                    <Ionicons name='color-filter-sharp' color={color} size={size} />
+                                ) : (
+                                    <Ionicons name='color-filter-outline' color={color} size={size} />
+                                )}
+                            </>
+                        )
+                    },
+                }}
+            />
+            <Tabs.Screen
                 name='expert'
                 options={{
                     headerShown: false,

@@ -1,15 +1,15 @@
-import { Image, Pressable, ScrollView, Text, View } from 'react-native'
+import { useState, useEffect } from 'react'
+
 import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Text, View, Image, Pressable, ScrollView } from 'react-native'
 
 import Colors from '@constants/Colors'
-import TabPageHeader from '@components/View/TabPageHeader'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useEffect, useState } from 'react'
-import { getLinhVucs } from '@services/tinTucServices'
-import { getChuyenGias } from '@services/chuyenGiaServices'
 import Modal from '@components/View/Modal'
 import Loading from '@components/StatusPage/Loading'
-import { screenHeight, windowHeight } from '@utils/window'
+import { getLinhVucs } from '@services/tinTucServices'
+import TabPageHeader from '@components/View/TabPageHeader'
+import { getChuyenGias } from '@services/chuyenGiaServices'
 
 const Page = () => {
     const [linhVuc, setLinhVuc] = useState([])
@@ -46,8 +46,8 @@ const Page = () => {
     }, [linhVucSelected])
     return (
         <SafeAreaView style={styles.container}>
+            <TabPageHeader title={'Chuyên gia tư vấn'} />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <TabPageHeader title={'Chuyên gia tư vấn'} />
                 <ScrollView
                     style={{ gap: 4, paddingTop: 16 }}
                     contentContainerStyle={{ gap: 6, paddingHorizontal: 16 }}

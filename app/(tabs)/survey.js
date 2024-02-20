@@ -1,23 +1,26 @@
-import { defaultStyles, textStyles } from '@constants/Styles'
-import { Dimensions, Image, ImageBackground, Pressable, ScrollView, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Text, View, Image, Pressable, ScrollView } from 'react-native'
 
-import { Text, View } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
 import Colors from '@constants/Colors'
-import { Link, useRouter } from 'expo-router'
+import Modal from '@components/View/Modal'
+import Loading from '@components/StatusPage/Loading'
+import TabPageHeader from '@components/View/TabPageHeader'
 import { useSelector } from 'react-redux'
-import RequireLogin from '@components/StatusPage/RequireLogin'
-import top_bg from '@assets/images/survey_bg.jpg'
 
 const { width, height } = Dimensions.get('screen')
 
 const SurveyPage = () => {
-    const router = useRouter()
     const userStore = useSelector(state => state.user)
     const { isLoggedIn } = userStore
 
     return (
-        <View></View>
+        <SafeAreaView style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <TabPageHeader title={'Đánh giá doanh nghiệp'} />
+                {/* {loading && <Loading containerStyles={{ marginTop: 30, backgroundColor: 'transparent' }} />} */}
+            </ScrollView>
+        </SafeAreaView>
         // <View style={styles.container}>
         //     <View style={{ height: 150 }}>
         //         <Image style={styles.topImg} source={top_bg} />

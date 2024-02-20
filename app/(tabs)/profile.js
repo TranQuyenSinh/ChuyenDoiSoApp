@@ -1,22 +1,23 @@
+import { useRef, useMemo, useEffect } from 'react'
+
 import { useRouter } from 'expo-router'
-import { Image, Pressable, Text, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import { ScrollView, StyleSheet } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { Text, View, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { toast } from '@utils/toast'
 import Colors from '@constants/Colors'
-import { useDangNhap } from '@hooks/useDangNhap'
-import Button, { GradienButton } from '@components/Button'
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
-import avatar_default from '@assets/icons/user.png'
-import { useEffect, useMemo, useRef } from 'react'
-import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
 import useChonAnh from '@hooks/useChonAnh'
+import { useDangNhap } from '@hooks/useDangNhap'
+import avatar_default from '@assets/icons/user.png'
 import { renewUserProfile } from '@redux/userSlice'
 import { doiAvatar } from '@services/accountServices'
-import { toast } from '@utils/toast'
+import Button, { GradienButton } from '@components/View/Button'
 import TabPageHeader from '@components/View/TabPageHeader'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
 
 const Page = () => {
     const router = useRouter()
@@ -79,10 +80,6 @@ const ProfileItem = () => {
     const modalRef = useRef(null)
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
     const { pickImageAsync } = useChonAnh()
-
-    useEffect(() => {
-        console.log('===> ', userProfile)
-    }, [userProfile])
 
     const handleChangeAvatar = async pickImageFrom => {
         const imgInfo = await pickImageAsync(pickImageFrom)
