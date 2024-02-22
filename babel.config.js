@@ -20,6 +20,7 @@ module.exports = function (api) {
                         '@assets': './assets',
                         '@redux': './redux',
                         '@validateSchemas': './validateSchemas',
+                        '@configs': './configs',
                     },
                     extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 },

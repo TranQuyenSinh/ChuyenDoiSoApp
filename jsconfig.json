@@ -11,7 +11,8 @@
             "@utils/*": ["utils/*"],
             "@assets/*": ["assets/*"],
             "@redux/*": ["redux/*"],
-            "@validateSchemas/*": ["validateSchemas/*"]
+            "@validateSchemas/*": ["validateSchemas/*"],
+            "@configs/*": ["configs/*"]
         }
     }
 }

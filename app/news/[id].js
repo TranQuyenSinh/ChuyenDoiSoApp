@@ -1,30 +1,21 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 
-import { useRouter } from 'expo-router'
-import { FlatList } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Stack, router, useNavigation, useLocalSearchParams } from 'expo-router'
+import { useDispatch } from 'react-redux'
+import { useNavigation, useLocalSearchParams } from 'expo-router'
 import { Text, View, Pressable, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import Animated, {
-    SlideInDown,
-    interpolate,
-    useAnimatedRef,
-    useAnimatedStyle,
-    useScrollViewOffset,
-} from 'react-native-reanimated'
+import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated'
 
 import moment from '@utils/moment'
 import Colors from '@constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import { getTinTucById } from '@services/tinTucServices'
-import { textStyles, defaultStyles } from '@constants/Styles'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import BinhLuanBottomSheet from '@components/TinTuc/BinhLuanBottomSheet'
-import { useDispatch, useSelector } from 'react-redux'
 import tinTucSlice from '@redux/tinTucSlice'
+import { Ionicons } from '@expo/vector-icons'
 import Loading from '@components/StatusPage/Loading'
 import NotFound from '@components/StatusPage/NotFound'
-
+import { getTinTucById } from '@services/tinTucServices'
+import { textStyles, defaultStyles } from '@constants/Styles'
+import BinhLuanBottomSheet from '@components/TinTuc/BinhLuanBottomSheet'
+import RenderHTML, { defaultSystemFonts } from 'react-native-render-html'
+import { tagStyles } from '@configs/newsHtmlConfig'
 const IMAGE_HEIGHT = 300
 const { width, height } = Dimensions.get('window')
 
@@ -130,8 +121,13 @@ const DetailNews = () => {
                                 <Ionicons name='ios-time-outline' size={16} color={Colors.bodyText} />
                                 <Text style={textStyles.mutedSmall}>{moment(news?.createdAt).fromNow()}</Text>
                             </View>
-
-                            <Text style={styles.noiDung}>{news?.noiDung}</Text>
+                            {/* <Text style={styles.noiDung}>{news?.noiDung}</Text> */}
+                            <RenderHTML
+                                tagsStyles={tagStyles}
+                                emSize={18}
+                                contentWidth={width}
+                                source={{ html: news?.noiDung }}
+                            />
                             <Text>Tin khác</Text>
                         </View>
                     </>
