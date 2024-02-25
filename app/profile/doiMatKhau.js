@@ -17,10 +17,6 @@ import { Field, Formik } from 'formik'
 import { doiMatKhauValidate } from '@validateSchemas/doiMatKhauValidate'
 const { width, height } = Dimensions.get('screen')
 
-const tabViewScene = [
-    { key: 'formDN', title: 'Đăng ký thông tin doanh nghiệp' },
-    { key: 'formDaiDienDN', title: 'Đăng ký thông tin đại diện doanh nghiệp' },
-]
 const DangKyDoanhNghiep = () => {
     const router = useRouter()
     const navigation = useNavigation()

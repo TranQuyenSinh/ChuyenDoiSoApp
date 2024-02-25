@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { getDanhSachHiepHoi } from '@services/hiepHoiServices'
 import Loading from '@components/StatusPage/Loading'
 import HiepHoiAccordion from '@components/HiepHoiInfo/HiepHoiAccordion'
+import Colors from '@constants/Colors'
 
 const Page = () => {
     const [loading, setLoading] = useState(false)
@@ -41,4 +42,9 @@ const Page = () => {
 
 export default Page
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: Colors.background.default,
+    },
+})

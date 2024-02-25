@@ -68,6 +68,9 @@ export const News = ({ item }) => {
     )
 }
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     newsContainer: {
         flexDirection: 'row',
         gap: 12,

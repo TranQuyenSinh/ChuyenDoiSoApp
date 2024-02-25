@@ -99,7 +99,7 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
                         <Pressable onPress={() => dismiss()} style={{ position: 'absolute', top: 0, left: 10 }}>
                             <Ionicons name='chevron-back' size={24} color={Colors.bodyText} />
                         </Pressable>
-                        <Text style={styles.title}>Bình luận {isOpenReplyModal}</Text>
+                        <Text style={styles.title}>Bình luận</Text>
                     </View>
                     {isLoggedIn && (
                         <>

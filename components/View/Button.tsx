@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     defaultBtn: {
         backgroundColor: Colors.default,
         height: 40,
+        paddingHorizontal: 12,
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',

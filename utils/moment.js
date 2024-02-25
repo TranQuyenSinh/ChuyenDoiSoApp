@@ -1,7 +1,7 @@
 import moment from 'moment'
-// import 'moment/locale/vi'
+import 'moment/locale/vi'
 
-moment.locale('vi', {
+moment.updateLocale('vi', {
     relativeTime: {
         future: '%s tới',
         past: '%s',

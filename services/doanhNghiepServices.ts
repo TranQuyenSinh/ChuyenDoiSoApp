@@ -1,16 +1,6 @@
 import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { authAxios } from '@utils/axios'
 
-type User = {
-    id: number
-    email: string
-    first_name: string
-}
-
-type GetUsersResponse = {
-    data: User[]
-}
-
 export const getLoaiHinhDN = async () => {
     try {
         const { data } = await authAxios.get<LoaiHinh[]>('/api/doanhnghiep/loaihinh')

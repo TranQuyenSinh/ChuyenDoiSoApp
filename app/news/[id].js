@@ -121,7 +121,7 @@ const DetailNews = () => {
                                 <Ionicons name='ios-time-outline' size={16} color={Colors.bodyText} />
                                 <Text style={textStyles.mutedSmall}>{moment(news?.createdAt).fromNow()}</Text>
                             </View>
-                            {/* <Text style={styles.noiDung}>{news?.noiDung}</Text> */}
+                            <Text style={styles.noiDung}>{news?.tomTat}</Text>
                             <RenderHTML
                                 tagsStyles={tagStyles}
                                 emSize={18}

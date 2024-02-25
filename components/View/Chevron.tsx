@@ -13,7 +13,7 @@ const Chevron = ({ progress }: ChevronProps) => {
         transform: [{ rotateX: `${progress.value * -180}deg` }],
     }))
     return (
-        <Animated.View style={iconStyle}>
+        <Animated.View style={[styles.container, iconStyle]}>
             <Image source={chevron_icon} style={styles.chevron} />
         </Animated.View>
     )
@@ -22,6 +22,9 @@ const Chevron = ({ progress }: ChevronProps) => {
 export default Chevron
 
 const styles = StyleSheet.create({
+    container: {
+        minWidth: 20,
+    },
     chevron: {
         width: 20,
         height: 20,

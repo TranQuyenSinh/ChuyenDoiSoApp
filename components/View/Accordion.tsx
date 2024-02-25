@@ -37,6 +37,7 @@ const Accordion = ({ title, children }: Props) => {
         <View style={{ overflow: 'hidden', paddingHorizontal: 16 }}>
             <View style={styles.container}>
                 <Pressable
+                    style={styles.titleContainer}
                     onPress={() => {
                         if (heightValue.value === 0) {
                             runOnUI(() => {
@@ -47,8 +48,7 @@ const Accordion = ({ title, children }: Props) => {
                             heightValue.value = withTiming(0)
                         }
                         open.value = !open.value
-                    }}
-                    style={styles.titleContainer}>
+                    }}>
                     <Animated.Text style={[styles.textTitle, titleTextAnimationStyle]}>{title}</Animated.Text>
                     <Chevron progress={progress} />
                 </Pressable>
@@ -73,14 +73,16 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         overflow: 'hidden',
     },
-    textTitle: {
-        fontSize: 18,
-    },
     titleContainer: {
-        padding: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        gap: 6,
+        padding: 20,
+    },
+    textTitle: {
+        fontSize: 18,
+        flex: 1,
     },
     contentContainer: {
         position: 'absolute',

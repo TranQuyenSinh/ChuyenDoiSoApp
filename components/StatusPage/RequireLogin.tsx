@@ -4,6 +4,7 @@ import { defaultStyles } from '@constants/Styles'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import Button from '@components/View/Button'
 
 interface RequireLoginProps {
     message?: string
@@ -17,12 +18,8 @@ const RequireLogin = ({
     const router = useRouter()
     return (
         <View style={[defaultStyles.container, styles.container]}>
-            <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }}>{message}</Text>
-            <Pressable
-                onPress={() => router.replace(redirectHref)}
-                style={[defaultStyles.btn, { padding: 12, flexDirection: 'row', gap: 6, marginTop: 10 }]}>
-                <Text style={defaultStyles.btnText}>Đăng nhập ngay</Text>
-            </Pressable>
+            <Text style={styles.messageText}>{message}</Text>
+            <Button btnStyles={{ marginTop: 12 }} text={'Đăng nhập ngay'} onPress={() => router.push(redirectHref)} />
         </View>
     )
 }
@@ -32,8 +29,14 @@ export default RequireLogin
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: 'transparent',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    messageText: {
+        width: '70%',
+        fontFamily: 'mon-sb',
+        textAlign: 'center',
+        fontSize: 18,
     },
 })

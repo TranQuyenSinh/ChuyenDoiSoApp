@@ -1,24 +1,48 @@
-import { Dimensions, StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Text, View, Image, Pressable, ScrollView } from 'react-native'
-
-import Colors from '@constants/Colors'
-import Modal from '@components/View/Modal'
-import Loading from '@components/StatusPage/Loading'
-import TabPageHeader from '@components/View/TabPageHeader'
+import { useRouter } from 'expo-router'
+import { StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Text, View, Pressable, ScrollView } from 'react-native'
 
-const { width, height } = Dimensions.get('screen')
+import moment from '@utils/moment'
+import Colors from '@constants/Colors'
+import { Ionicons } from '@expo/vector-icons'
+import TabPageHeader from '@components/View/TabPageHeader'
+import RequireLogin from '@components/StatusPage/RequireLogin'
 
 const SurveyPage = () => {
-    const userStore = useSelector(state => state.user)
-    const { isLoggedIn } = userStore
+    const { isLoggedIn } = useSelector(state => state.user)
+    const router = useRouter()
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <TabPageHeader title={'Đánh giá doanh nghiệp'} />
+            <ScrollView contentContainerStyle={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+                <TabPageHeader title={'Danh sách khảo sát'} />
+                {!isLoggedIn && <RequireLogin message='Vui lòng đăng nhập để sử dụng chức năng này' />}
                 {/* {loading && <Loading containerStyles={{ marginTop: 30, backgroundColor: 'transparent' }} />} */}
+
+                {isLoggedIn && (
+                    <>
+                        <Pressable onPress={() => router.push('survey/1')} style={styles.itemContainer}>
+                            <View style={styles.itemInfo}>
+                                <View style={{ flex: 1, gap: 6 }}>
+                                    <Text style={styles.title}>
+                                        Khảo sát: #<Text style={{ color: Colors.default }}>1</Text>
+                                    </Text>
+                                    <Text style={styles.date}>
+                                        <Text style={{ textTransform: 'capitalize' }}>
+                                            {moment(new Date()).format('dddd, HH:mm, DD/MM/YYYY')}
+                                        </Text>
+                                    </Text>
+                                </View>
+                                <Text style={styles.score}>256 điểm</Text>
+                            </View>
+                            <View style={styles.btnContainer}>
+                                <Ionicons name='chevron-forward-outline' size={24} color={Colors.bodyText} />
+                            </View>
+                        </Pressable>
+                    </>
+                )}
             </ScrollView>
         </SafeAreaView>
         // <View style={styles.container}>
@@ -61,39 +85,43 @@ const SurveyPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: Colors.background.default,
     },
-    box: {
-        height: 150,
-        backgroundColor: 'blue',
-        borderRadius: 16,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    boxTitle: {
-        color: Colors.white,
-        fontFamily: 'mon-sb',
-        fontSize: 20,
-        textShadowColor: '#000',
-    },
-    container: {
+    itemContainer: {
         backgroundColor: Colors.white,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 6,
+        marginHorizontal: 16,
+        marginTop: 12,
+        padding: 12,
+        borderRadius: 8,
+        elevation: 6,
+    },
+    itemInfo: {
         flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
-    topImg: {
-        position: 'absolute',
-        top: 0,
-        width,
-        height: 140,
-        resizeMode: 'cover',
+    title: {
+        fontWeight: 'bold',
+        fontSize: 20,
     },
-    topText: {
-        fontSize: 24,
-        paddingHorizontal: 16,
-        textAlign: 'center',
-        marginTop: 50,
-        color: Colors.default,
+    score: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+    itemBottom: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    date: {
+        color: Colors.textGray,
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 })
 

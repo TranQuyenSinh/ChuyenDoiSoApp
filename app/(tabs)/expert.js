@@ -33,7 +33,6 @@ const Page = () => {
     useEffect(() => {
         fetchData()
     }, [])
-
     useEffect(() => {
         ;(async () => {
             setLoading(true)
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 4,
-        resizeMode: 'center',
+        resizeMode: 'cover',
     },
 })
 
