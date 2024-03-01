@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react'
+import React, { useRef, useState, useMemo, useCallback } from 'react'
 
 import { Field, Formik } from 'formik'
 import { useRouter } from 'expo-router'
@@ -20,6 +20,7 @@ import { daiDienDoanhNghiepValidate } from '@validateSchemas/registerValidate'
 import { ValidateInputBox, TextInputBoxWrapper } from '@components/Input/InputBox'
 
 import { formStyles } from './formStyles'
+import { useTinhThanh } from '@hooks/useTinhThanh'
 
 const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
     const router = useRouter()
@@ -29,15 +30,25 @@ const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
     const formRef = useRef(null)
 
     const { loading, tinhThanhs, formDaiDienDN } = useSelector(state => state.dangKy)
+    const { thanhPhoData, huyenData, xaData } = useTinhThanh(formDaiDienDN)
     const { setFormDaiDienDN, resetAllForm } = dangKySlice.actions
 
     const handleChangeText = (field, text) => {
         dispatch(setFormDaiDienDN({ field, value: text }))
     }
 
-    const handleChangeDropdown = (field, item) => {
-        dispatch(setFormDaiDienDN({ field, value: item?.value }))
-    }
+    const handleChangeDropdown = useCallback((field, item) => {
+        console.log('===> item: ', item)
+        dispatch(
+            setFormDaiDienDN({
+                field,
+                value: {
+                    id: item?.value,
+                    name: item?.label,
+                },
+            })
+        )
+    }, [])
 
     const pickImage = async (pickType, field) => {
         const result = await pickImageAsync(pickType)
@@ -66,20 +77,6 @@ const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
         setIsPosting(false)
     }
 
-    const tinhData = useMemo(
-        () =>
-            tinhThanhs.map(item => ({
-                label: item.label,
-                value: item.value,
-            })),
-        [tinhThanhs]
-    )
-
-    const thanhPhoData = useMemo(() => {
-        const tinh = formDaiDienDN.tinh
-        return tinh ? tinhThanhs.find(x => x.value === tinh)?.thanhPhos : []
-    }, [formDaiDienDN.tinh])
-
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             {(loading || isPosting) && <Loading />}
@@ -88,8 +85,9 @@ const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
                     innerRef={formRef}
                     initialValues={{
                         ...formDaiDienDN,
-                        tinh: '',
                         thanhPho: '',
+                        huyen: '',
+                        xa: '',
                         imgMatTruoc: '',
                         imgMatSau: '',
                         chucVu: '',
@@ -198,25 +196,33 @@ const DaiDienDoanhNghiepForm = ({ onBackPage }) => {
                                         label={'Email cá nhân'}
                                     />
                                     {tinhThanhs?.length > 0 && (
-                                        <Field
-                                            data={tinhData}
-                                            component={ValidateDropdownComponent}
-                                            name='tinh'
-                                            label='Tỉnh thành'
-                                            placeholder='Chọn Tỉnh thành'
-                                            mode='default'
-                                            onSelectedChange={handleChangeDropdown}
-                                        />
+                                        <>
+                                            <Field
+                                                data={thanhPhoData}
+                                                component={ValidateDropdownComponent}
+                                                name='thanhPho'
+                                                label='Tỉnh thành'
+                                                placeholder='Chọn Tỉnh thành'
+                                                onSelectedChange={handleChangeDropdown}
+                                            />
+                                            <Field
+                                                data={huyenData}
+                                                component={ValidateDropdownComponent}
+                                                name='huyen'
+                                                label='Quận, Huyện'
+                                                placeholder='Chọn Quận, Huyện'
+                                                onSelectedChange={handleChangeDropdown}
+                                            />
+                                            <Field
+                                                data={xaData}
+                                                component={ValidateDropdownComponent}
+                                                name='xa'
+                                                label='Phường, Xã'
+                                                placeholder='Chọn Phường, Xã'
+                                                onSelectedChange={handleChangeDropdown}
+                                            />
+                                        </>
                                     )}
-                                    <Field
-                                        data={thanhPhoData}
-                                        component={ValidateDropdownComponent}
-                                        name='thanhPho'
-                                        label='Quận, Huyện'
-                                        placeholder='Chọn Quận, Huyện'
-                                        mode='default'
-                                        onSelectedChange={handleChangeDropdown}
-                                    />
                                     <Field
                                         component={ValidateInputBox}
                                         name='diaChi'

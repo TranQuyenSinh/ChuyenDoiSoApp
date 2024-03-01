@@ -4,6 +4,7 @@ import { toast } from '@utils/toast'
 import { getSecureItem } from '@utils/secureStore'
 import { useDangNhap } from './useDangNhap'
 import Constants from '@constants/Constants'
+import { Alert } from 'react-native'
 
 const authOptions = {
     promptMessage: 'Đăng nhập sinh trắc học',
@@ -19,16 +20,23 @@ export default useSinhTracHoc = () => {
     // const [bioType, setBioType] = useState([])
 
     const bioAuthenticate = async () => {
+        if (!isDeviceSupport) {
+            Alert.alert('Thiết bị của bạn không hỗ trợ sinh trắc học')
+            return
+        }
+        if (!isHasBiometric) {
+            Alert.alert('Thiết bị của bạn chưa đăng ký sinh trắc học')
+            return
+        }
+        if (!isBiometricEnabled) {
+            Alert.alert('Bạn chưa thiết lập đăng nhập sinh trắc học')
+            return
+        }
         const result = await LocalAuthentication.authenticateAsync(authOptions)
         const success = result.success
         if (success) {
             tryLoginBySavedInfo(Constants.SecureStore.BioAuth)
         }
-    }
-
-    const getBioSavedInfo = async () => {
-        const data = await getSecureItem(Constants.SecureStore.BioAuth)
-        return data
     }
 
     useEffect(() => {

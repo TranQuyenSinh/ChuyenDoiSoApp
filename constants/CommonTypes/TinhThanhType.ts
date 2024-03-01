@@ -1,11 +1,18 @@
-export interface TinhThanh {
+export interface ThanhPho {
     [key: number]: any
     Id: string
     Name: string
-    Districts: ThanhPho[]
+    Districts: Huyen[]
 }
 
-export interface ThanhPho {
+export interface Huyen {
+    [key: number]: any
+    Id: string
+    Name: string
+    Wards: Xa[]
+}
+
+export interface Xa {
     Id: string
     Name: string
 }

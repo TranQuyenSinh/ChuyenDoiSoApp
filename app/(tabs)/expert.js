@@ -10,6 +10,7 @@ import Loading from '@components/StatusPage/Loading'
 import { getLinhVucs } from '@services/tinTucServices'
 import TabPageHeader from '@components/View/TabPageHeader'
 import { getChuyenGias } from '@services/chuyenGiaServices'
+import no_avatar from '@assets/icons/user.png'
 
 const Page = () => {
     const [linhVuc, setLinhVuc] = useState([])
@@ -68,7 +69,7 @@ const Page = () => {
                                     color: Colors.white,
                                     fontSize: 14,
                                 }}>
-                                {item.tenlinhvuc}
+                                {item.tenLinhVuc}
                             </Text>
                         </Pressable>
                     ))}
@@ -86,7 +87,10 @@ const Page = () => {
                                     }}
                                     key={item.id}
                                     style={styles.chuyenGiaItem}>
-                                    <Image source={{ uri: item.hinhAnh }} style={styles.anhDaiDien} />
+                                    <Image
+                                        source={item?.hinhAnh ? { uri: item?.hinhAnh } : no_avatar}
+                                        style={styles.anhDaiDien}
+                                    />
                                     <View style={{ gap: 3 }}>
                                         <Text style={styles.hoTen}>{item.tenChuyenGia}</Text>
                                         <Text>Email: {item.email}</Text>
@@ -97,7 +101,12 @@ const Page = () => {
                         </View>
                         <Modal showCloseIcon={true} isOpen={isOpenModal} toggle={toggleModal}>
                             <View style={{ flexDirection: 'row', gap: 12 }}>
-                                <Image source={{ uri: chuyenGiaSelected?.hinhAnh }} style={styles.anhDaiDien} />
+                                <Image
+                                    source={
+                                        chuyenGiaSelected?.hinhAnh ? { uri: chuyenGiaSelected?.hinhAnh } : no_avatar
+                                    }
+                                    style={styles.anhDaiDien}
+                                />
                                 <View style={{ gap: 3 }}>
                                     <Text style={styles.hoTen}>{chuyenGiaSelected?.tenChuyenGia}</Text>
                                     <Text>Email: {chuyenGiaSelected?.email}</Text>

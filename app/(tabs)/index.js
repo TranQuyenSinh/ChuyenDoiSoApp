@@ -20,7 +20,7 @@ export default function TrangTin() {
     useEffect(() => {
         ;(async () => {
             let linhVucs = await getLinhVucs()
-            setLinhVucs(linhVucs?.map(item => ({ key: item.id, title: item.tenlinhvuc })))
+            setLinhVucs(linhVucs?.map(item => ({ key: item.id, title: item.tenLinhVuc })))
         })()
     }, [])
 

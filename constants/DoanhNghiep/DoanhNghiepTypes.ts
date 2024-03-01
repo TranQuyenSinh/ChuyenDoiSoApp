@@ -1,5 +1,5 @@
 import { DropdownItem } from '@constants/CommonTypes/DropdownType'
-import { ThanhPho, TinhThanh } from '@constants/CommonTypes/TinhThanhType'
+import { ThanhPho } from '@constants/CommonTypes/TinhThanhType'
 import { string } from 'yup'
 
 export interface DoanhNghiep {
@@ -7,8 +7,9 @@ export interface DoanhNghiep {
     tentienganh: string
     tenviettat: string
     diachi: string
-    tinh: any
     thanhpho: any
+    huyen: any
+    xa: any
     mathue: string
     fax: string
     soluongnhansu: string
@@ -39,6 +40,9 @@ export interface DaiDienDoanhNghiep {
     email: string
     sdt: string
     diachi: string
+    thanhpho: string
+    huyen: string
+    xa: string
     cccd: string
     imgMattruoc: string
     imgMatsau: string

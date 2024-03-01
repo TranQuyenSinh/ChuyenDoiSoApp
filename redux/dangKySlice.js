@@ -20,9 +20,10 @@ const dangKySlice = createSlice({
             loaiHinhId: null,
             tenTiengViet: 'Cảnh Toàn',
             tenTiengAnh: 'Canh Toan',
-            tenVietTat: '',
-            tinh: null,
+            tenVietTat: 'CT',
             thanhPho: null,
+            huyen: null,
+            xa: null,
             diaChi: '30A, Trần Hưng Đạo',
             maSoThue: '98458475',
             fax: '',
@@ -35,6 +36,11 @@ const dangKySlice = createSlice({
                     loaiSdt: 'Di động',
                     sdt: '0913615485',
                 },
+                {
+                    id: Date.now() * 2,
+                    loaiSdt: 'Bàn',
+                    sdt: '0845473875',
+                },
             ],
         },
 
@@ -42,8 +48,9 @@ const dangKySlice = createSlice({
             tenNguoiDaiDien: 'Nguyễn Thị Quỳnh Trâm',
             dienThoai: '0937456575',
             email: 'qt391997@gmail.com',
-            tinh: null,
             thanhPho: null,
+            huyen: null,
+            xa: null,
             diaChi: '5M2, Đặng Dung, Khóm 3',
             cccd: '08748577567',
             imgMatTruoc: null,
@@ -102,8 +109,8 @@ const dangKySlice = createSlice({
 
             // Đăng ký doanh nghiệp
             .addCase(dangKyDoanhNghiep.rejected, (_, { payload }) => {
-                toast(payload?.message)
-                console.log('🚀 ~ Lỗi đăng ký doanh nghiệp: ', payload?.message)
+                // toast(payload?.message)
+                console.log('🚀 ~ Lỗi đăng ký doanh nghiệp: ')
             })
     },
 })
@@ -120,11 +127,11 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             tenNguoiDaiDien,
             dienThoai: dienThoaiDD,
             email: emailDD,
-            tinh: tinhDD,
             thanhPho: thanhPhoDD,
+            huyen: huyenDD,
+            xa: xaDD,
             diaChi: diaChiDD,
             cccd,
-            // noiCap,
             imgMatTruoc,
             imgMatSau,
             chucVu,
@@ -134,9 +141,9 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             tenTiengViet,
             tenTiengAnh,
             tenVietTat,
-            // email: emailDN,
-            tinh: tinhDN,
             thanhPho: thanhPhoDN,
+            huyen: huyenDN,
+            xa: xaDN,
             diaChi: diaChiDN,
             maSoThue,
             fax,
@@ -145,52 +152,66 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             moTa,
             dienThoais: dienThoaisDN,
         } = getState().dangKy.formDN
-        const fullDiaChiDD = `${diaChiDD}, ${thanhPhoDD}, ${tinhDD}`
-        const fullDiaChiDN = `${diaChiDN}, ${thanhPhoDN}, ${tinhDN}`
 
         const formData = new FormData()
 
         // Tài khoản
-        formData.append('name', name)
         formData.append('email', email)
+        formData.append('name', name)
         formData.append('password', password)
 
         // Đại diện doanh nghiệp
-        formData.append('tenNguoiDaiDien', tenNguoiDaiDien)
-        formData.append('dienThoaiDD', dienThoaiDD)
-        formData.append('emailDD', emailDD)
-        formData.append('diaChiDD', fullDiaChiDD)
-        formData.append('cccd', cccd)
-        // formData.append('noiCap', noiCap)
-        formData.append('imgMatTruoc', imgMatTruoc)
-        formData.append('imgMatSau', imgMatSau)
-        formData.append('chucVu', chucVu)
+        formData.append('doanhnghiep_daidien_tendaidien', tenNguoiDaiDien)
+        formData.append('doanhnghiep_daidien_email', emailDD)
+        formData.append('doanhnghiep_daidien_sdt', dienThoaiDD)
+        formData.append('doanhnghiep_daidien_cccd', cccd)
+        formData.append('doanhnghiep_daidien_thanhpho', thanhPhoDD.name)
+        formData.append('doanhnghiep_daidien_huyen', huyenDD.name)
+        formData.append('doanhnghiep_daidien_xa', xaDD.name)
+        formData.append('doanhnghiep_daidien_diachi', diaChiDD)
+        formData.append('doanhnghiep_daidien_chucvu', chucVu.name)
+        formData.append('doanhnghiep_daidien_img_mattruoc', imgMatTruoc)
+        formData.append('doanhnghiep_daidien_img_matsau', imgMatSau)
 
         // Doanh nghiệp
-        formData.append('loaiHinhId', loaiHinhId)
-        formData.append('tenTiengViet', tenTiengViet)
-        formData.append('tenTiengAnh', tenTiengAnh)
-        formData.append('tenVietTat', tenVietTat)
-        // formData.append('emailDN', emailDN)
-        formData.append('diaChiDN', fullDiaChiDN)
-        formData.append('maSoThue', maSoThue)
-        formData.append('fax', fax)
-        formData.append('soLuongNhanSu', soLuongNhanSu)
-        formData.append('ngayLap', ngayLap)
-        formData.append('moTa', moTa)
+        formData.append('doanhnghiep_loaihinh_id', loaiHinhId.id)
+        formData.append('doanhnghiep_tentiengviet', tenTiengViet)
+        formData.append('doanhnghiep_tentienganh', tenTiengAnh)
+        formData.append('doanhnghiep_tenviettat', tenVietTat)
+        formData.append('doanhnghiep_ngaylap', ngayLap)
+        formData.append('doanhnghiep_mathue', maSoThue)
+        formData.append('doanhnghiep_fax', fax)
+        formData.append('doanhnghiep_soluongnhansu', soLuongNhanSu)
+        formData.append('doanhnghiep_thanhpho', thanhPhoDN.name)
+        formData.append('doanhnghiep_huyen', huyenDN.name)
+        formData.append('doanhnghiep_xa', xaDN.name)
+        formData.append('doanhnghiep_diachi', diaChiDN)
+        formData.append('doanhnghiep_mota', moTa)
+
         dienThoaisDN.forEach((item, index) => {
-            formData.append(`DienThoaiDN[${index}].LoaiSdt`, item.loaiSdt)
-            formData.append(`DienThoaiDN[${index}].Sdt`, item.sdt)
+            formData.append(`doanhnghiep_sdt[]`, JSON.stringify(item))
         })
 
-        await axios.post('/api/auth/register', formData, {
+        await axios.post('/api/doanhnghiep/register', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
     } catch (error) {
         const errData = error?.response?.data
-        console.log('===> error: ', JSON.stringify(error))
-        return rejectWithValue({ code: errData?.code, message: errData?.message })
+        console.log('===> error: ', errData)
+        // return rejectWithValue({ code: errData?.code, message: errData?.message })
+        return rejectWithValue()
     }
+
+    // try {
+    //     const formData = new FormData()
+    //     formData.append('test', 123)
+    //     await axios.post('/api/doanhnghiep/test', formData, {
+    //         headers: { 'Content-Type': 'multipart/form-data' },
+    //     })
+    //     console.log('===> Đã đăng ký thành công: ')
+    // } catch (error) {
+    //     console.log('===> Lỗi đăng ký: ', error)
+    // }
 })
 
 export default dangKySlice

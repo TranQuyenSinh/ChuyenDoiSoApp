@@ -19,7 +19,7 @@ export const ValidateDropdownComponent = ({
     data,
     label = 'Chọn',
     placeholder = '',
-    mode = 'modal',
+    mode = 'default',
     onSelectedChange,
     containerStyles,
     field: { name, onChange, value },

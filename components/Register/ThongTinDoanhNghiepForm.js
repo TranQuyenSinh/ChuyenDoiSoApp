@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, memo } from 'react'
 
 import { Text, View, Pressable } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,6 +18,7 @@ import TextInputBox, { TextAreaInputBox, ValidateInputBox } from '@components/In
 import { formStyles } from './formStyles'
 import { Field, Formik } from 'formik'
 import { dangKyDoanhNghiepValidate } from '@validateSchemas/registerValidate'
+import { useTinhThanh } from '@hooks/useTinhThanh'
 const loaiDienThoai = [
     { value: 'Di động', label: 'Di động' },
     { value: 'Bàn', label: 'Bàn' },
@@ -29,19 +30,28 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
     const { setFormDN, addSoDienThoaiDN, removeSoDienThoaiDN, setSoDienThoaiDN } = dangKySlice.actions
     const [loaiHinhs, setLoaiHinhs] = useState([])
     const [localLoading, setLocalLoading] = useState(false)
+    const { thanhPhoData, huyenData, xaData } = useTinhThanh(formDN)
 
-    const handleChangeDate = date => {
+    const handleChangeDate = useCallback(date => {
         const formatedDate = moment(date, 'YYYY/MM/DD').format('DD/MM/YYYY')
         dispatch(setFormDN({ field: 'ngayLap', value: formatedDate }))
-    }
+    }, [])
 
-    const handleChangeText = (field, text) => {
+    const handleChangeText = useCallback((field, text) => {
         dispatch(setFormDN({ field, value: text }))
-    }
+    }, [])
 
-    const handleChangeDropdown = (field, item) => {
-        dispatch(setFormDN({ field, value: item?.value }))
-    }
+    const handleChangeDropdown = useCallback((field, item) => {
+        dispatch(
+            setFormDN({
+                field,
+                value: {
+                    id: item?.value,
+                    name: item?.label,
+                },
+            })
+        )
+    }, [])
 
     const fetchData = async () => {
         setLocalLoading(true)
@@ -49,20 +59,6 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
         setLoaiHinhs(loaiHinhs.map(item => ({ value: item.id, label: item.tenLoaiHinh })))
         setLocalLoading(false)
     }
-
-    const tinhData = useMemo(
-        () =>
-            tinhThanhs.map(item => ({
-                label: item.label,
-                value: item.value,
-            })),
-        [tinhThanhs]
-    )
-
-    const thanhPhoData = useMemo(() => {
-        const tinh = formDN.tinh
-        return tinh ? tinhThanhs.find(x => x.value === tinh)?.thanhPhos : []
-    }, [formDN.tinh])
 
     useEffect(() => {
         fetchData()
@@ -78,8 +74,9 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                         initialValues={{
                             ...formDN,
                             loaiHinhId: '',
-                            tinh: '',
                             thanhPho: '',
+                            huyen: '',
+                            xa: '',
                         }}
                         onSubmit={onNextPage}>
                         {({ handleSubmit, isValid, values }) => (
@@ -142,25 +139,33 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                                     <Text style={formStyles.sectionTitle}>Thông tin liên hệ</Text>
                                     <View style={{ gap: 10 }}>
                                         {tinhThanhs?.length > 0 && (
-                                            <Field
-                                                data={tinhData}
-                                                component={ValidateDropdownComponent}
-                                                name='tinh'
-                                                label='Tỉnh thành'
-                                                placeholder='Chọn Tỉnh thành'
-                                                mode='default'
-                                                onSelectedChange={handleChangeDropdown}
-                                            />
+                                            <>
+                                                <Field
+                                                    data={thanhPhoData}
+                                                    component={ValidateDropdownComponent}
+                                                    name='thanhPho'
+                                                    label='Tỉnh thành'
+                                                    placeholder='Chọn Tỉnh thành'
+                                                    onSelectedChange={handleChangeDropdown}
+                                                />
+                                                <Field
+                                                    data={huyenData}
+                                                    component={ValidateDropdownComponent}
+                                                    name='huyen'
+                                                    label='Quận, Huyện'
+                                                    placeholder='Chọn Quận, Huyện'
+                                                    onSelectedChange={handleChangeDropdown}
+                                                />
+                                                <Field
+                                                    data={xaData}
+                                                    component={ValidateDropdownComponent}
+                                                    name='xa'
+                                                    label='Phường, Xã'
+                                                    placeholder='Chọn Phường, Xã'
+                                                    onSelectedChange={handleChangeDropdown}
+                                                />
+                                            </>
                                         )}
-                                        <Field
-                                            data={thanhPhoData}
-                                            component={ValidateDropdownComponent}
-                                            name='thanhPho'
-                                            label='Quận, Huyện'
-                                            placeholder='Chọn Quận, Huyện'
-                                            mode='default'
-                                            onSelectedChange={handleChangeDropdown}
-                                        />
                                         <Field
                                             component={ValidateInputBox}
                                             name='diaChi'

@@ -23,9 +23,10 @@ export const daiDienDoanhNghiepValidate = yup.object().shape({
     imgMatSau: yup.string().required('Không được để trống'),
 
     // dropdown
-    tinh: yup.string().required('Không được để trống'),
-    thanhPho: yup.string().required('Không được để trống'),
     diaChi: yup.string().required('Không được để trống'),
+    thanhPho: yup.string().required('Không được để trống'),
+    huyen: yup.string().required('Không được để trống'),
+    xa: yup.string().required('Không được để trống'),
     chucVu: yup.string().required('Không được để trống'),
 })
 
@@ -38,9 +39,10 @@ export const dangKyDoanhNghiepValidate = yup.object().shape({
     loaiHinhId: yup.string().required('Không được để trống'),
 
     // address
-    tinh: yup.string().required('Không được để trống'),
-    thanhPho: yup.string().required('Không được để trống'),
     diaChi: yup.string().required('Không được để trống'),
+    thanhPho: yup.string().required('Không được để trống'),
+    huyen: yup.string().required('Không được để trống'),
+    xa: yup.string().required('Không được để trống'),
 })
 
 // test

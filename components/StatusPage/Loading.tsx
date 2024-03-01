@@ -16,7 +16,7 @@ export default function Loading({ containerStyles }: LoadingProps) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0000001b',
+        backgroundColor: '#afafaf1b',
         width,
         height: '100%',
         alignItems: 'center',

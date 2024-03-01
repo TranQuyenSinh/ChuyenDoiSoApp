@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useRouter, useNavigation } from 'expo-router'
@@ -8,7 +8,7 @@ import { Text, View } from 'react-native'
 import { linkStyles, textStyles } from '@constants/Styles'
 import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
-import dangKySlice from '@redux/dangKySlice'
+import dangKySlice, { dangKyDoanhNghiep } from '@redux/dangKySlice'
 import TextInputBox, { ValidateInputBox } from '@components/Input/InputBox'
 import { formStyles } from './formStyles'
 import { Ionicons } from '@expo/vector-icons'
@@ -30,6 +30,10 @@ const TaiKhoanForm = ({ onNextPage }) => {
     const handleSubmit = async () => {
         onNextPage()
     }
+
+    useEffect(() => {
+        dispatch(dangKyDoanhNghiep())
+    }, [])
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={formStyles.sectionContainer}>

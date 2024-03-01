@@ -3,7 +3,7 @@ import { authAxios } from '@utils/axios'
 
 export const getLoaiHinhDN = async () => {
     try {
-        const { data } = await authAxios.get<LoaiHinh[]>('/api/doanhnghiep/loaihinh')
+        const { data } = await authAxios.get<LoaiHinh>('/api/loaihinhdoanhnghiep')
         return data
     } catch (err) {
         console.log('===> Lỗi lấy loại hình doanh nghiệp')
