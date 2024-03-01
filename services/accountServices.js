@@ -16,13 +16,12 @@ export const doiAvatar = async ({ uri, type, name }) => {
     try {
         const formData = new FormData()
         formData.append('avatar', { uri, type, name })
-        await authAxios.post('/api/account/change-avatar', formData, {
+        await authAxios.post('/api/doanhnghiep/avatar', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
         return true
     } catch (error) {
-        console.log('===> Error: ', JSON.stringify(error))
-        console.log('===> Error: ', error)
+        console.log('===> Lỗi đổi avatar', JSON.stringify(error?.response?.data))
         return false
     }
 }

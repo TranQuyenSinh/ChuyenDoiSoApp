@@ -71,8 +71,11 @@ const userSlice = createSlice({
                 }
             })
             // renewProfile
-            .addCase(renewUserProfile.fulfilled, (state, action) => {
-                state.userProfile = action.payload
+            .addCase(renewUserProfile.fulfilled, (state, { payload }) => {
+                state.userProfile = {
+                    ...payload,
+                    image: payload?.image + '?' + new Date(),
+                }
             })
     },
 })
@@ -128,7 +131,7 @@ export const loginWithOAuth = createAsyncThunk(
 )
 
 export const renewUserProfile = createAsyncThunk('user/renewUserProfile', async () => {
-    const { data } = await authAxios.get('/api/account')
+    const { data } = await authAxios.get('/api/doanhnghiep/profile')
     return data
 })
 
