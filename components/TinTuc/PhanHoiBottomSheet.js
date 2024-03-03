@@ -1,14 +1,15 @@
-import { View, Text, Button, TouchableOpacity, StyleSheet, Pressable, ScrollView } from 'react-native'
-import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { BottomSheetBackdrop, BottomSheetModal, BottomSheetScrollView, useBottomSheetModal } from '@gorhom/bottom-sheet'
-import Colors from '@constants/Colors'
-import { Link } from 'expo-router'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { defaultStyles, textStyles } from '@constants/Styles'
+import React, { memo, useRef, useMemo, useState, useEffect, useCallback } from 'react'
+
 import { TextInput } from 'react-native-gesture-handler'
-import { useDispatch, useSelector } from 'react-redux'
+import { View, Text, Image, Pressable, StyleSheet } from 'react-native'
+
 import moment from '@utils/moment'
-import tinTucSlice, { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
+import Colors from '@constants/Colors'
+import { Ionicons } from '@expo/vector-icons'
+import no_avatar from '@assets/icons/user.png'
+import { textStyles, defaultStyles } from '@constants/Styles'
+import { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
+import { BottomSheetModal, BottomSheetBackdrop, useBottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
 
 const PhanHoiBottomSheet = ({ isOpen, toggle, replyComment, dispatch }) => {
     const [cmtText, setCmtText] = useState('')
@@ -57,24 +58,38 @@ const PhanHoiBottomSheet = ({ isOpen, toggle, replyComment, dispatch }) => {
                     scrollEnabled={true}>
                     {replyComment && (
                         <View style={styles.commentContainer}>
-                            <View style={styles.commentBox}>
-                                <Text style={{ color: Colors.bodyText }}>{replyComment.hoTen}</Text>
-                                <Text>{replyComment.noiDung}</Text>
-                            </View>
-                            <View style={styles.commentActions}>
-                                <Text style={textStyles.mutedSmall}>{moment(replyComment.createdAt).fromNow()}</Text>
+                            <Image
+                                source={replyComment.avatar ? { uri: replyComment.avatar } : no_avatar}
+                                style={styles.userAvatar}
+                            />
+                            <View style={{ flex: 1 }}>
+                                <View style={styles.commentBox}>
+                                    <Text style={{ color: Colors.bodyText }}>{replyComment.hoTen}</Text>
+                                    <Text>{replyComment.noiDung}</Text>
+                                </View>
+                                <View style={styles.commentActions}>
+                                    <Text style={textStyles.mutedSmall}>
+                                        {moment(replyComment.createdAt).fromNow()}
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                     )}
                     {replyComment?.phanHois?.length > 0 &&
                         replyComment.phanHois.map(item => (
                             <View key={item.id} style={[styles.commentContainer, { paddingStart: 50 }]}>
-                                <View style={styles.commentBox}>
-                                    <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
-                                    <Text>{item.noiDung}</Text>
-                                </View>
-                                <View style={styles.commentActions}>
-                                    <Text style={textStyles.mutedSmall}>{moment(item.createdAt).fromNow()}</Text>
+                                <Image
+                                    source={item.avatar ? { uri: item.avatar } : no_avatar}
+                                    style={styles.userAvatar}
+                                />
+                                <View style={{ flex: 1 }}>
+                                    <View style={styles.commentBox}>
+                                        <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
+                                        <Text>{item.noiDung}</Text>
+                                    </View>
+                                    <View style={styles.commentActions}>
+                                        <Text style={textStyles.mutedSmall}>{moment(item.createdAt).fromNow()}</Text>
+                                    </View>
                                 </View>
                             </View>
                         ))}
@@ -115,6 +130,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     commentContainer: {
+        flexDirection: 'row',
+        gap: 12,
+        justifyContent: 'space-between',
         paddingHorizontal: 24,
     },
     commentBox: {
@@ -156,6 +174,12 @@ const styles = StyleSheet.create({
         color: Colors.white,
         fontFamily: 'mon-b',
     },
+    userAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 50,
+        marginTop: 4,
+    },
 })
 
-export default PhanHoiBottomSheet
+export default memo(PhanHoiBottomSheet)

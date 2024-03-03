@@ -12,11 +12,6 @@ export const getLoaiHinhDN = async () => {
 }
 
 export const getThongTinDN = async () => {
-    try {
-        const { data } = await authAxios.get<DoanhNghiep>('/api/doanhnghiep/doanhnghiep-info')
-        return data
-    } catch (error) {
-        console.log('===> Lỗi lấy thông tin doanh nghiệp')
-        return null
-    }
+    const { data } = await authAxios.get<DoanhNghiep>('/api/doanhnghiep/profile')
+    return data
 }

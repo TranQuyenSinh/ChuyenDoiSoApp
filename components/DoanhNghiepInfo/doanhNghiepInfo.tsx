@@ -10,11 +10,13 @@ import TryAgain from '@components/StatusPage/TryAgain'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import moment from 'moment'
 import dnStyles from './dnStyles'
+import { AppDispatch, RootState } from '@redux/store'
+import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 
 const DoanhNghiepInfo = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const navigation = useNavigation()
-    const { doanhNghiep, status } = useSelector(state => state.doanhNghiep)
+    const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -31,45 +33,48 @@ const DoanhNghiepInfo = () => {
                 <ScrollView style={dnStyles.contentContainer} showsVerticalScrollIndicator={false}>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Tên doanh nghiệp</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.tentiengviet}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.tenTiengViet}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Tên tiếng anh</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.tentienganh}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.tenTiengAnh}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Tên viết tắt</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.tenviettat}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.tenVietTat}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Ngày hoạt động</Text>
-                        <Text style={dnStyles.itemText}>{moment(doanhNghiep?.ngaylap).format('DD/MM/YYYY')}</Text>
+                        <Text style={dnStyles.itemText}>{moment(doanhNghiep?.ngayLap).format('DD/MM/YYYY')}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Loại hình doanh nghiệp</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.loaihinh?.tenLoaiHinh}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.loaiHinh?.tenLoaiHinh}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Mã số thuế</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.mathue}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.maThue}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Số lượng nhân sự</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.soluongnhansu}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.soLuongNhanSu}</Text>
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Mô tả</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.mota}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.moTa}</Text>
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Địa chỉ</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.diachi}</Text>
+                        <Text
+                            style={
+                                dnStyles.itemText
+                            }>{`${doanhNghiep?.diaChi}, ${doanhNghiep?.xa}, ${doanhNghiep?.huyen}, ${doanhNghiep?.thanhPho}`}</Text>
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Điện thoại</Text>
-                        {doanhNghiep?.dienthoais.map(dt => (
+                        {doanhNghiep?.sdts.map(dt => (
                             <Text style={dnStyles.itemText} key={dt.id}>
-                                - {dt.sdt} ({dt.loaisdt})
+                                - {dt.sdt} ({dt.loaiSdt})
                             </Text>
                         ))}
                     </View>

@@ -1,24 +1,42 @@
-import { DropdownItem } from '@constants/CommonTypes/DropdownType'
-import { ThanhPho } from '@constants/CommonTypes/TinhThanhType'
-import { string } from 'yup'
-
 export interface DoanhNghiep {
-    tentiengviet: string
-    tentienganh: string
-    tenviettat: string
-    diachi: string
-    thanhpho: any
-    huyen: any
-    xa: any
-    mathue: string
-    fax: string
-    soluongnhansu: string
-    ngaylap: string
-    mota: string
-    trangthai: string
-    loaihinh: (LoaiHinh & DropdownItem) | undefined
-    dienthoais: DienThoai[]
-    daidien: DaiDienDoanhNghiep
+    id: number
+    tenTiengViet: string
+    tenTiengAnh: string
+    tenVietTat: string
+    ngayLap: string
+    thanhPho: string
+    huyen: string
+    xa: string
+    diaChi: string
+    maThue: string
+    fax?: any
+    soLuongNhanSu: number
+    moTa: string
+    loaiHinh: LoaiHinh
+    daiDien: DaiDienDoanhNghiep
+    sdts: Sdt[]
+}
+
+export interface Sdt {
+    id: number
+    loaiSdt: string
+    sdt: string
+}
+
+export interface DaiDienDoanhNghiep {
+    id: number
+    tenDaiDien: string
+    email: string
+    sdt: string
+    thanhPho: string
+    huyen: string
+    xa: string
+    diaChi: string
+    cccd: string
+    imgMatTruoc: string
+    imgMatSau: string
+    chucVu: string
+    moTa?: any
 }
 
 export interface LoaiHinh {
@@ -32,19 +50,4 @@ export interface DienThoai {
     id: string
     sdt: string
     loaisdt: string
-}
-
-export interface DaiDienDoanhNghiep {
-    id: string
-    tendaidien: string
-    email: string
-    sdt: string
-    diachi: string
-    thanhpho: string
-    huyen: string
-    xa: string
-    cccd: string
-    imgMattruoc: string
-    imgMatsau: string
-    chucvu: string
 }

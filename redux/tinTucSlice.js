@@ -30,8 +30,8 @@ const tinTucSlice = createSlice({
     },
 })
 
-export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, { getState }) => {
-    let { tinTucId, binhLuanLoading } = getState().tinTuc
+export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, { getState, rejectWithValue }) => {
+    let { tinTucId } = getState().tinTuc
     if (!tinTucId) return
     const data = await getBinhLuanByTinTucId(tinTucId)
     return data
@@ -40,13 +40,11 @@ export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, 
 export const themBinhLuan = createAsyncThunk(
     'tinTuc/themBinhLuan',
     async ({ noiDung, binhLuanChaId = null }, { getState }) => {
-        const userId = getState().user.userProfile?.id
         const { tinTucId } = getState().tinTuc
-        if (!userId || !tinTucId) return
+        if (!tinTucId) return
         await binhLuanServices.themBinhLuan({
             noiDung,
             tinTucId,
-            userId,
             binhLuanChaId,
         })
     }

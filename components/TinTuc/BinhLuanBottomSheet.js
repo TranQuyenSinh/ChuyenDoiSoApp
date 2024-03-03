@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { TextInput } from 'react-native-gesture-handler'
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
 
 import moment from '@utils/moment'
 import Colors from '@constants/Colors'
@@ -11,6 +11,7 @@ import { textStyles, defaultStyles } from '@constants/Styles'
 import RequireLogin from '@components/StatusPage/RequireLogin'
 import { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
 import { BottomSheetModal, BottomSheetBackdrop, useBottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import no_avatar from '@assets/icons/user.png'
 
 import PhanHoiBottomSheet from './PhanHoiBottomSheet'
 
@@ -25,8 +26,7 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
 
     const [refreshing, setRefreshing] = useState(false)
 
-    const tinTucStore = useSelector(state => state.tinTuc)
-    const { tinTucId, binhLuans } = tinTucStore
+    const { tinTucId, binhLuans } = useSelector(state => state.tinTuc)
 
     const userStore = useSelector(state => state.user)
     const { isLoggedIn } = userStore
@@ -113,38 +113,44 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
                                 {comments?.length > 0 &&
                                     comments.map(item => (
                                         <View key={item.id} style={styles.commentContainer}>
-                                            <View style={styles.commentBox}>
-                                                <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
-                                                <Text>{item.noiDung}</Text>
-                                            </View>
-                                            <View style={styles.commentActions}>
-                                                <Text style={textStyles.mutedSmall}>
-                                                    {moment(item.createdAt).fromNow()}
-                                                </Text>
-                                                <Pressable onPress={() => handleTraLoiBinhLuan(item.id)}>
-                                                    <Text style={{ fontWeight: 'bold', fontFamily: 'mon-sb' }}>
-                                                        Trả lời
+                                            <Image
+                                                source={item.avatar ? { uri: item.avatar } : no_avatar}
+                                                style={styles.userAvatar}
+                                            />
+                                            <View style={{ flex: 1 }}>
+                                                <View style={styles.commentBox}>
+                                                    <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
+                                                    <Text>{item.noiDung}</Text>
+                                                </View>
+                                                <View style={styles.commentActions}>
+                                                    <Text style={textStyles.mutedSmall}>
+                                                        {moment(item.createdAt).fromNow()}
                                                     </Text>
-                                                </Pressable>
+                                                    <Pressable onPress={() => handleTraLoiBinhLuan(item.id)}>
+                                                        <Text style={{ fontWeight: 'bold', fontFamily: 'mon-sb' }}>
+                                                            Trả lời
+                                                        </Text>
+                                                    </Pressable>
+                                                </View>
+                                                {item.phanHois?.length > 0 && (
+                                                    <Pressable
+                                                        onPress={() => handleTraLoiBinhLuan(item.id)}
+                                                        style={{
+                                                            flexDirection: 'row',
+                                                            alignItems: 'center',
+                                                            gap: 6,
+                                                            marginTop: 6,
+                                                            marginStart: 6,
+                                                        }}>
+                                                        <MaterialIcons
+                                                            name='subdirectory-arrow-right'
+                                                            size={24}
+                                                            color={Colors.bodyText}
+                                                        />
+                                                        <Text>Xem thêm ({item.phanHois.length}) phản hồi</Text>
+                                                    </Pressable>
+                                                )}
                                             </View>
-                                            {item.phanHois?.length > 0 && (
-                                                <Pressable
-                                                    onPress={() => handleTraLoiBinhLuan(item.id)}
-                                                    style={{
-                                                        flexDirection: 'row',
-                                                        alignItems: 'center',
-                                                        gap: 6,
-                                                        marginTop: 6,
-                                                        marginStart: 6,
-                                                    }}>
-                                                    <MaterialIcons
-                                                        name='subdirectory-arrow-right'
-                                                        size={24}
-                                                        color={Colors.bodyText}
-                                                    />
-                                                    <Text>Xem thêm ({item.phanHois.length}) phản hồi</Text>
-                                                </Pressable>
-                                            )}
                                         </View>
                                     ))}
                             </BottomSheetScrollView>
@@ -191,6 +197,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     commentContainer: {
+        flexDirection: 'row',
+        gap: 12,
+        justifyContent: 'space-between',
         paddingHorizontal: 24,
     },
     commentBox: {
@@ -231,6 +240,12 @@ const styles = StyleSheet.create({
     sendBtnText: {
         color: Colors.white,
         fontFamily: 'mon-b',
+    },
+    userAvatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 50,
+        marginTop: 4,
     },
 })
 

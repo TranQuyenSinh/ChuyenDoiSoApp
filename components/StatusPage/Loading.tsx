@@ -1,13 +1,14 @@
+import { View, ViewStyle, Dimensions, StyleSheet, ActivityIndicator } from 'react-native'
 import Colors from '@constants/Colors'
-import { ActivityIndicator, Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native'
+const { width } = Dimensions.get('window')
 
-const { width, height } = Dimensions.get('window')
 interface LoadingProps {
-    containerStyles: ViewStyle
+    containerStyles?: ViewStyle
+    isCoverScreen?: boolean
 }
-export default function Loading({ containerStyles }: LoadingProps) {
+export default function Loading({ containerStyles, isCoverScreen = false }: LoadingProps) {
     return (
-        <View style={[styles.container, containerStyles]}>
+        <View style={[styles.container, containerStyles, isCoverScreen && styles.containerAbsolute]}>
             <ActivityIndicator size={'large'} color={Colors.default} />
         </View>
     )
@@ -22,5 +23,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 19,
+    },
+
+    containerAbsolute: {
+        position: 'absolute',
+        backgroundColor: '#2c2c2c1b',
     },
 })
