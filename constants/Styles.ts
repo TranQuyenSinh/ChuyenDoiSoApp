@@ -65,6 +65,11 @@ export const defaultStyles = StyleSheet.create({
 })
 
 export const textStyles = StyleSheet.create({
+    longText: {
+        fontSize: 16,
+        textAlign: 'justify',
+        lineHeight: 24,
+    },
     small: {
         fontSize: 14,
         color: Colors.bodyText,

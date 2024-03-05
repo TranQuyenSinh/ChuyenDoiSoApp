@@ -22,7 +22,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.tranquyensinh.ChuyenDoiSoApp"
     },
     "web": {
       "bundler": "metro",
@@ -41,6 +45,14 @@
     "experiments": {
       "typedRoutes": true,
       "jsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "cbf87da9-5cc3-48be-b19a-8e32ff48475a"
+      }
     }
   }
 }

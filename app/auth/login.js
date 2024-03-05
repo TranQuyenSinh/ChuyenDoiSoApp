@@ -8,10 +8,10 @@ import { Text, View, Image, Keyboard, Pressable, TouchableWithoutFeedback } from
 import Colors from '@constants/Colors'
 import Constants from '@constants/Constants'
 import { useDangNhap } from '@hooks/useDangNhap'
-import googleIcon from '@assets/icons/google.png'
+import googleIcon from '@assets/icons/google.jpg'
 import useSinhTracHoc from '@hooks/useSinhTracHoc'
 import { Entypo, Ionicons } from '@expo/vector-icons'
-import facebookIcon from '@assets/icons/facebook.png'
+import facebookIcon from '@assets/icons/facebook.jpg'
 import { linkStyles, textStyles, defaultStyles } from '@constants/Styles'
 
 import authStyles from './authStyles'

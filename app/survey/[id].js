@@ -6,10 +6,10 @@ import PageHeader from '@components/View/PageHeader'
 import { ScrollView } from 'react-native-gesture-handler'
 import { LinearGradient } from 'expo-linear-gradient'
 import moment from '@utils/moment'
-import survey1_bg from '@assets/images/survey1.png'
-import survey2_bg from '@assets/images/survey2.png'
-import survey3_bg from '@assets/images/survey3.png'
-import survey4_bg from '@assets/images/survey4.png'
+import survey1_bg from '@assets/images/survey1.jpg'
+import survey2_bg from '@assets/images/survey2.jpg'
+import survey3_bg from '@assets/images/survey3.jpg'
+import survey4_bg from '@assets/images/survey4.jpg'
 
 const ChiTietKhaoSat = () => {
     const { id } = useLocalSearchParams()

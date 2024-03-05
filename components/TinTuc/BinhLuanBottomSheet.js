@@ -11,7 +11,7 @@ import { textStyles, defaultStyles } from '@constants/Styles'
 import RequireLogin from '@components/StatusPage/RequireLogin'
 import { themBinhLuan, fetchBinhLuan as fetchBinhLuanAction } from '@redux/tinTucSlice'
 import { BottomSheetModal, BottomSheetBackdrop, useBottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet'
-import no_avatar from '@assets/icons/user.png'
+import no_avatar from '@assets/icons/user.jpg'
 
 import PhanHoiBottomSheet from './PhanHoiBottomSheet'
 
@@ -57,9 +57,11 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
     }
 
     const fetchBinhLuan = async () => {
-        setRefreshing(true)
-        await dispatch(fetchBinhLuanAction()).unwrap()
-        setRefreshing(false)
+        if (isLoggedIn) {
+            setRefreshing(true)
+            await dispatch(fetchBinhLuanAction()).unwrap()
+            setRefreshing(false)
+        }
     }
 
     useEffect(() => {

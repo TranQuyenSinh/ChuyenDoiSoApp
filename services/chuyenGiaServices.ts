@@ -12,3 +12,13 @@ export const getChuyenGias = async (linhVucId: string) => {
         return []
     }
 }
+
+export const getChuyenGia = async (id: number) => {
+    try {
+        const { data } = await axios.get<ChuyenGia>(`/api/chuyengia/${id}`)
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy chuyên gia', JSON.stringify(error))
+        return undefined
+    }
+}

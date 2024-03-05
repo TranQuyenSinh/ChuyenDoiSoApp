@@ -12,23 +12,6 @@ import { useDangNhap } from '@hooks/useDangNhap'
 import Constants from '@constants/Constants'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
-const tokenCache = {
-    async getToken(key) {
-        try {
-            return SecureStore.getItemAsync(key)
-        } catch (e) {
-            return
-        }
-    },
-    async saveToken(key, value) {
-        try {
-            return SecureStore.setItemAsync(key, value)
-        } catch (e) {
-            return
-        }
-    },
-}
-
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,

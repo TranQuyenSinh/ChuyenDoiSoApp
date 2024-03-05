@@ -80,11 +80,10 @@ export const useDangNhap = () => {
     }
 
     const logOut = async () => {
-        await signOut()
         dispatch(userSlice.actions.logout())
         await deleteSecureItem(Constants.SecureStore.SavedAuth)
-        toast('Đã đăng xuất tài khoản')
         console.log('===> User logout success')
+        await signOut()
     }
 
     return { loginWithPassword, loginOAuth, logOut, tryLoginBySavedInfo }

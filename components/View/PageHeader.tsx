@@ -1,10 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import Colors from '@constants/Colors'
 
-const PageHeader = ({ title, style = undefined }) => {
+type PageHeaderProps = {
+    title?: string
+    style?: ViewStyle
+}
+
+const PageHeader = ({ title, style }: PageHeaderProps) => {
     const router = useRouter()
     return (
         <View style={[styles.container, style]}>

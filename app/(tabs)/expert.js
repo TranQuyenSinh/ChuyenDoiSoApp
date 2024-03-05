@@ -10,44 +10,44 @@ import Loading from '@components/StatusPage/Loading'
 import { getLinhVucs } from '@services/tinTucServices'
 import TabPageHeader from '@components/View/TabPageHeader'
 import { getChuyenGias } from '@services/chuyenGiaServices'
-import no_avatar from '@assets/icons/user.png'
+import no_avatar from '@assets/icons/user.jpg'
+import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 
 const Page = () => {
     const [linhVuc, setLinhVuc] = useState([])
     const [linhVucSelected, setLinhVucSelected] = useState(null)
     const [chuyenGias, setChuyenGias] = useState([])
-    const [isOpenModal, setIsOpenModal] = useState(false)
-    const [chuyenGiaSelected, setChuyenGiaSelected] = useState(null)
     const [loading, setLoading] = useState(false)
 
-    const toggleModal = () => {
-        setIsOpenModal(!isOpenModal)
-    }
-
-    const fetchData = async () => {
+    const fetchLinhVucs = async () => {
         setLoading(true)
         let data = await getLinhVucs()
         setLinhVuc(data)
         setLinhVucSelected(data[0])
         setLoading(false)
     }
+
+    const fetchChuyenGiasByLinhVuc = async linhVucId => {
+        setLoading(true)
+        const data = await getChuyenGias(linhVucId)
+        setChuyenGias(data)
+        setLoading(false)
+    }
     useEffect(() => {
-        fetchData()
+        fetchLinhVucs()
     }, [])
     useEffect(() => {
-        ;(async () => {
-            setLoading(true)
-            if (linhVucSelected?.id) {
-                const data = await getChuyenGias(linhVucSelected.id)
-                setChuyenGias(data)
-            }
-            setLoading(false)
-        })()
+        if (linhVucSelected?.id) {
+            fetchChuyenGiasByLinhVuc(linhVucSelected?.id)
+        }
     }, [linhVucSelected])
+
     return (
         <SafeAreaView style={styles.container}>
             <TabPageHeader title={'Chuyên gia tư vấn'} />
             <ScrollView showsVerticalScrollIndicator={false}>
+                {/* Lĩnh vực */}
                 <ScrollView
                     style={{ gap: 4, paddingTop: 16 }}
                     contentContainerStyle={{ gap: 6, paddingHorizontal: 16 }}
@@ -82,8 +82,7 @@ const Page = () => {
                             {chuyenGias?.map(item => (
                                 <Pressable
                                     onPress={() => {
-                                        setChuyenGiaSelected(item)
-                                        toggleModal()
+                                        router.push(`/chuyengia/${item.id}`)
                                     }}
                                     key={item.id}
                                     style={styles.chuyenGiaItem}>
@@ -93,13 +92,18 @@ const Page = () => {
                                     />
                                     <View style={{ gap: 3 }}>
                                         <Text style={styles.hoTen}>{item.tenChuyenGia}</Text>
-                                        <Text>Email: {item.email}</Text>
-                                        <Text>Số điện thoại: {item.sdt}</Text>
+                                        <Text>
+                                            <Ionicons name='call-sharp' size={20} color={Colors.success} /> {item.email}
+                                        </Text>
+                                        <Text>
+                                            <Ionicons name='mail-open-outline' size={20} color={Colors.success} />{' '}
+                                            {item.sdt}
+                                        </Text>
                                     </View>
                                 </Pressable>
                             ))}
                         </View>
-                        <Modal showCloseIcon={true} isOpen={isOpenModal} toggle={toggleModal}>
+                        {/* <Modal showCloseIcon={true} isOpen={isOpenModal} toggle={toggleModal}>
                             <View style={{ flexDirection: 'row', gap: 12 }}>
                                 <Image
                                     source={
@@ -109,8 +113,14 @@ const Page = () => {
                                 />
                                 <View style={{ gap: 3 }}>
                                     <Text style={styles.hoTen}>{chuyenGiaSelected?.tenChuyenGia}</Text>
-                                    <Text>Email: {chuyenGiaSelected?.email}</Text>
-                                    <Text>Số điện thoại: {chuyenGiaSelected?.sdt}</Text>
+                                    <Text>
+                                        <Ionicons name='mail-open-outline' size={20} color={Colors.success} />{' '}
+                                        {chuyenGiaSelected?.email}
+                                    </Text>
+                                    <Text>
+                                        <Ionicons name='call-sharp' size={20} color={Colors.success} />{' '}
+                                        {chuyenGiaSelected?.sdt}
+                                    </Text>
                                     <Text>Lĩnh vực: {chuyenGiaSelected?.linhVuc?.tenLinhVuc}</Text>
                                 </View>
                             </View>
@@ -121,7 +131,7 @@ const Page = () => {
                                     </Text>
                                 </Pressable>
                             </ScrollView>
-                        </Modal>
+                        </Modal> */}
                     </>
                 )}
             </ScrollView>

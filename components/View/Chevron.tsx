@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 //@ts-ignore
-import chevron_icon from '@assets/icons/chevron.png'
+import chevron_icon from '@assets/icons/chevron.jpg'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 
 type ChevronProps = {

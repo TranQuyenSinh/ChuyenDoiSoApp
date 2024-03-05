@@ -4,7 +4,7 @@ import 'moment/locale/vi'
 moment.updateLocale('vi', {
     relativeTime: {
         future: '%s tới',
-        past: '%s',
+        past: '%s trước',
         s: '%d giây',
         ss: '%d giây',
         m: '%d phút',
