@@ -1,31 +1,43 @@
-import { Href, Link, useRouter } from 'expo-router'
+import { useState, useEffect } from 'react'
+
+import { useRouter } from 'expo-router'
 import { Image, StyleSheet } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useDispatch, useSelector } from 'react-redux'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, View, Pressable, ScrollView } from 'react-native'
 
 import moment from '@utils/moment'
 import Colors from '@constants/Colors'
-import { Ionicons } from '@expo/vector-icons'
-import TabPageHeader from '@components/View/TabPageHeader'
-import RequireLogin from '@components/StatusPage/RequireLogin'
-import { defaultStyles, textStyles } from '@constants/Styles'
-import { useEffect } from 'react'
-import { AppDispatch, RootState } from '@redux/store'
-import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import MoHinh from '@components/KhaoSat/MoHinh'
 import Seperator from '@components/View/Seperator'
-import { LinearGradient } from 'expo-linear-gradient'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import Loading from '@components/StatusPage/Loading'
+import { RootState, AppDispatch } from '@redux/store'
+import { getKhaoSat } from '@services/khaoSatServices'
+import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
+import TabPageHeader from '@components/View/TabPageHeader'
+import { textStyles, defaultStyles } from '@constants/Styles'
+import RequireLogin from '@components/StatusPage/RequireLogin'
+import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import ChuyenGiaDanhGia from '@components/KhaoSat/ChuyenGiaDanhGia'
 
 const SurveyPage = () => {
     const router = useRouter()
     const dispatch = useDispatch<AppDispatch>()
     const { isLoggedIn } = useSelector((state: RootState) => state.user)
     const { doanhNghiep } = useSelector((state: RootState) => state.doanhNghiep)
+    const [loading, setLoading] = useState(false)
+    const [khaoSat, setKhaoSat] = useState<KhaoSat | undefined>()
 
-    const fetchKhaoSat = async () => {}
+    const fetchKhaoSat = async () => {
+        setLoading(true)
+        const data = await getKhaoSat()
+        setKhaoSat(data)
+        setLoading(false)
+    }
 
     useEffect(() => {
+        fetchKhaoSat()
         dispatch(fetchDoanhNghiepInfo())
     }, [])
 
@@ -33,10 +45,17 @@ const SurveyPage = () => {
         return <RequireLogin message='Vui lòng đăng nhập để sử dụng chức năng này' />
     }
 
-    if (false) {
+    if (loading) {
         return <Loading />
     }
 
+    if (!loading && !khaoSat) {
+        return (
+            <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                <Text style={textStyles.medium}>Doanh nghiệp chưa thực hiện khảo sát nào</Text>
+            </View>
+        )
+    }
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -47,85 +66,37 @@ const SurveyPage = () => {
                 <Seperator />
 
                 <View style={styles.boxsContainer}>
-                    <Pressable style={{ flex: 6 }} onPress={() => router.push('/danhgia/phieu1')}>
+                    <Pressable
+                        style={{ flex: 6 }}
+                        onPress={() =>
+                            router.push({
+                                pathname: '/danhgia/mucdo',
+                                params: { id: (khaoSat?.mucDo?.id || 0) - 1 },
+                            })
+                        }>
                         <LinearGradient start={{ x: 0, y: 0.2 }} colors={['#4ee9f2', '#4ba0fa']} style={[styles.box]}>
                             <Text style={styles.boxTitle}>Mức độ CDS</Text>
-                            <Text style={styles.boxNumber}>Mức 2 - Hình thành</Text>
+                            <Text style={styles.boxNumber}>{khaoSat?.mucDo?.tenMucDo}</Text>
                             <Text style={styles.boxSub}>Xem chi tiết {'>'}</Text>
                         </LinearGradient>
                     </Pressable>
                     <Pressable style={{ flex: 4 }} onPress={() => router.push('/danhgia/phieu1')}>
                         <LinearGradient start={{ x: 0, y: 0.2 }} colors={['#38ef7d', '#15b175']} style={[styles.box]}>
                             <Text style={styles.boxTitle}>Đã thực hiện</Text>
-                            <Text style={styles.boxNumber}>2 khảo sát</Text>
-                            <Text style={styles.boxSub}>Xem chi tiết {'>'}</Text>
+                            <Text style={styles.boxNumber}>{khaoSat?.khaoSatCount} khảo sát</Text>
+                            <Text style={styles.boxSub}>Xem tất cả {'>'}</Text>
                         </LinearGradient>
                     </Pressable>
                 </View>
 
-                <Text style={styles.title}>Mô hình đề xuất hiện tại</Text>
-                <View style={styles.sectionContainer}>
-                    <View style={styles.mohinhImageContainer}>
-                        <Image
-                            source={{
-                                uri: 'http://192.168.1.9:8000/assets/backend/img/tintuc/Giai-phap-chuyen-doi-so-cho-cac-doanh-nghiep-vua-va-lon-nganh-Cong-nghiep-san-xuat.jpg?62592',
-                            }}
-                            style={styles.mohinhImage}
-                        />
-                        <View style={styles.imageOverlay}>
-                            <Text style={styles.mohinhTen}>Giảm chi phí tìm kiếm và chi phí cơ hội</Text>
-                        </View>
-                    </View>
-                    <View style={styles.mohinhInfoContainer}>
-                        <Text style={textStyles.longText}>
-                            Là mô hình kích hoạt sự xuất hiện của bên trung gian – nhóm người chuyên tổng hợp, xử lý,
-                            sắp xếp lượng thông tin phức tạp sau đó cung cấp cho người dùng theo định dạng họ mong muốn.
-                            Doanh nghiệp muốn áp dụng mô hình này phải đáp ứng được yêu cầu về mặt chuyên môn, đồng thời
-                            đảm bảo được tính khách quan và tin cậy. Từ đó giúp người dùng dễ dàng
-                        </Text>
-                    </View>
-                </View>
+                {khaoSat?.moHinh && <MoHinh data={khaoSat.moHinh} />}
 
-                <Text style={styles.title}>Ý kiến chuyên gia</Text>
-                <View style={[styles.sectionContainer, { padding: 12 }]}>
-                    {true && (
-                        <>
-                            {/* Chuyên gia Info */}
-                            <Pressable
-                                onPress={() => router.push(`/chuyengia/1`)}
-                                style={styles.chuyengiaInfoContainer}>
-                                <Image
-                                    source={{ uri: 'http://192.168.1.9:8000/assets/backend/img/hoso/avatar-86.jpeg' }}
-                                    style={styles.chuyengiaAvatar}
-                                />
-                                <View>
-                                    <Text style={styles.chuyengiaTen}>Chuyên gia Nguyễn Việt Long</Text>
-                                    <Text>{moment(new Date(2024, 1, 15)).fromNow()}</Text>
-                                </View>
-                            </Pressable>
-                            <Seperator style={{ marginHorizontal: 0, marginBottom: 0 }} />
-                            {/* Đánh giá & đề xuất của chuyên gia */}
-                            <View>
-                                <Text style={styles.chuyengiaTitle}>Đánh giá:</Text>
-                                <Text style={textStyles.longText}>Mô hình đề xuất hiện tại rất tốt</Text>
-                                <Text style={styles.chuyengiaTitle}>Đề xuất:</Text>
-                                <Text style={textStyles.longText}>
-                                    Giúp kích hoạt sự xuất hiện của bên trung gian – nhóm người chuyên tổng hợp, xử lý,
-                                    sắp xếp lượng thông tin phức tạp sau đó cung cấp cho người dùng theo định dạng họ
-                                    mong muốn.
-                                </Text>
-                            </View>
-                        </>
-                    )}
-
-                    {false && (
-                        <>
-                            <Text style={[textStyles.medium, { textAlign: 'center' }]}>
-                                Chưa có ý kiến chuyên gia...
-                            </Text>
-                        </>
-                    )}
-                </View>
+                <ChuyenGiaDanhGia
+                    chuyenGia={khaoSat?.chuyenGia}
+                    danhGia={khaoSat?.chuyenGiaDanhGia}
+                    deXuat={khaoSat?.chuyenGiaDeXuat}
+                    danhGiaAt={khaoSat?.chuyenGiaDanhGiaAt}
+                />
 
                 {/* {isLoggedIn && (
                     <>
@@ -189,67 +160,6 @@ const styles = StyleSheet.create({
         color: Colors.white,
         alignSelf: 'flex-end',
         marginTop: 6,
-    },
-
-    sectionContainer: {
-        overflow: 'hidden',
-        borderRadius: 8,
-        backgroundColor: Colors.white,
-        elevation: 6,
-        marginHorizontal: 16,
-        marginBottom: 12,
-    },
-
-    mohinhImageContainer: {},
-    imageOverlay: {
-        backgroundColor: '#000000aa',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 6,
-    },
-    mohinhImage: {
-        width: '100%',
-        height: 200,
-        resizeMode: 'cover',
-        marginTop: 12,
-    },
-    mohinhTen: {
-        color: Colors.white,
-        fontSize: 24,
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    mohinhInfoContainer: {
-        backgroundColor: Colors.white,
-        padding: 12,
-    },
-
-    chuyengiaInfoContainer: {
-        flexDirection: 'row',
-        gap: 12,
-    },
-    chuyengiaAvatar: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-    },
-    chuyengiaTen: {
-        fontSize: 18,
-        fontWeight: '500',
-    },
-    chuyengiaDate: {
-        color: Colors.textGray,
-        fontSize: 16,
-    },
-    chuyengiaTitle: {
-        fontWeight: '500',
-        fontSize: 18,
-        marginTop: 12,
     },
 })
 
