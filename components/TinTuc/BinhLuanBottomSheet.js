@@ -76,10 +76,6 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
         fetchBinhLuan()
     }, [tinTucId])
 
-    const handleRefresh = useCallback(() => {
-        fetchBinhLuan()
-    }, [])
-
     return (
         <>
             <BottomSheetModal
@@ -106,8 +102,6 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
                     {isLoggedIn && (
                         <>
                             <BottomSheetScrollView
-                                refreshing={refreshing}
-                                onRefresh={handleRefresh}
                                 style={{ marginTop: 16 }}
                                 contentContainerStyle={{ gap: 25, paddingBottom: 80, paddingTop: 12 }}
                                 showsVerticalScrollIndicator={false}

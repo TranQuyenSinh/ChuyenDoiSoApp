@@ -7,8 +7,6 @@ export const getLinhVucs = async () => {
         let { data } = await axios.get<LinhVuc>('/api/linhvuc')
         return data
     } catch (err) {
-        // let { code, message } = err?.response?.data
-        // console.error('Lỗi lấy lĩnh vục: ', message)
         return []
     }
 }
@@ -19,8 +17,6 @@ export const getTinTucById = async (tinTucId: number) => {
         return data
     } catch (err) {
         console.log('===> err: ', err)
-        // let { code, message } = err.response?.data
-        // console.error('Lỗi lấy tin tức by id: ', message)
         throw err
     }
 }
@@ -28,12 +24,10 @@ export const getTinTucById = async (tinTucId: number) => {
 export const getTinTucByLinhVuc = async (linhVucId: string) => {
     try {
         let { data } = await axios.get<TinTuc>('/api/tintuc', {
-            params: { linhvucid: linhVucId },
+            params: { linhVucId },
         })
         return data
     } catch (err) {
-        // let { code, message } = err.response?.data
-        // console.error('Lỗi lấy tin tức by lĩnh vực: ', message)
         return []
     }
 }
@@ -41,12 +35,37 @@ export const getTinTucByLinhVuc = async (linhVucId: string) => {
 export const timKiemTinTucByTuKhoa = async (tuKhoa: string) => {
     try {
         let { data } = await axios.get<TinTuc>('/api/tintuc', {
-            params: { tukhoa: tuKhoa },
+            params: { tuKhoa },
         })
         return data
     } catch (err) {
-        // let { code, message } = err.response?.data
-        // console.error('Lỗi tìm kiếm tin bằng từ khóa: ', message)
+        return []
+    }
+}
+
+export const getTinTucXemNhieu = async () => {
+    try {
+        let { data } = await axios.get<TinTuc[]>(`/api/tintuc`, {
+            params: { type: 'xem-nhieu' },
+        })
+        return data
+    } catch (err) {
+        console.log('===> Lỗi lấy tin xem nhiều: ', err)
+        return []
+    }
+}
+
+export const getTinTucLienQuan = async (id: number) => {
+    try {
+        let { data } = await axios.get<TinTuc[]>(`/api/tintuc`, {
+            params: {
+                type: 'lien-quan',
+                tinTucId: id,
+            },
+        })
+        return data
+    } catch (err) {
+        console.log('===> Lỗi lấy tin liên quan: ', err)
         return []
     }
 }

@@ -1,16 +1,17 @@
-import { Dimensions, FlatList, StyleSheet, Text, View, ViewToken } from 'react-native'
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
+
+import PagerView from 'react-native-pager-view'
+import { Text, View, StyleSheet } from 'react-native'
+import StepIndicator from 'react-native-step-indicator'
+import { useNavigation, useLocalSearchParams } from 'expo-router'
+
+import Colors from '@constants/Colors'
+import { screenHeight } from '@utils/window'
+import { textStyles } from '@constants/Styles'
 import { MucDo } from '@constants/KhaoSat/MucDoType'
-import { getMucDos } from '@services/khaoSatServices'
 import Loading from '@components/StatusPage/Loading'
 import PageHeader from '@components/View/PageHeader'
-import StepIndicator from 'react-native-step-indicator'
-import { screenHeight, windowHeight } from '@utils/window'
-import Colors from '@constants/Colors'
-import { textStyles } from '@constants/Styles'
-import Seperator from '@components/View/Seperator'
-import PagerView from 'react-native-pager-view'
+import { getMucDos } from '@services/khaoSatServices'
 
 const stepIndicatorStyles = {
     stepIndicatorSize: 30,

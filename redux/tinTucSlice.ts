@@ -1,15 +1,24 @@
+import { BinhLuan } from '@constants/TinTuc/BinhLuanTypes'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getBinhLuanByTinTucId } from '@services/binhLuanServices'
-import userSlice from './userSlice'
 import * as binhLuanServices from '@services/binhLuanServices'
+import { RootState } from './store'
+
+type SliceState = {
+    tinTucId?: number
+    binhLuans?: BinhLuan[]
+    binhLuanLoading: string
+}
+
+const initialState: SliceState = {
+    tinTucId: undefined,
+    binhLuans: [],
+    binhLuanLoading: 'idle',
+}
 
 const tinTucSlice = createSlice({
     name: 'tinTuc',
-    initialState: {
-        tinTucId: null,
-        binhLuans: null,
-        binhLuanLoading: 'idle',
-    },
+    initialState,
     reducers: {
         setTinTuc: (state, { payload }) => {
             state.tinTucId = payload.tinTucId
@@ -30,8 +39,10 @@ const tinTucSlice = createSlice({
     },
 })
 
-export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, { getState, rejectWithValue }) => {
-    let { tinTucId } = getState().tinTuc
+export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, { getState }) => {
+    const {
+        tinTuc: { tinTucId },
+    } = getState() as RootState
     if (!tinTucId) return
     const data = await getBinhLuanByTinTucId(tinTucId)
     return data
@@ -39,8 +50,10 @@ export const fetchBinhLuan = createAsyncThunk('tinTuc/fetchBinhLuan', async (_, 
 
 export const themBinhLuan = createAsyncThunk(
     'tinTuc/themBinhLuan',
-    async ({ noiDung, binhLuanChaId = null }, { getState }) => {
-        const { tinTucId } = getState().tinTuc
+    async ({ noiDung, binhLuanChaId }: { noiDung: string; binhLuanChaId?: number }, { getState }) => {
+        const {
+            tinTuc: { tinTucId },
+        } = getState() as RootState
         if (!tinTucId) return
         await binhLuanServices.themBinhLuan({
             noiDung,

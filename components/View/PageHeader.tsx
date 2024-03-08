@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         zIndex: 10,
         width: 'auto',
         position: 'absolute',
+        paddingHorizontal: 6,
     },
     headerText: {
         fontSize: 18,

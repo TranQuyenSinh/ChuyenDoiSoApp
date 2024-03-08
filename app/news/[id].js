@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
+import RenderHTML from 'react-native-render-html'
 import { useNavigation, useLocalSearchParams } from 'expo-router'
 import { Text, View, Pressable, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated'
@@ -9,13 +10,16 @@ import moment from '@utils/moment'
 import Colors from '@constants/Colors'
 import tinTucSlice from '@redux/tinTucSlice'
 import { Ionicons } from '@expo/vector-icons'
+import { tagStyles } from '@configs/newsHtmlConfig'
 import Loading from '@components/StatusPage/Loading'
 import NotFound from '@components/StatusPage/NotFound'
 import { getTinTucById } from '@services/tinTucServices'
+import TinXemNhieu from '@components/TinTuc/TinXemNhieu'
+import TinLienQuan from '@components/TinTuc/TinLienQuan'
 import { textStyles, defaultStyles } from '@constants/Styles'
 import BinhLuanBottomSheet from '@components/TinTuc/BinhLuanBottomSheet'
-import RenderHTML, { defaultSystemFonts } from 'react-native-render-html'
-import { tagStyles } from '@configs/newsHtmlConfig'
+import no_image from '@assets/images/logo_an_giang.jpg'
+
 const IMAGE_HEIGHT = 300
 const { width, height } = Dimensions.get('window')
 
@@ -23,11 +27,10 @@ const DetailNews = () => {
     const { id } = useLocalSearchParams()
     const [news, setNews] = useState()
     const [status, setStatus] = useState('loading')
+    const [isOpenComment, setIsOpenComment] = useState(false)
 
     const navigation = useNavigation()
     const dispatch = useDispatch()
-
-    // ===========
 
     const scrollRef = useAnimatedRef()
     const scrollOffset = useScrollViewOffset(scrollRef)
@@ -62,7 +65,6 @@ const DetailNews = () => {
             console.log(err)
         }
     }
-    // ===========
 
     useEffect(() => {
         ;(async () => {
@@ -101,25 +103,38 @@ const DetailNews = () => {
         })
     }, [])
 
-    const [isOpenComment, setIsOpenComment] = useState(false)
-
     return (
         <View style={styles.container}>
             <BinhLuanBottomSheet isOpen={isOpenComment} toggle={setIsOpenComment} tinTucId={id} />
+
+            {/* Main content */}
             <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
                 {status == 'success' && (
                     <>
+                        {/* Top Image */}
                         <Animated.Image
-                            source={{ uri: news?.hinhAnh }}
+                            source={news?.hinhAnh ? { uri: news?.hinhAnh } : no_image}
                             style={[styles.image, imageAnimatedStyle]}
                             resizeMode='cover'
                         />
+
+                        {/* News */}
                         <View style={[defaultStyles.container, styles.newsContainer]}>
                             <Text style={styles.tieuDe}>{news?.tieuDe}</Text>
                             <View style={{ flexDirection: 'row', gap: 3, marginTop: 12 }}>
-                                <Text style={textStyles.small}>{news?.tacGia}</Text>
-                                <Ionicons name='ios-time-outline' size={16} color={Colors.bodyText} />
-                                <Text style={textStyles.mutedSmall}>{moment(news?.createdAt).fromNow()}</Text>
+                                {news.createdAt && (
+                                    <Text style={textStyles.mutedSmall}>
+                                        <Ionicons name='ios-time-outline' size={16} color={Colors.bodyText} />
+                                        <> </>
+                                        {moment(news.createdAt).fromNow()}
+                                        <> / </>
+                                    </Text>
+                                )}
+                                <Text style={textStyles.mutedSmall}>
+                                    <Ionicons name='eye-outline' size={16} color={Colors.bodyText} />
+                                    <> </>
+                                    {news?.luotXem}
+                                </Text>
                             </View>
                             <Text style={styles.noiDung}>{news?.tomTat}</Text>
                             <RenderHTML
@@ -128,7 +143,13 @@ const DetailNews = () => {
                                 contentWidth={width}
                                 source={{ html: news?.noiDung }}
                             />
-                            <Text>Tin khác</Text>
+
+                            <Text style={[textStyles.medium, { textAlign: 'right' }]}>{news?.tacGia}</Text>
+
+                            <Text style={styles.sectionTitle}>Xem nhiều nhất</Text>
+                            <TinXemNhieu />
+                            <Text style={styles.sectionTitle}>Tin liên quan</Text>
+                            <TinLienQuan />
                         </View>
                     </>
                 )}
@@ -168,6 +189,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    sectionTitle: {
+        fontSize: 24,
+        fontWeight: '500',
+        marginTop: 16,
+        marginBottom: 12,
+        textTransform: 'uppercase',
+        color: Colors.warning,
+    },
     tieuDe: {
         fontWeight: 'bold',
         fontSize: 24,
@@ -179,7 +208,7 @@ const styles = StyleSheet.create({
     },
     newsContainer: {
         paddingTop: 16,
-        backgroundColor: Colors.lightGrey,
+        backgroundColor: Colors.background.default,
     },
     image: {
         height: IMAGE_HEIGHT,

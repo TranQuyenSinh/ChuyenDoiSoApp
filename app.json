@@ -4,11 +4,11 @@
     "slug": "ChuyenDoiSoApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo_an_giang.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash_2.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

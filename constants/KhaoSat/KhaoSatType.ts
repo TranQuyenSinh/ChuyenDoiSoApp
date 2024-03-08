@@ -10,5 +10,7 @@ export interface KhaoSat {
     chuyenGiaDanhGia?: string
     chuyenGiaDeXuat?: string
     chuyenGiaDanhGiaAt?: string
+    tongDiem: number
+    createdAt: string
     khaoSatCount?: number
 }

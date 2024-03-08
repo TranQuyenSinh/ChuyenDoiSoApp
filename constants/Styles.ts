@@ -65,6 +65,12 @@ export const defaultStyles = StyleSheet.create({
 })
 
 export const textStyles = StyleSheet.create({
+    title: {
+        fontSize: 18,
+        fontWeight: '500',
+        marginTop: 16,
+        marginBottom: 6,
+    },
     longText: {
         fontSize: 16,
         textAlign: 'justify',

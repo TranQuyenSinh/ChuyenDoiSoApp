@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router'
 import moment from 'moment'
 import Seperator from '@components/View/Seperator'
 import Colors from '@constants/Colors'
+import _ from 'lodash'
 
 type ChuyenGiaDanhGiaProps = {
     chuyenGia?: ChuyenGia
@@ -19,13 +20,15 @@ type ChuyenGiaDanhGiaProps = {
 
 const ChuyenGiaDanhGia = ({ chuyenGia, danhGia, deXuat, danhGiaAt }: ChuyenGiaDanhGiaProps) => {
     const router = useRouter()
+
     return (
         <>
             <Text style={khaoSatStyles.title}>Ý kiến chuyên gia</Text>
             <View style={[khaoSatStyles.container, { padding: 12 }]}>
-                {chuyenGia && (
+                {/* Chuyên gia Info */}
+
+                {chuyenGia ? (
                     <>
-                        {/* Chuyên gia Info */}
                         <Pressable
                             onPress={() => router.push(`/chuyengia/${chuyenGia?.id}`)}
                             style={styles.chuyengiaInfoContainer}>
@@ -47,12 +50,8 @@ const ChuyenGiaDanhGia = ({ chuyenGia, danhGia, deXuat, danhGiaAt }: ChuyenGiaDa
                             <Text style={textStyles.longText}>{deXuat}</Text>
                         </View>
                     </>
-                )}
-
-                {!chuyenGia && (
-                    <>
-                        <Text style={[textStyles.medium, { textAlign: 'center' }]}>Chưa có ý kiến chuyên gia...</Text>
-                    </>
+                ) : (
+                    <Text style={[textStyles.medium, { textAlign: 'center' }]}>Chưa có ý kiến chuyên gia...</Text>
                 )}
             </View>
         </>
