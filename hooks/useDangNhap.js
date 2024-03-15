@@ -10,6 +10,7 @@ import Constants from '@constants/Constants'
 import useWarmUpBrowser from '@hooks/useWarmUpBrowser'
 import { useAuth, useUser, useOAuth } from '@clerk/clerk-expo'
 import userSlice, {
+    logOutServer,
     loginWithOAuth as loginOAuthAction,
     loginWithPassword as loginPasswordAction,
 } from '@redux/userSlice'
@@ -81,6 +82,7 @@ export const useDangNhap = () => {
 
     const logOut = async () => {
         dispatch(userSlice.actions.logout())
+        dispatch(logOutServer())
         await deleteSecureItem(Constants.SecureStore.SavedAuth)
         console.log('===> User logout success')
         await signOut()

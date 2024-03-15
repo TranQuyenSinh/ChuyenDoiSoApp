@@ -9,6 +9,7 @@ import moment from '@utils/moment'
 import { Ionicons } from '@expo/vector-icons'
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
+import no_image from '@assets/images/logo_an_giang.jpg'
 
 const ListNews = ({ linhVucId }) => {
     const router = useRouter()
@@ -51,7 +52,7 @@ export const News = ({ item }) => {
     const router = useRouter()
     return (
         <Pressable key={item.id} onPress={() => router.push(`/news/${item.id}`)} style={styles.newsContainer}>
-            <Image src={item.hinhAnh} style={styles.newsImage} />
+            <Image source={item?.hinhAnh ? { uri: item.hinhAnh } : no_image} style={styles.newsImage} />
             <View style={{ justifyContent: 'space-between', flex: 1 }}>
                 <Text numberOfLines={3} style={styles.newsTitle}>
                     {item.tieuDe}

@@ -53,9 +53,12 @@ export const themBinhLuan = createAsyncThunk(
     async ({ noiDung, binhLuanChaId }: { noiDung: string; binhLuanChaId?: number }, { getState }) => {
         const {
             tinTuc: { tinTucId },
+            user: { userProfile },
         } = getState() as RootState
         if (!tinTucId) return
+
         await binhLuanServices.themBinhLuan({
+            userId: userProfile?.id,
             noiDung,
             tinTucId,
             binhLuanChaId,

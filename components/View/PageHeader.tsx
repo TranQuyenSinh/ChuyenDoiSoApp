@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import Colors from '@constants/Colors'
@@ -7,9 +7,10 @@ import Colors from '@constants/Colors'
 type PageHeaderProps = {
     title?: string
     style?: ViewStyle
+    rightItem?: ReactNode
 }
 
-const PageHeader = ({ title, style }: PageHeaderProps) => {
+const PageHeader = ({ title, style, rightItem }: PageHeaderProps) => {
     const router = useRouter()
     return (
         <View style={[styles.container, style]}>
@@ -17,6 +18,7 @@ const PageHeader = ({ title, style }: PageHeaderProps) => {
                 <Ionicons name='chevron-back-outline' size={24} color={Colors.bodyText} />
             </TouchableOpacity>
             <Text style={styles.headerText}>{title}</Text>
+            {rightItem && <View style={styles.headerRight}>{rightItem}</View>}
         </View>
     )
 }
@@ -33,6 +35,13 @@ const styles = StyleSheet.create({
         zIndex: 10,
         width: 'auto',
         position: 'absolute',
+        paddingHorizontal: 6,
+    },
+    headerRight: {
+        zIndex: 10,
+        width: 'auto',
+        position: 'absolute',
+        right: 6,
         paddingHorizontal: 6,
     },
     headerText: {

@@ -29,7 +29,6 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
     const { tinTucId, binhLuans } = useSelector(state => state.tinTuc)
 
     const userStore = useSelector(state => state.user)
-    const { isLoggedIn } = userStore
 
     const snapPoints = useMemo(() => ['90%'], [])
     const modalRef = useRef(null)
@@ -57,11 +56,9 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
     }
 
     const fetchBinhLuan = async () => {
-        if (isLoggedIn) {
-            setRefreshing(true)
-            await dispatch(fetchBinhLuanAction()).unwrap()
-            setRefreshing(false)
-        }
+        setRefreshing(true)
+        await dispatch(fetchBinhLuanAction()).unwrap()
+        setRefreshing(false)
     }
 
     useEffect(() => {
@@ -99,79 +96,74 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
                         </Pressable>
                         <Text style={styles.title}>Bình luận</Text>
                     </View>
-                    {isLoggedIn && (
-                        <>
-                            <BottomSheetScrollView
-                                style={{ marginTop: 16 }}
-                                contentContainerStyle={{ gap: 25, paddingBottom: 80, paddingTop: 12 }}
-                                showsVerticalScrollIndicator={false}
-                                scrollEnabled={true}>
-                                {comments?.length > 0 &&
-                                    comments.map(item => (
-                                        <View key={item.id} style={styles.commentContainer}>
-                                            <Image
-                                                source={item.avatar ? { uri: item.avatar } : no_avatar}
-                                                style={styles.userAvatar}
-                                            />
-                                            <View style={{ flex: 1 }}>
-                                                <View style={styles.commentBox}>
-                                                    <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
-                                                    <Text>{item.noiDung}</Text>
-                                                </View>
-                                                <View style={styles.commentActions}>
-                                                    <Text style={textStyles.mutedSmall}>
-                                                        {moment(item.createdAt).fromNow()}
-                                                    </Text>
-                                                    <Pressable onPress={() => handleTraLoiBinhLuan(item.id)}>
-                                                        <Text style={{ fontWeight: 'bold', fontFamily: 'mon-sb' }}>
-                                                            Trả lời
-                                                        </Text>
-                                                    </Pressable>
-                                                </View>
-                                                {item.phanHois?.length > 0 && (
-                                                    <Pressable
-                                                        onPress={() => handleTraLoiBinhLuan(item.id)}
-                                                        style={{
-                                                            flexDirection: 'row',
-                                                            alignItems: 'center',
-                                                            gap: 6,
-                                                            marginTop: 6,
-                                                            marginStart: 6,
-                                                        }}>
-                                                        <MaterialIcons
-                                                            name='subdirectory-arrow-right'
-                                                            size={24}
-                                                            color={Colors.bodyText}
-                                                        />
-                                                        <Text>Xem thêm ({item.phanHois.length}) phản hồi</Text>
-                                                    </Pressable>
-                                                )}
-                                            </View>
-                                        </View>
-                                    ))}
-                            </BottomSheetScrollView>
-                            <View style={[defaultStyles.footer, styles.footer]}>
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        value={cmtText}
-                                        onChangeText={text => setCmtText(text)}
-                                        style={{ flex: 1, paddingHorizontal: 16 }}
-                                        placeholder='Viết bình luận...'
+                    <BottomSheetScrollView
+                        style={{ marginTop: 16 }}
+                        contentContainerStyle={{ gap: 25, paddingBottom: 80, paddingTop: 12 }}
+                        showsVerticalScrollIndicator={false}
+                        scrollEnabled={true}>
+                        {comments?.length > 0 &&
+                            comments.map(item => (
+                                <View key={item.id} style={styles.commentContainer}>
+                                    <Image
+                                        source={item.avatar ? { uri: item.avatar } : no_avatar}
+                                        style={styles.userAvatar}
                                     />
-                                    <Pressable
-                                        onPress={handleThemBinhLuan}
-                                        style={[
-                                            styles.sendBtn,
-                                            { backgroundColor: cmtText ? Colors.default : Colors.bodyText },
-                                        ]}>
-                                        <Ionicons name='paper-plane-sharp' size={24} color={Colors.white} />
-                                        <Text style={styles.sendBtnText}>Gửi</Text>
-                                    </Pressable>
+                                    <View style={{ flex: 1 }}>
+                                        <View style={styles.commentBox}>
+                                            <Text style={{ color: Colors.bodyText }}>{item.hoTen}</Text>
+                                            <Text>{item.noiDung}</Text>
+                                        </View>
+                                        <View style={styles.commentActions}>
+                                            <Text style={textStyles.mutedSmall}>
+                                                {moment(item.createdAt).fromNow()}
+                                            </Text>
+                                            <Pressable onPress={() => handleTraLoiBinhLuan(item.id)}>
+                                                <Text style={{ fontWeight: 'bold', fontFamily: 'mon-sb' }}>
+                                                    Trả lời
+                                                </Text>
+                                            </Pressable>
+                                        </View>
+                                        {item.phanHois?.length > 0 && (
+                                            <Pressable
+                                                onPress={() => handleTraLoiBinhLuan(item.id)}
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignItems: 'center',
+                                                    gap: 6,
+                                                    marginTop: 6,
+                                                    marginStart: 6,
+                                                }}>
+                                                <MaterialIcons
+                                                    name='subdirectory-arrow-right'
+                                                    size={24}
+                                                    color={Colors.bodyText}
+                                                />
+                                                <Text>Xem thêm ({item.phanHois.length}) phản hồi</Text>
+                                            </Pressable>
+                                        )}
+                                    </View>
                                 </View>
-                            </View>
-                        </>
-                    )}
-                    {!isLoggedIn && <RequireLogin />}
+                            ))}
+                    </BottomSheetScrollView>
+                    <View style={[defaultStyles.footer, styles.footer]}>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                value={cmtText}
+                                onChangeText={text => setCmtText(text)}
+                                style={{ flex: 1, paddingHorizontal: 16 }}
+                                placeholder='Viết bình luận...'
+                            />
+                            <Pressable
+                                onPress={handleThemBinhLuan}
+                                style={[
+                                    styles.sendBtn,
+                                    { backgroundColor: cmtText ? Colors.default : Colors.bodyText },
+                                ]}>
+                                <Ionicons name='paper-plane-sharp' size={24} color={Colors.white} />
+                                <Text style={styles.sendBtnText}>Gửi</Text>
+                            </Pressable>
+                        </View>
+                    </View>
                 </View>
             </BottomSheetModal>
         </>

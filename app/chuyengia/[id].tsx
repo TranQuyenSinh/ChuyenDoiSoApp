@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 import { getChuyenGia } from '@services/chuyenGiaServices'
@@ -9,6 +9,9 @@ import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 import no_avatar from '@assets/icons/user.jpg'
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
+import Button from '@components/View/Button'
+import Modal from '@components/View/Modal'
+import useToggle from '@hooks/useToggle'
 
 const ChuyenGiaDetail = () => {
     const { id } = useLocalSearchParams()
@@ -19,6 +22,7 @@ const ChuyenGiaDetail = () => {
     const fetchChuyenGia = async (id: number) => {
         setLoading(true)
         const data = await getChuyenGia(id)
+        console.log('===> data: ', data)
         setChuyenGia(data)
         setLoading(false)
     }
@@ -35,7 +39,7 @@ const ChuyenGiaDetail = () => {
         })
     }, [navigation])
 
-    if (loading) {
+    if (loading || !chuyenGia) {
         return <Loading />
     }
 
@@ -44,10 +48,11 @@ const ChuyenGiaDetail = () => {
             <PageHeader title={'Thông tin chuyên gia'} style={{ marginBottom: 12 }} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={[styles.section, { flexDirection: 'row', gap: 12 }]}>
-                    <Image source={chuyenGia?.hinhAnh ? { uri: chuyenGia.hinhAnh } : no_avatar} style={styles.image} />
+                    <Image source={chuyenGia.hinhAnh ? { uri: chuyenGia.hinhAnh } : no_avatar} style={styles.image} />
                     <View>
                         <Text style={styles.ten}>{chuyenGia?.tenChuyenGia}</Text>
-                        <Text>Lĩnh vực: {chuyenGia?.linhVuc.tenLinhVuc}</Text>
+                        <Text>Lĩnh vực: {chuyenGia.linhVuc?.tenLinhVuc}</Text>
+                        <Button text='Liên hệ ngay' onPress={() => router.push(`/chuyengia/hoidap/${chuyenGia.id}`)} />
                     </View>
                 </View>
 

@@ -103,35 +103,6 @@ const Page = () => {
                                 </Pressable>
                             ))}
                         </View>
-                        {/* <Modal showCloseIcon={true} isOpen={isOpenModal} toggle={toggleModal}>
-                            <View style={{ flexDirection: 'row', gap: 12 }}>
-                                <Image
-                                    source={
-                                        chuyenGiaSelected?.hinhAnh ? { uri: chuyenGiaSelected?.hinhAnh } : no_avatar
-                                    }
-                                    style={styles.anhDaiDien}
-                                />
-                                <View style={{ gap: 3 }}>
-                                    <Text style={styles.hoTen}>{chuyenGiaSelected?.tenChuyenGia}</Text>
-                                    <Text>
-                                        <Ionicons name='mail-open-outline' size={20} color={Colors.success} />{' '}
-                                        {chuyenGiaSelected?.email}
-                                    </Text>
-                                    <Text>
-                                        <Ionicons name='call-sharp' size={20} color={Colors.success} />{' '}
-                                        {chuyenGiaSelected?.sdt}
-                                    </Text>
-                                    <Text>Lĩnh vực: {chuyenGiaSelected?.linhVuc?.tenLinhVuc}</Text>
-                                </View>
-                            </View>
-                            <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 12 }}>
-                                <Pressable>
-                                    <Text style={{ fontSize: 16, textAlign: 'justify', lineHeight: 24 }}>
-                                        {chuyenGiaSelected?.moTa}
-                                    </Text>
-                                </Pressable>
-                            </ScrollView>
-                        </Modal> */}
                     </>
                 )}
             </ScrollView>

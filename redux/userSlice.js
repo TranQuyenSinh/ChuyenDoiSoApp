@@ -126,10 +126,12 @@ export const loginWithOAuth = createAsyncThunk(
         }
     }
 )
-
 export const renewUserProfile = createAsyncThunk('user/renewUserProfile', async () => {
     const { data } = await authAxios.get('/api/taikhoan/profile')
     return data
+})
+export const logOutServer = createAsyncThunk('user/logoutServer', async () => {
+    await authAxios.post('/api/doanhnghiep/logout')
 })
 
 export default userSlice
