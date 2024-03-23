@@ -43,7 +43,7 @@ const ThongKeKhaoSat = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ marginHorizontal: 16 }}>
                 <Text style={[khaoSatStyles.title, { marginHorizontal: 0 }]}>Doanh nghiệp của bạn:</Text>
-                {khaoSats.length > 0 && <DiemLineChart data={khaoSats.slice().sort((a, b) => b.id - a.id)} />}
+                <DiemLineChart />
                 <Seperator style={{ marginBottom: 0 }} />
                 <Text style={[khaoSatStyles.title, { marginHorizontal: 0 }]}>Tỉnh An Giang:</Text>
 

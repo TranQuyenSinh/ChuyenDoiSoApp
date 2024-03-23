@@ -68,7 +68,7 @@ export const textStyles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '500',
-        marginTop: 16,
+        marginTop: 12,
         marginBottom: 6,
     },
     longText: {

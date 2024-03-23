@@ -18,13 +18,14 @@ import { Conversation } from '@constants/HoiDap/HoiDapType'
 import { fetchConversations } from '@services/hoiDapServices'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
+import RequireLogin from '@components/StatusPage/RequireLogin'
 
 const HoiDap = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch<AppDispatch>()
     const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState<Conversation[]>([])
-
+    const { isLoggedIn } = useSelector((state: RootState) => state.user)
     useEffect(() => {
         ;(async () => {
             setLoading(true)
@@ -38,7 +39,7 @@ const HoiDap = () => {
         navigation.setOptions({
             headerShown: false,
             presentation: 'modal',
-            animation: 'slide_from_right',
+            animation: 'fade',
         })
     }, [navigation])
 
@@ -46,22 +47,29 @@ const HoiDap = () => {
         return <Loading />
     }
 
+    if (!isLoggedIn) return <RequireLogin />
+
     return (
         <View style={styles.container}>
             <PageHeader title={'Cuộc trò chuyện'} style={{ marginBottom: 12 }} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {conversations?.map((item: Conversation) => (
                     <Pressable
+                        android_ripple={{ color: 'gray' }}
                         onPress={() => router.push(`/chuyengia/hoidap/${item.chuyenGia.id}`)}
                         key={item.id}
                         style={styles.itemContainer}>
                         <View style={{ flexDirection: 'row', gap: 8 }}>
                             <Image
-                                source={item.chuyenGia?.image ? { uri: item.chuyenGia.image } : chuyengia_avatar}
+                                source={item.chuyenGia?.hinhAnh ? { uri: item.chuyenGia.hinhAnh } : chuyengia_avatar}
                                 style={styles.itemImg}
                             />
-                            <View style={{ gap: 2 }}>
-                                <Text style={styles.itemName}>Chuyên gia {item.chuyenGia?.name}</Text>
+                            <View style={{ gap: 2, flexShrink: 1 }}>
+                                <Text style={styles.itemName}>{item.chuyenGia?.tenChuyenGia}</Text>
+                                <Text style={{ color: Colors.textGray }}>
+                                    Lĩnh vực:{' '}
+                                    <Text style={{ fontWeight: '600' }}>{item.chuyenGia?.linhVuc?.tenLinhVuc}</Text>
+                                </Text>
                             </View>
                         </View>
                     </Pressable>
@@ -80,10 +88,11 @@ const styles = StyleSheet.create({
     },
     itemContainer: {
         backgroundColor: Colors.white,
-        borderRadius: 8,
-        marginBottom: 18,
+        // borderRadius: 8,
+        // marginBottom: 18,
         marginHorizontal: 16,
         padding: 16,
+        // elevation: 4,
     },
     itemImg: {
         width: 50,
@@ -92,7 +101,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     itemName: {
-        fontWeight: '500',
+        fontWeight: '400',
         fontSize: 16,
     },
     itemDate: {

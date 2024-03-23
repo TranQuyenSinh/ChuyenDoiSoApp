@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 
-import { useRouter } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { StatusBar, Dimensions, StyleSheet } from 'react-native'
 
@@ -10,9 +10,9 @@ import Loading from '@components/StatusPage/Loading'
 import SearchBar from '@components/TinTuc/SearchBar'
 import { getLinhVucs } from '@services/tinTucServices'
 
-export default function TrangTin() {
+export default function TinTucPage() {
     const router = useRouter()
-
+    const navigation = useNavigation()
     const [linhVucs, setLinhVucs] = useState([])
     const [index, setIndex] = useState(0)
     const [searchKey, setSearchKey] = useState('')
@@ -29,6 +29,13 @@ export default function TrangTin() {
         if (!searchKey) return
         router.push({ pathname: '/news/search', params: { searchKey } })
     }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerShown: false,
+            animation: 'fade',
+        })
+    }, [])
 
     return (
         <>

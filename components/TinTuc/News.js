@@ -51,7 +51,11 @@ const ListNews = ({ linhVucId }) => {
 export const News = ({ item }) => {
     const router = useRouter()
     return (
-        <Pressable key={item.id} onPress={() => router.push(`/news/${item.id}`)} style={styles.newsContainer}>
+        <Pressable
+            android_ripple={{ color: 'gray' }}
+            key={item.id}
+            onPress={() => router.push(`/news/${item.id}`)}
+            style={styles.newsContainer}>
             <Image source={item?.hinhAnh ? { uri: item.hinhAnh } : no_image} style={styles.newsImage} />
             <View style={{ justifyContent: 'space-between', flex: 1 }}>
                 <Text numberOfLines={3} style={styles.newsTitle}>

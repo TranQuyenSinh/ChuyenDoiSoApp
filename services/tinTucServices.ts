@@ -13,7 +13,9 @@ export const getLinhVucs = async () => {
 
 export const getTinTucById = async (tinTucId: number) => {
     try {
-        let { data } = await axios.get<TinTuc>(`/api/tintuc/${tinTucId}`)
+        let { data } = await axios.get<TinTuc>(`/api/tintuc/detail?id=13`, {
+            params: { id: tinTucId },
+        })
         return data
     } catch (err) {
         console.log('===> err: ', err)

@@ -1,5 +1,6 @@
 import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 import { User } from '@constants/CommonTypes/UserType'
+import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 
 export interface Message {
     id: number
@@ -10,6 +11,7 @@ export interface Message {
 
 export interface Conversation {
     id: number
-    doanhNghiep: User
-    chuyenGia: User
+    doanhNghiep: DoanhNghiep
+    chuyenGia: ChuyenGia
+    tinNhans: Message[]
 }

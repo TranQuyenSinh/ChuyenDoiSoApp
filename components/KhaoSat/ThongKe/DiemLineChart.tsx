@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import moment from 'moment'
 import { useRouter } from 'expo-router'
@@ -8,25 +8,34 @@ import { LineChart } from 'react-native-chart-kit'
 import { windowWidth } from '@utils/window'
 import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 import { khaoSatStyles } from '../khaoSatStyles'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
+import Loading from '@components/StatusPage/Loading'
 
-type DiemLineChartProps = {
-    data: KhaoSat[]
-}
-
-const DiemLineChart = ({ data }: DiemLineChartProps) => {
+const DiemLineChart = () => {
     const router = useRouter()
+    const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
 
-    const lineChartData = useMemo(
-        () => ({
-            labels: data.map(item => moment(item.createdAt).format('MM/YYYY')),
+    useEffect(() => {
+        if (khaoSats?.length !== 0) {
+            khaoSats.slice().sort((a, b) => b.id - a.id)
+        }
+    }, [khaoSats])
+
+    const lineChartData = useMemo(() => {
+        if (khaoSats?.length === 0) return undefined
+        return {
+            labels: khaoSats?.map(item => moment(item.createdAt).format('MM/YYYY')),
             datasets: [
                 {
-                    data: data.map(item => item.tongDiem),
+                    data: khaoSats?.map(item => item.tongDiem),
                 },
             ],
-        }),
-        [data]
-    )
+        }
+    }, [khaoSats])
+
+    if (!lineChartData) return <Loading />
+
     return (
         <>
             <LineChart
@@ -47,7 +56,7 @@ const DiemLineChart = ({ data }: DiemLineChartProps) => {
                     decimalPlaces: 0,
                 }}
                 onDataPointClick={({ index }) => {
-                    const id = data[index].id
+                    const id = khaoSats[index].id
                     router.push(`/khaosat/${id}`)
                 }}
                 bezier
@@ -55,9 +64,7 @@ const DiemLineChart = ({ data }: DiemLineChartProps) => {
                     borderRadius: 16,
                 }}
             />
-            <Text style={[khaoSatStyles.title, { textAlign: 'center' }]}>
-                Điểm khảo sát của doanh nghiệp theo từng đợt đánh giá
-            </Text>
+            <Text style={[khaoSatStyles.title, { textAlign: 'center' }]}>Thống kê điểm khảo sát của doanh nghiệp</Text>
         </>
     )
 }

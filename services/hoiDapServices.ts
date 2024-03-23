@@ -18,15 +18,27 @@ export const fetchConversations = async () => {
 export const fetchMessages = async (chuyenGiaId: number) => {
     try {
         console.log('===> chuyenGiaId: ', chuyenGiaId)
-        const { data } = await authAxios.get<Message[]>('/api/hoidap/tinnhan', {
+        const { data } = await authAxios.get<Conversation>('/api/hoidap/tinnhan', {
             params: { chuyenGiaId },
         })
-        console.log('===> data: ', data)
         return data
     } catch (error) {
         const err = error as AxiosError
         // @ts-ignore
         console.log('===> error: ', err.message)
-        return []
+        return undefined
+    }
+}
+
+export const sendMessage = async (message: string, hoiThoaiId: number) => {
+    try {
+        await authAxios.post('/api/hoidap/tinnhan', {
+            message,
+            hoiThoaiId,
+        })
+    } catch (error) {
+        const err = error as AxiosError
+        // @ts-ignore
+        console.log('===> error: ', err.message)
     }
 }

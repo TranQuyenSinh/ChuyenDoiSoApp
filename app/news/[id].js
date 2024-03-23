@@ -141,7 +141,7 @@ const DetailNews = () => {
                                 tagsStyles={tagStyles}
                                 emSize={18}
                                 contentWidth={width}
-                                source={{ html: news?.noiDung }}
+                                source={{ html: news?.noiDung ?? '' }}
                             />
 
                             <Text style={[textStyles.medium, { textAlign: 'right' }]}>{news?.tacGia}</Text>

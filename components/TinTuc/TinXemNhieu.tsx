@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react'
 
 import { useRouter } from 'expo-router'
-import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
 
 import Seperator from '@components/View/Seperator'
 import Loading from '@components/StatusPage/Loading'
@@ -32,8 +32,8 @@ const TinXemNhieu = () => {
         <View>
             {data.map(item => (
                 <View key={item.id}>
-                    <TouchableOpacity
-                        activeOpacity={0.6}
+                    <Pressable
+                        android_ripple={{ color: 'gray' }}
                         onPress={() => {
                             router.push(`/news/${item.id}`)
                         }}
@@ -43,7 +43,7 @@ const TinXemNhieu = () => {
                             {item.tomTat}
                         </Text>
                         <Image source={{ uri: item.hinhAnh }} style={tinTucStyles.image} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Seperator style={{ marginHorizontal: 0, height: 1 }} />
                 </View>
             ))}

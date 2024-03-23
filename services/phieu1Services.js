@@ -2,7 +2,7 @@ import { authAxios, axios } from '@utils/axios'
 
 export const layPhieuDanhGia1 = async () => {
     try {
-        const { data } = await authAxios.get('/api/phieudanhgia1')
+        const { data } = await authAxios.get('/phieudanhgia1')
         const scores = []
         const tieuchi = data.map((tieuChiC1, index) => {
             const c1 = {

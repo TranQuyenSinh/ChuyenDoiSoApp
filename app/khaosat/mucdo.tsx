@@ -57,7 +57,6 @@ const MucDoPage = () => {
     }
 
     useEffect(() => {
-        console.log('===> id: ', id)
         fetchData()
     }, [])
 

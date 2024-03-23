@@ -20,6 +20,9 @@ const khaoSatSlice = createSlice({
         selectKhaoSat: (state, { payload }) => {
             state.selectedKhaoSat = payload.data
         },
+        resetKhaoSat: () => {
+            return initialState
+        },
     },
     extraReducers: builder => {
         builder.addCase(fetchDanhSachKhaoSat.pending, state => {
@@ -29,6 +32,10 @@ const khaoSatSlice = createSlice({
         builder.addCase(fetchDanhSachKhaoSat.fulfilled, (state, { payload }) => {
             state.loading = false
             state.khaoSats = payload
+        })
+        builder.addCase(fetchDanhSachKhaoSat.rejected, (state, { payload }) => {
+            state.loading = false
+            state.khaoSats = []
         })
     },
 })

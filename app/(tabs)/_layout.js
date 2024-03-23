@@ -1,6 +1,8 @@
 import Colors from '@constants/Colors'
 import { FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
+import { Image, StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -10,6 +12,7 @@ function TabBarIcon(props) {
 }
 
 export default function TabLayout() {
+    const { userProfile } = useSelector(state => state.user)
     return (
         <Tabs
             screenOptions={{
@@ -19,7 +22,7 @@ export default function TabLayout() {
                     fontSize: 12,
                 },
                 tabBarStyle: {
-                    height: 55,
+                    height: 60,
                 },
                 headerTitleAlign: 'center',
             }}>
@@ -27,14 +30,14 @@ export default function TabLayout() {
                 name='index'
                 options={{
                     headerShown: false,
-                    tabBarLabel: 'Tin tức',
+                    tabBarLabel: 'Trang chủ',
                     tabBarIcon: ({ color, size, focused }) => {
                         return (
                             <>
                                 {focused ? (
-                                    <Ionicons name='newspaper-sharp' color={color} size={size} />
+                                    <Ionicons name='home-sharp' color={color} size={size} />
                                 ) : (
-                                    <Ionicons name='newspaper-outline' color={color} size={size} />
+                                    <Ionicons name='home-outline' color={color} size={size} />
                                 )}
                             </>
                         )
@@ -53,24 +56,6 @@ export default function TabLayout() {
                                     <Ionicons name='reader-sharp' color={color} size={size} />
                                 ) : (
                                     <Ionicons name='reader-outline' color={color} size={size} />
-                                )}
-                            </>
-                        )
-                    },
-                }}
-            />
-            <Tabs.Screen
-                name='association'
-                options={{
-                    headerShown: false,
-                    tabBarLabel: 'Hiệp hội',
-                    tabBarIcon: ({ color, size, focused }) => {
-                        return (
-                            <>
-                                {focused ? (
-                                    <Ionicons name='color-filter-sharp' color={color} size={size} />
-                                ) : (
-                                    <Ionicons name='color-filter-outline' color={color} size={size} />
                                 )}
                             </>
                         )
@@ -98,15 +83,22 @@ export default function TabLayout() {
             <Tabs.Screen
                 name='profile'
                 options={{
-                    tabBarLabel: 'Cài đặt',
+                    tabBarLabel: 'Cá nhân',
                     headerShown: false,
                     tabBarIcon: ({ color, size, focused }) => {
                         return (
                             <>
-                                {focused ? (
-                                    <Ionicons name='ios-settings-sharp' color={color} size={size} />
+                                {userProfile?.image ? (
+                                    <Image
+                                        source={{ uri: userProfile?.image }}
+                                        style={{
+                                            width: 40,
+                                            height: 40,
+                                            borderRadius: 50,
+                                        }}
+                                    />
                                 ) : (
-                                    <Ionicons name='ios-settings-outline' color={color} size={size} />
+                                    <Ionicons name='settings-outline' color={color} size={size} />
                                 )}
                             </>
                         )

@@ -10,7 +10,7 @@ import Loading from '@components/StatusPage/Loading'
 import HiepHoiAccordion from '@components/HiepHoiInfo/HiepHoiAccordion'
 import Colors from '@constants/Colors'
 
-const Page = () => {
+const AssociationPage = () => {
     const [loading, setLoading] = useState(false)
     const [hiepHois, setHiepHois] = useState([])
 
@@ -26,21 +26,21 @@ const Page = () => {
     }, [])
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             {loading && <Loading containerStyles={{ marginTop: 30, backgroundColor: 'transparent' }} />}
             {!loading && (
                 <ScrollView
+                    style={{ marginTop: 16 }}
                     contentContainerStyle={{ gap: 6, paddingBottom: 16 }}
                     showsHorizontalScrollIndicator={false}>
-                    <TabPageHeader title={'Hiệp hội doanh nghiệp'} />
                     {hiepHois && hiepHois?.map(item => <HiepHoiAccordion key={item.id} hiepHoiItem={item} />)}
                 </ScrollView>
             )}
-        </SafeAreaView>
+        </View>
     )
 }
 
-export default Page
+export default AssociationPage
 
 const styles = StyleSheet.create({
     container: {

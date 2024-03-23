@@ -1,4 +1,3 @@
-import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
 import Constants from '@constants/Constants'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { authAxios, axios } from '@utils/axios'
@@ -94,6 +93,7 @@ export const loginWithPassword = createAsyncThunk('user/login', async ({ email, 
     } catch (err) {
         let error = err.response?.data?.error
         if (error) toast(error)
+        console.log('===> error: ')
         return Promise.reject({ error })
     }
 })

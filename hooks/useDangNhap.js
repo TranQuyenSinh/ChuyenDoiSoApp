@@ -16,6 +16,8 @@ import userSlice, {
 } from '@redux/userSlice'
 import { deleteSecureItem, getSecureItem, setSecureItem } from '@utils/secureStore'
 import { toast } from '@utils/toast'
+import doanhNghiepSlice from '@redux/doanhNghiepSlice'
+import khaoSatSlice from '@redux/khaoSatSlice'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -82,6 +84,8 @@ export const useDangNhap = () => {
 
     const logOut = async () => {
         dispatch(userSlice.actions.logout())
+        dispatch(doanhNghiepSlice.actions.resetDoanhNghiep())
+        dispatch(khaoSatSlice.actions.resetKhaoSat())
         dispatch(logOutServer())
         await deleteSecureItem(Constants.SecureStore.SavedAuth)
         console.log('===> User logout success')

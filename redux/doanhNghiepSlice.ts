@@ -5,7 +5,7 @@ import { toast } from '@utils/toast'
 import { Axios, AxiosError } from 'axios'
 
 type SliceState = {
-    status: string
+    status: 'idle' | 'loading' | 'success' | 'error'
     doanhNghiep?: DoanhNghiep
 }
 
@@ -17,7 +17,11 @@ const initialState: SliceState = {
 const doanhNghiepSlice = createSlice({
     name: 'doanhNghiep',
     initialState,
-    reducers: {},
+    reducers: {
+        resetDoanhNghiep: () => {
+            return initialState
+        },
+    },
     extraReducers: builder => {
         builder.addCase(fetchDoanhNghiepInfo.pending, state => {
             state.status = 'loading'

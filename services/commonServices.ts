@@ -1,5 +1,7 @@
 import { ThanhPho } from '@constants/CommonTypes/TinhThanhType'
-import axios from 'axios'
+import { Slide } from '@constants/TinTuc/SlideType'
+import { Video } from '@constants/TinTuc/VideoType'
+import { axios } from '@utils/axios'
 
 export const layTinhThanh = async () => {
     try {
@@ -18,6 +20,26 @@ export const layTinhThanh = async () => {
         return thanhPhos
     } catch (err) {
         console.log('===> Lỗi khi lấy tỉnh thành', err)
+        return []
+    }
+}
+
+export const getSlides = async () => {
+    try {
+        const { data } = await axios.get<Slide[]>('/api/tintuc/slide')
+        return data
+    } catch (error) {
+        console.log('===> error: ', error)
+        return []
+    }
+}
+
+export const getVideos = async () => {
+    try {
+        const { data } = await axios.get<Video[]>('/api/tintuc/video')
+        return data
+    } catch (error) {
+        console.log('===> error: ', error)
         return []
     }
 }
