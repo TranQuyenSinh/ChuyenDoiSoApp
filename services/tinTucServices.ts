@@ -4,7 +4,7 @@ import { axios } from '@utils/axios'
 
 export const getLinhVucs = async () => {
     try {
-        let { data } = await axios.get<LinhVuc>('/api/linhvuc')
+        let { data } = await axios.get<LinhVuc>('linhvuc')
         return data
     } catch (err) {
         return []
@@ -13,7 +13,7 @@ export const getLinhVucs = async () => {
 
 export const getTinTucById = async (tinTucId: number) => {
     try {
-        let { data } = await axios.get<TinTuc>(`/api/tintuc/detail?id=13`, {
+        let { data } = await axios.get<TinTuc>(`tintuc/detail?id=13`, {
             params: { id: tinTucId },
         })
         return data
@@ -25,7 +25,7 @@ export const getTinTucById = async (tinTucId: number) => {
 
 export const getTinTucByLinhVuc = async (linhVucId: string) => {
     try {
-        let { data } = await axios.get<TinTuc>('/api/tintuc', {
+        let { data } = await axios.get<TinTuc>('tintuc/index', {
             params: { linhVucId },
         })
         return data
@@ -36,7 +36,7 @@ export const getTinTucByLinhVuc = async (linhVucId: string) => {
 
 export const timKiemTinTucByTuKhoa = async (tuKhoa: string) => {
     try {
-        let { data } = await axios.get<TinTuc>('/api/tintuc', {
+        let { data } = await axios.get<TinTuc>('tintuc/index', {
             params: { tuKhoa },
         })
         return data
@@ -47,7 +47,7 @@ export const timKiemTinTucByTuKhoa = async (tuKhoa: string) => {
 
 export const getTinTucXemNhieu = async () => {
     try {
-        let { data } = await axios.get<TinTuc[]>(`/api/tintuc`, {
+        let { data } = await axios.get<TinTuc[]>(`tintuc/index`, {
             params: { type: 'xem-nhieu' },
         })
         return data
@@ -59,7 +59,7 @@ export const getTinTucXemNhieu = async () => {
 
 export const getTinTucLienQuan = async (id: number) => {
     try {
-        let { data } = await axios.get<TinTuc[]>(`/api/tintuc`, {
+        let { data } = await axios.get<TinTuc[]>(`tintuc/index`, {
             params: {
                 type: 'lien-quan',
                 tinTucId: id,

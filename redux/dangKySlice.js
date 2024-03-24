@@ -10,49 +10,44 @@ const dangKySlice = createSlice({
         tinhThanhs: [],
 
         formUser: {
-            name: 'Nguyễn Thị Quỳnh Trâm',
-            email: 'qt391997@gmail.com',
-            password: 'Anhzer020',
-            rePassword: 'Anhzer020',
+            name: '',
+            email: '',
+            password: '',
+            rePassword: '',
         },
 
         formDN: {
             loaiHinhId: null,
-            tenTiengViet: 'Cảnh Toàn',
-            tenTiengAnh: 'Canh Toan',
-            tenVietTat: 'CT',
+            tenTiengViet: '',
+            tenTiengAnh: '',
+            tenVietTat: '',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: '30A, Trần Hưng Đạo',
-            maSoThue: '98458475',
+            diaChi: '',
+            maSoThue: '',
             fax: '',
-            soLuongNhanSu: '30',
-            ngayLap: '19/03/2013',
-            moTa: 'Bán Laptop',
+            soLuongNhanSu: '',
+            ngayLap: '',
+            moTa: '',
             dienThoais: [
                 {
                     id: Date.now(),
-                    loaiSdt: 'Di động',
-                    sdt: '0913615485',
-                },
-                {
-                    id: Date.now() * 2,
-                    loaiSdt: 'Bàn',
-                    sdt: '0845473875',
+                    loaiSdt: '',
+                    sdt: '',
                 },
             ],
         },
 
         formDaiDienDN: {
-            tenNguoiDaiDien: 'Nguyễn Thị Quỳnh Trâm',
-            dienThoai: '0937456575',
-            email: 'qt391997@gmail.com',
+            tenNguoiDaiDien: '',
+            dienThoai: '',
+            email: '',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: '5M2, Đặng Dung, Khóm 3',
-            cccd: '08748577567',
+            diaChi: '',
+            cccd: '',
             imgMatTruoc: null,
             imgMatSau: null,
             chucVu: null,
@@ -192,26 +187,14 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             formData.append(`doanhnghiep_sdt[]`, JSON.stringify(item))
         })
 
-        await axios.post('/api/doanhnghiep/register', formData, {
+        await axios.post('doanhnghiep/register', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
     } catch (error) {
         const errData = error?.response?.data
         console.log('===> error: ', errData)
-        // return rejectWithValue({ code: errData?.code, message: errData?.message })
         return rejectWithValue()
     }
-
-    // try {
-    //     const formData = new FormData()
-    //     formData.append('test', 123)
-    //     await axios.post('/api/doanhnghiep/test', formData, {
-    //         headers: { 'Content-Type': 'multipart/form-data' },
-    //     })
-    //     console.log('===> Đã đăng ký thành công: ')
-    // } catch (error) {
-    //     console.log('===> Lỗi đăng ký: ', error)
-    // }
 })
 
 export default dangKySlice

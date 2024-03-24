@@ -5,7 +5,7 @@ import { AxiosError } from 'axios'
 
 export const fetchConversations = async () => {
     try {
-        const { data } = await authAxios.get<Conversation[]>('/api/hoidap/hoithoai')
+        const { data } = await authAxios.get<Conversation[]>('hoidap/hoithoai')
         return data
     } catch (error) {
         const err = error as AxiosError
@@ -18,7 +18,7 @@ export const fetchConversations = async () => {
 export const fetchMessages = async (chuyenGiaId: number) => {
     try {
         console.log('===> chuyenGiaId: ', chuyenGiaId)
-        const { data } = await authAxios.get<Conversation>('/api/hoidap/tinnhan', {
+        const { data } = await authAxios.get<Conversation>('hoidap/tinnhan', {
             params: { chuyenGiaId },
         })
         return data
@@ -32,7 +32,7 @@ export const fetchMessages = async (chuyenGiaId: number) => {
 
 export const sendMessage = async (message: string, hoiThoaiId: number) => {
     try {
-        await authAxios.post('/api/hoidap/tinnhan', {
+        await authAxios.post('hoidap/tinnhan', {
             message,
             hoiThoaiId,
         })

@@ -3,7 +3,7 @@ import { axios } from '@utils/axios'
 
 export const getChuyenGias = async (linhVucId: string) => {
     try {
-        const { data } = await axios.get<ChuyenGia>(`/api/chuyengia`, {
+        const { data } = await axios.get<ChuyenGia>(`chuyengia`, {
             params: { linhvucid: linhVucId },
         })
         return data
@@ -15,7 +15,7 @@ export const getChuyenGias = async (linhVucId: string) => {
 
 export const getChuyenGia = async (id: number) => {
     try {
-        const { data } = await axios.get<ChuyenGia>(`/api/chuyengia/${id}`)
+        const { data } = await axios.get<ChuyenGia>(`chuyengia/${id}`)
         return data
     } catch (error) {
         console.log('===> Lỗi lấy chuyên gia', JSON.stringify(error))

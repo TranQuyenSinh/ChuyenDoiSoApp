@@ -78,7 +78,7 @@ const userSlice = createSlice({
 
 export const loginWithPassword = createAsyncThunk('user/login', async ({ email, password }) => {
     try {
-        let { data } = await axios.post('/api/doanhnghiep/login', { email, password })
+        let { data } = await axios.post('doanhnghiep/login', { email, password })
         const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
         if (bioInfo?.email !== email) {
             await setSecureItem(Constants.SecureStore.BioAuth, { isEnabled: false })
@@ -105,7 +105,7 @@ export const loginWithOAuth = createAsyncThunk(
             if (OAuthLoading !== 'pending' || currentRequestId !== requestId) {
                 return
             }
-            let { data } = await axios.post('/api/doanhnghiep/loginemail', userInfo)
+            let { data } = await axios.post('doanhnghiep/loginemail', userInfo)
 
             const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
             if (bioInfo?.email !== userInfo?.email) {
@@ -127,11 +127,11 @@ export const loginWithOAuth = createAsyncThunk(
     }
 )
 export const renewUserProfile = createAsyncThunk('user/renewUserProfile', async () => {
-    const { data } = await authAxios.get('/api/taikhoan/profile')
+    const { data } = await authAxios.get('taikhoan/profile')
     return data
 })
 export const logOutServer = createAsyncThunk('user/logoutServer', async () => {
-    await authAxios.post('/api/doanhnghiep/logout')
+    await authAxios.post('doanhnghiep/logout')
 })
 
 export default userSlice

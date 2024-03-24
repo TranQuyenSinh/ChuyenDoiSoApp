@@ -3,7 +3,7 @@ import { authAxios } from '@utils/axios'
 
 export const getLoaiHinhDN = async () => {
     try {
-        const { data } = await authAxios.get<LoaiHinh>('/api/loaihinhdoanhnghiep')
+        const { data } = await authAxios.get<LoaiHinh>('loaihinhdoanhnghiep')
         return data
     } catch (err) {
         console.log('===> Lỗi lấy loại hình doanh nghiệp')
@@ -12,6 +12,11 @@ export const getLoaiHinhDN = async () => {
 }
 
 export const getThongTinDN = async () => {
-    const { data } = await authAxios.get<DoanhNghiep>('/api/doanhnghiep/profile')
-    return data
+    try {
+        const { data } = await authAxios.get<DoanhNghiep>('doanhnghiep/profile')
+        return data
+    } catch (error) {
+        console.log('===> error: ', error)
+        throw error
+    }
 }

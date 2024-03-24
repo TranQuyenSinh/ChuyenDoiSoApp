@@ -2,7 +2,7 @@ import { authAxios, axios } from '@utils/axios'
 
 export const layPhieuDanhGia1 = async () => {
     try {
-        const { data } = await authAxios.get('/phieudanhgia1')
+        const { data } = await authAxios.get('phieudanhgia1')
         const scores = []
         const tieuchi = data.map((tieuChiC1, index) => {
             const c1 = {
@@ -56,7 +56,7 @@ export const layPhieuDanhGia1 = async () => {
 
 export const themDanhGia = async scores => {
     try {
-        const { data } = await authAxios.post('/api/phieudanhgia1', { scores })
+        const { data } = await authAxios.post('phieudanhgia1', { scores })
         return data
     } catch (err) {
         console.error('===> Lỗi khi thêm đánh giá', JSON.stringify(err))

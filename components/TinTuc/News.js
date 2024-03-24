@@ -36,7 +36,7 @@ const ListNews = ({ linhVucId }) => {
             <View style={styles.container}>
                 <FlatList
                     data={news}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => index}
                     refreshControl={<RefreshControl refreshing={refresing} onRefresh={fetchData} />}
                     showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => {

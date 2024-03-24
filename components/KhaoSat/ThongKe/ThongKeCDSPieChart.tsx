@@ -12,7 +12,7 @@ const ThongKeCDSPieChart = () => {
     const [data, setData] = useState<any[]>([])
     const colors = useMemo(() => ['#f53d3dc9', '#ffa600b9', '#f7f72db7', '#008000bf', '#0000ff7b', '#4c0082a4'], [])
     const fetchData = async () => {
-        const { data } = await axios.get('api/thongke/mucdo')
+        const { data } = await axios.get('thongke/mucdo')
 
         const result = []
         for (let key in data) {

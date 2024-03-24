@@ -4,7 +4,7 @@ import { toast } from '@utils/toast'
 
 export const getBinhLuanByTinTucId = async (tinTucId: number) => {
     try {
-        let { data } = await axios.get<BinhLuan[]>('/api/binhluan', {
+        let { data } = await axios.get<BinhLuan[]>('binhluan', {
             params: { tinTucId },
         })
         return data
@@ -26,7 +26,7 @@ export const themBinhLuan = async ({
     binhLuanChaId?: number
 }) => {
     try {
-        await axios.post('/api/binhluan', {
+        await axios.post('binhluan', {
             userId,
             noiDung,
             tinTucId,

@@ -26,7 +26,7 @@ export const layTinhThanh = async () => {
 
 export const getSlides = async () => {
     try {
-        const { data } = await axios.get<Slide[]>('/api/tintuc/slide')
+        const { data } = await axios.get<Slide[]>('tintuc/slide')
         return data
     } catch (error) {
         console.log('===> error: ', error)
@@ -36,7 +36,7 @@ export const getSlides = async () => {
 
 export const getVideos = async () => {
     try {
-        const { data } = await axios.get<Video[]>('/api/tintuc/video')
+        const { data } = await axios.get<Video[]>('tintuc/video')
         return data
     } catch (error) {
         console.log('===> error: ', error)
