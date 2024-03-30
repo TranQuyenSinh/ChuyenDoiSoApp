@@ -136,7 +136,13 @@ const DetailNews = () => {
                                     {news?.luotXem}
                                 </Text>
                             </View>
-                            <Text style={styles.noiDung}>{news?.tomTat}</Text>
+                            <RenderHTML
+                                tagsStyles={tagStyles}
+                                emSize={18}
+                                contentWidth={width}
+                                source={{ html: news?.tomTat ?? '' }}
+                            />
+
                             <RenderHTML
                                 tagsStyles={tagStyles}
                                 emSize={18}

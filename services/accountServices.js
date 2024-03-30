@@ -1,4 +1,4 @@
-import { authAxios } from '@utils/axios'
+import { authAxios, thongtinAuthAxios } from '@utils/axios'
 import { toast } from '@utils/toast'
 
 export const doiMatKhau = async (currentPassword, newPassword) => {
@@ -16,12 +16,12 @@ export const doiAvatar = async ({ uri, type, name }) => {
     try {
         const formData = new FormData()
         formData.append('avatar', { uri, type, name })
-        await authAxios.post('taikhoan/avatar', formData, {
+        await thongtinAuthAxios.post('taikhoan/avatar', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
         return true
     } catch (error) {
-        console.log('===> Lỗi đổi avatar', JSON.stringify(error?.response?.data))
+        console.log('===> error: ', error)
         return false
     }
 }

@@ -34,6 +34,7 @@ const userSlice = createSlice({
                 state.loading = false
                 state.userProfile = action.payload.userProfile
                 state.accessToken = action.payload.accessToken
+                console.log('===>action.payload: ', action.payload)
             })
             .addCase(loginWithPassword.rejected, state => {
                 state.loading = false

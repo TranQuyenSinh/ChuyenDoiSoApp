@@ -1,3 +1,5 @@
+import { User } from '@constants/CommonTypes/UserType'
+
 export interface DoanhNghiep {
     id: number
     tenTiengViet: string
@@ -15,6 +17,7 @@ export interface DoanhNghiep {
     loaiHinh: LoaiHinh
     daiDien: DaiDienDoanhNghiep
     sdts: Sdt[]
+    user?: User
 }
 
 export interface Sdt {

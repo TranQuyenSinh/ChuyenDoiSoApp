@@ -10,44 +10,44 @@ const dangKySlice = createSlice({
         tinhThanhs: [],
 
         formUser: {
-            name: '',
-            email: '',
-            password: '',
-            rePassword: '',
+            name: 'ten',
+            email: 'vn.quyensinh@gmail.com',
+            password: 'Anhzer020',
+            rePassword: 'Anhzer020',
         },
 
         formDN: {
             loaiHinhId: null,
-            tenTiengViet: '',
-            tenTiengAnh: '',
-            tenVietTat: '',
+            tenTiengViet: 'ten',
+            tenTiengAnh: 'ten',
+            tenVietTat: 'ten',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: '',
-            maSoThue: '',
-            fax: '',
-            soLuongNhanSu: '',
+            diaChi: 'ten',
+            maSoThue: '213123',
+            fax: '432423',
+            soLuongNhanSu: '23',
             ngayLap: '',
-            moTa: '',
+            moTa: 'ten',
             dienThoais: [
                 {
                     id: Date.now(),
-                    loaiSdt: '',
-                    sdt: '',
+                    loaiSdt: 'Bàn',
+                    sdt: '094376423',
                 },
             ],
         },
 
         formDaiDienDN: {
-            tenNguoiDaiDien: '',
-            dienThoai: '',
-            email: '',
+            tenNguoiDaiDien: 'ten',
+            dienThoai: '0997327423',
+            email: 'vn.quyensinh@gmail.com',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: '',
-            cccd: '',
+            diaChi: 'ten',
+            cccd: '3123223',
             imgMatTruoc: null,
             imgMatSau: null,
             chucVu: null,
@@ -191,6 +191,7 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             headers: { 'Content-Type': 'multipart/form-data' },
         })
     } catch (error) {
+        console.log('===> error: ', error)
         const errData = error?.response?.data
         console.log('===> error: ', errData)
         return rejectWithValue()

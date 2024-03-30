@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 
-import moment from 'moment'
 import { router, useNavigation } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { Text, View, Image, Pressable, TextInput, ScrollView, StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
+import { Text, View, Image, Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import Colors from '@constants/Colors'
-import useToggle from '@hooks/useToggle'
-import Modal from '@components/View/Modal'
-import Button from '@components/View/Button'
-import { textStyles } from '@constants/Styles'
-import { MaterialIcons } from '@expo/vector-icons'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
-import { RootState, AppDispatch } from '@redux/store'
+import { RootState } from '@redux/store'
 import { Conversation } from '@constants/HoiDap/HoiDapType'
 import { fetchConversations } from '@services/hoiDapServices'
 // @ts-ignore
@@ -22,7 +16,6 @@ import RequireLogin from '@components/StatusPage/RequireLogin'
 
 const HoiDap = () => {
     const navigation = useNavigation()
-    const dispatch = useDispatch<AppDispatch>()
     const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState<Conversation[]>([])
     const { isLoggedIn } = useSelector((state: RootState) => state.user)

@@ -7,4 +7,11 @@ export default {
         SavedAuth: 'saved_auth',
         BioAuth: 'bio_auth',
     },
+    Role: {
+        Admin: 'ad',
+        DoanhNghiep: 'dn',
+        ChuyenGia: 'cg',
+        CongTacVien: 'ctv',
+        HiepHoi: 'hhdn',
+    },
 }

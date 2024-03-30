@@ -7,13 +7,17 @@ import { axios } from '@utils/axios'
 import { screenWidth } from '@utils/window'
 
 import { khaoSatStyles } from '../khaoSatStyles'
+import { collapseTopMarginForChild } from 'react-native-render-html'
 
 const ThongKeCDSPieChart = () => {
     const [data, setData] = useState<any[]>([])
     const colors = useMemo(() => ['#f53d3dc9', '#ffa600b9', '#f7f72db7', '#008000bf', '#0000ff7b', '#4c0082a4'], [])
     const fetchData = async () => {
         const { data } = await axios.get('thongke/mucdo')
-
+        if (data['1'] == 0 && data['2'] == 0 && data['3'] == 0 && data['4'] == 0 && data['5'] == 0 && data['6'] == 0) {
+            setData([])
+            return
+        }
         const result = []
         for (let key in data) {
             const item = {
@@ -31,6 +35,8 @@ const ThongKeCDSPieChart = () => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    if (data.length === 0) return
 
     return (
         <>

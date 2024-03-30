@@ -9,6 +9,9 @@ import { TinTuc } from '@constants/TinTuc/TinTucTypes'
 import { getTinTucXemNhieu } from '@services/tinTucServices'
 
 import { tinTucStyles } from './tinTucStyles'
+import RenderHTML from 'react-native-render-html'
+import { tagStyles } from '@configs/newsHtmlConfig'
+import { windowWidth } from '@utils/window'
 
 const TinXemNhieu = () => {
     const router = useRouter()
@@ -39,9 +42,7 @@ const TinXemNhieu = () => {
                         }}
                         style={tinTucStyles.itemContainer}>
                         <Text style={tinTucStyles.title}>{item.tieuDe}</Text>
-                        <Text numberOfLines={4} style={tinTucStyles.tomTat}>
-                            {item.tomTat}
-                        </Text>
+
                         <Image source={{ uri: item.hinhAnh }} style={tinTucStyles.image} />
                     </Pressable>
                     <Seperator style={{ marginHorizontal: 0, height: 1 }} />

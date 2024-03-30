@@ -11,6 +11,9 @@ import { getTinTucLienQuan, getTinTucXemNhieu } from '@services/tinTucServices'
 import { tinTucStyles } from './tinTucStyles'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import { tagStyles } from '@configs/newsHtmlConfig'
+import RenderHTML from 'react-native-render-html'
+import { windowWidth } from '@utils/window'
 
 const TinLienQuan = () => {
     const router = useRouter()
@@ -44,9 +47,6 @@ const TinLienQuan = () => {
                         style={tinTucStyles.itemContainer}>
                         <>
                             <Text style={tinTucStyles.title}>{item.tieuDe}</Text>
-                            <Text numberOfLines={4} style={tinTucStyles.tomTat}>
-                                {item.tomTat}
-                            </Text>
                             <Image source={{ uri: item.hinhAnh }} style={tinTucStyles.image} />
                         </>
                     </Pressable>

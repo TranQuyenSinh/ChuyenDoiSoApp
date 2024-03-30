@@ -15,6 +15,18 @@ export const fetchConversations = async () => {
     }
 }
 
+export const fetchChuyenGiaConversations = async () => {
+    try {
+        const { data } = await authAxios.get<Conversation[]>('hoidap/chuyengiahoithoai')
+        return data
+    } catch (error) {
+        const err = error as AxiosError
+        // @ts-ignore
+        console.log('===> error: ', err?.response?.data?.error)
+        return []
+    }
+}
+
 export const fetchMessages = async (chuyenGiaId: number) => {
     try {
         console.log('===> chuyenGiaId: ', chuyenGiaId)
