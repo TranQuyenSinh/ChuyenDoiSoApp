@@ -18,6 +18,7 @@ import TabPageHeader from '@components/View/TabPageHeader'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
+import Constants from '@constants/Constants'
 
 const Page = () => {
     const router = useRouter()
@@ -27,7 +28,6 @@ const Page = () => {
     return (
         <SafeAreaView style={{ backgroundColor: Colors.background.default, flex: 1 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <TabPageHeader title={'Cài đặt'} />
                 <ProfileItem />
                 {!isLoggedIn && (
                     <GradienButton
@@ -37,7 +37,7 @@ const Page = () => {
                     />
                 )}
 
-                {isLoggedIn && (
+                {isLoggedIn && userProfile?.vaitro?.[0]?.id === Constants.Role.DoanhNghiep && (
                     <SettingSection title={'Doanh nghiệp'}>
                         <SettingSectionItem
                             title={'Thông tin doanh nghiệp'}

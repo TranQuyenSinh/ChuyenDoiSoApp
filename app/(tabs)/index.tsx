@@ -13,10 +13,10 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons'
 import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import { Feather, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
-
 // @ts-ignore
 import logo from '@assets/images/logo_cds.jpg'
 import { StatusBar } from 'expo-status-bar'
+import { screenWidth } from '@utils/window'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -32,11 +32,15 @@ export default function TrangTin() {
                     </Pressable>
                 )}
             </SafeAreaView>
-            <TinTucCarousel2 />
             <ScrollView style={{ marginBottom: 16 }} showsVerticalScrollIndicator={false}>
+                <TinTucCarousel2 />
                 <View style={styles.contentContainer}>
                     <Text style={textStyles.title}>Thông tin - Tin tức</Text>
-                    <View style={{ flexDirection: 'row', gap: 12 }}>
+                    <ScrollView
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ gap: 12 }}>
                         <GradientButton onPress={() => router.push('/news')} colors={['#64a3f5', '#286df7']}>
                             <FontAwesome style={styles.btnIcon} name='newspaper-o' />
                             <Text style={styles.btnText}>Tin tức chuyển đổi số</Text>
@@ -45,7 +49,11 @@ export default function TrangTin() {
                             <FontAwesome style={styles.btnIcon} name='youtube-play' />
                             <Text style={styles.btnText}>Video về chuyển đổi số</Text>
                         </GradientButton>
-                    </View>
+                        <GradientButton onPress={() => router.push('/news/thuvien')} colors={['#0170fd', '#7710d1']}>
+                            <Ionicons style={styles.btnIcon} name='document-text-outline' />
+                            <Text style={styles.btnText}>Văn bản chuyển đổi số</Text>
+                        </GradientButton>
+                    </ScrollView>
                 </View>
                 <View style={styles.contentContainer}>
                     <Text style={textStyles.title}>Khảo sát mức độ chuyển đổi số</Text>
@@ -139,7 +147,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
     },
     btnContainer: {
-        flex: 1,
+        // flex: 1,
+        width: screenWidth / 2 - 24,
         borderRadius: 8,
         justifyContent: 'center',
     },

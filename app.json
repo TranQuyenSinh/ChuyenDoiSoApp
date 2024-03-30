@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ChuyenDoiSoApp",
+    "name": "Tư Vấn Chuyển Đổi Số",
     "slug": "ChuyenDoiSoApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,8 +21,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/playstore-icon.png",
+        "backgroundColor": "#406abe"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -32,7 +32,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/ic_launcher-web.png"
     },
     "plugins": [
       "expo-router",

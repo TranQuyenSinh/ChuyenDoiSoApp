@@ -14,14 +14,14 @@ import moment from 'moment'
 import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
 import Button from '@components/View/Button'
-import { fetchMessages, sendMessage } from '@services/hoiDapServices'
+import { fetchMessages, fetchMessagesChuyenGia, sendMessage } from '@services/hoiDapServices'
 import { Conversation, Message } from '@constants/HoiDap/HoiDapType'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 const ChiTietHoiDap = () => {
-    // id = chuyengia_id
+    // id = doanhnghiep_id
     const { id } = useLocalSearchParams()
     const navigation = useNavigation()
     const [conversation, setConversation] = useState<Conversation>()
@@ -29,12 +29,13 @@ const ChiTietHoiDap = () => {
     const [loading, setLoading] = useState(false)
     const { isOpen, toggle } = useToggle()
     const [text, setText] = useState('')
-    const { userProfile } = useSelector((state: RootState) => state.user)
 
     const fetchData = async () => {
         setLoading(true)
-        const data = await fetchMessages(+id)
+        console.log('===> id: ', id)
+        const data = await fetchMessagesChuyenGia(+id)
         setConversation(data)
+        console.log('===> data: ', data)
         setLoading(false)
     }
 
@@ -79,7 +80,7 @@ const ChiTietHoiDap = () => {
                 title={'Hỏi đáp chuyên gia'}
                 style={{ marginBottom: 12 }}
             />
-            {conversation?.tinNhans?.length !== 0 && (
+            {conversation?.tinNhans.length !== 0 && (
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {conversation?.tinNhans?.map(item => (
                         <View key={item.id} style={styles.itemContainer}>
@@ -101,7 +102,7 @@ const ChiTietHoiDap = () => {
                 </ScrollView>
             )}
 
-            {!loading && conversation?.tinNhans?.length === 0 && (
+            {!loading && conversation?.tinNhans.length === 0 && (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                     <Text style={{ fontSize: 16 }}>Chọn biểu tượng + để thêm câu hỏi</Text>
                 </View>

@@ -1,5 +1,6 @@
 import { ThanhPho } from '@constants/CommonTypes/TinhThanhType'
 import { Slide } from '@constants/TinTuc/SlideType'
+import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
 import { Video } from '@constants/TinTuc/VideoType'
 import { axios } from '@utils/axios'
 
@@ -37,6 +38,18 @@ export const getSlides = async () => {
 export const getVideos = async () => {
     try {
         const { data } = await axios.get<Video[]>('tintuc/video')
+        return data
+    } catch (error) {
+        console.log('===> error: ', error)
+        return []
+    }
+}
+
+export const getThuViens = async (loai: number) => {
+    try {
+        const { data } = await axios.get<ThuVien[]>('tintuc/thuvien', {
+            params: { loai },
+        })
         return data
     } catch (error) {
         console.log('===> error: ', error)

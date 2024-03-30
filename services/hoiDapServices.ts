@@ -42,6 +42,21 @@ export const fetchMessages = async (chuyenGiaId: number) => {
     }
 }
 
+export const fetchMessagesChuyenGia = async (doanhNghiepId: number) => {
+    try {
+        console.log('===> doanhNghiepId: ', doanhNghiepId) // doanhnghiep_id
+        const { data } = await authAxios.get<Conversation>('hoidap/tinnhanchuyengia', {
+            params: { doanhNghiepId },
+        })
+        return data
+    } catch (error) {
+        const err = error as AxiosError
+        // @ts-ignore
+        console.log('===> error: ', err.message)
+        return undefined
+    }
+}
+
 export const sendMessage = async (message: string, hoiThoaiId: number) => {
     try {
         await authAxios.post('hoidap/tinnhan', {

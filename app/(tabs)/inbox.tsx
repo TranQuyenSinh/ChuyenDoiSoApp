@@ -22,8 +22,6 @@ const Inbox = () => {
             setLoading(true)
             const data = await fetchChuyenGiaConversations()
             setConversations(data)
-            // console.log('===> id ==== ', userProfile?.id)
-            console.log('===> ', data?.[0]?.doanhNghiep?.loaiHinh?.tenLoaiHinh)
             setLoading(false)
         })()
     }, [])
@@ -42,7 +40,7 @@ const Inbox = () => {
                 {conversations?.map((item: Conversation) => (
                     <Pressable
                         android_ripple={{ color: 'gray' }}
-                        onPress={() => router.push(`/chuyengia/hoidap/${item.chuyenGia.id}`)}
+                        onPress={() => router.push(`/inbox/${item.doanhNghiep.id}`)}
                         key={item.id}
                         style={styles.itemContainer}>
                         <View style={{ flexDirection: 'row', gap: 8 }}>

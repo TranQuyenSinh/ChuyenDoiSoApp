@@ -49,6 +49,7 @@ export default function TabLayout() {
                 />
                 <Tabs.Screen
                     name='survey'
+                    redirect={userProfile?.vaitro?.[0]?.id !== Constants.Role.DoanhNghiep}
                     options={{
                         headerShown: false,
                         tabBarLabel: 'Đánh giá',
