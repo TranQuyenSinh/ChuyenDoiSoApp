@@ -56,3 +56,15 @@ export const getThuViens = async (loai: number) => {
         return []
     }
 }
+
+export const getThuVien = async (id: number) => {
+    try {
+        const { data } = await axios.get<ThuVien>('tintuc/thuvien', {
+            params: { id },
+        })
+        return data
+    } catch (error) {
+        console.log('===> error: ', error)
+        return undefined
+    }
+}

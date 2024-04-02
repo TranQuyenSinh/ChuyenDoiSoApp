@@ -32,10 +32,8 @@ const ChiTietHoiDap = () => {
 
     const fetchData = async () => {
         setLoading(true)
-        console.log('===> id: ', id)
         const data = await fetchMessagesChuyenGia(+id)
         setConversation(data)
-        console.log('===> data: ', data)
         setLoading(false)
     }
 

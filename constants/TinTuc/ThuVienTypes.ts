@@ -4,6 +4,7 @@ export interface ThuVien {
     kyHieu: string
     namPhatHanh: string
     loai: number
+    file: string
     url: string
     createdAt: string
     updatedAt: string

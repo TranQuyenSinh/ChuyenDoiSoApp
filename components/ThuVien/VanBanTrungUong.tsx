@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { getThuViens } from '@services/commonServices'
-import Loading from '@components/StatusPage/Loading'
-import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
-import { useNavigation } from 'expo-router'
-import Colors from '@constants/Colors'
-import PageHeader from '@components/View/PageHeader'
+import React, { useState, useEffect } from 'react'
+
+import moment from 'moment'
+import { router } from 'expo-router'
 import { ScrollView } from 'react-native-gesture-handler'
-import { SceneMap, TabView } from 'react-native-tab-view'
+import { Text, Pressable, StyleSheet } from 'react-native'
+
+import Loading from '@components/StatusPage/Loading'
+import { getThuViens } from '@services/commonServices'
+import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
 
 const VanBanTrungUong = () => {
     const [data, setData] = useState<ThuVien[]>([])
@@ -23,13 +23,42 @@ const VanBanTrungUong = () => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    if (loading || !data) return <Loading />
     return (
-        <View>
-            <Text>VanBanTrungUong</Text>
-        </View>
+        <ScrollView style={styles.container}>
+            {data?.map(item => (
+                <Pressable
+                    onPress={() => router.push(`/thuvien/${item.id}`)}
+                    android_ripple={{ color: 'grey' }}
+                    style={styles.itemContainer}
+                    key={item.id}>
+                    <Text style={styles.tieuDe}>
+                        (<Text>{moment(item.namPhatHanh).toDate().toLocaleDateString()}</Text>) {item.tieuDe}
+                    </Text>
+                </Pressable>
+            ))}
+        </ScrollView>
     )
 }
 
 export default VanBanTrungUong
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+
+    itemContainer: {
+        paddingHorizontal: 12,
+        paddingVertical: 12,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: 'grey',
+    },
+    tieuDe: {
+        lineHeight: 20,
+        fontSize: 15,
+        // fontWeight: '500',
+        textAlign: 'justify',
+    },
+})

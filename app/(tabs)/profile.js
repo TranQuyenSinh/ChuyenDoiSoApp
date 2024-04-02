@@ -1,7 +1,7 @@
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo, useEffect, useState } from 'react'
 
 import { useRouter } from 'expo-router'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Text, View, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -12,13 +12,16 @@ import useChonAnh from '@hooks/useChonAnh'
 import { useDangNhap } from '@hooks/useDangNhap'
 import avatar_default from '@assets/icons/user.jpg'
 import { renewUserProfile } from '@redux/userSlice'
-import { doiAvatar } from '@services/accountServices'
+import { doiAvatar, doiTenUser } from '@services/accountServices'
 import Button, { GradienButton } from '@components/View/Button'
 import TabPageHeader from '@components/View/TabPageHeader'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
 import Constants from '@constants/Constants'
+import Modal from '@components/View/Modal'
+import useToggle from '@hooks/useToggle'
+import IconButton from '@components/View/IconButton'
 
 const Page = () => {
     const router = useRouter()
@@ -80,7 +83,23 @@ const ProfileItem = () => {
     const modalRef = useRef(null)
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
     const { pickImageAsync } = useChonAnh()
-
+    const { isOpen, toggle } = useToggle()
+    const [name, setName] = useState('')
+    const handleChangeName = async () => {
+        if (!name) {
+            toast('Tên không được bỏ trống')
+            return
+        }
+        const result = await doiTenUser(name)
+        if (result) {
+            toast('Thay đổi thành công')
+            dispatch(renewUserProfile())
+        } else {
+            toast('Có lỗi xảy ra')
+        }
+        dispatch(renewUserProfile())
+        toggle(false)
+    }
     const handleChangeAvatar = async pickImageFrom => {
         const imgInfo = await pickImageAsync(pickImageFrom)
         if (imgInfo) {
@@ -117,7 +136,9 @@ const ProfileItem = () => {
                             <View style={{ gap: 3 }}>
                                 <View style={{ flexDirection: 'row', gap: 3 }}>
                                     <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{userProfile.name}</Text>
-                                    <MaterialCommunityIcons name='pencil' size={20} color={Colors.bodyText} />
+                                    <IconButton onPress={() => toggle(true)}>
+                                        <MaterialCommunityIcons name='pencil' size={20} color={Colors.bodyText} />
+                                    </IconButton>
                                 </View>
                                 <Text style={{ color: Colors.textGray }}>{userProfile.email}</Text>
                             </View>
@@ -155,6 +176,22 @@ const ProfileItem = () => {
                             />
                         </View>
                     </BottomSheetModal>
+
+                    {/* Change Name Modal */}
+                    <Modal isOpen={isOpen} toggle={toggle}>
+                        <TextInput
+                            placeholder='Nhập tên mới'
+                            style={styles.modalInput}
+                            value={name}
+                            onChangeText={text => setName(text)}
+                            autoCapitalize='words'
+                        />
+                        <Button
+                            btnStyles={{ width: '100%', marginTop: 12 }}
+                            text='Xác nhận'
+                            onPress={handleChangeName}
+                        />
+                    </Modal>
                 </>
             )}
         </>
@@ -179,6 +216,13 @@ const styles = StyleSheet.create({
         gap: 12,
         alignItems: 'center',
         padding: 12,
+    },
+    modalInput: {
+        borderWidth: StyleSheet.hairlineWidth,
+        width: '100%',
+        borderRadius: 8,
+        padding: 8,
+        textAlign: 'center',
     },
 })
 

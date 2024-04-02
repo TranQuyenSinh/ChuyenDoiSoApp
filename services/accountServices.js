@@ -25,3 +25,14 @@ export const doiAvatar = async ({ uri, type, name }) => {
         return false
     }
 }
+
+export const doiTenUser = async name => {
+    try {
+        await authAxios.post('taikhoan/changename', { name })
+        return { result: true, message: 'Đổi tên hiển thị thành công' }
+    } catch (err) {
+        const error = err.response?.data?.error
+        console.log('===> Đổi tên thất bại. Err: ', error)
+        return { result: false, message: error }
+    }
+}

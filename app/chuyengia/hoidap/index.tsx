@@ -44,7 +44,7 @@ const HoiDap = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader title={'Cuộc trò chuyện'} style={{ marginBottom: 12 }} />
+            <PageHeader title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 12 }} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {conversations?.map((item: Conversation) => (
                     <Pressable

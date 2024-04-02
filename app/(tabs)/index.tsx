@@ -49,7 +49,7 @@ export default function TrangTin() {
                             <FontAwesome style={styles.btnIcon} name='youtube-play' />
                             <Text style={styles.btnText}>Video về chuyển đổi số</Text>
                         </GradientButton>
-                        <GradientButton onPress={() => router.push('/news/thuvien')} colors={['#0170fd', '#7710d1']}>
+                        <GradientButton onPress={() => router.push('/thuvien')} colors={['#0170fd', '#7710d1']}>
                             <Ionicons style={styles.btnIcon} name='document-text-outline' />
                             <Text style={styles.btnText}>Văn bản chuyển đổi số</Text>
                         </GradientButton>
