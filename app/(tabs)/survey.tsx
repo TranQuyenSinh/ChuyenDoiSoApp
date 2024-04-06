@@ -23,6 +23,7 @@ import NotFound from '@components/StatusPage/NotFound'
 import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
 import Seperator from '@components/View/Seperator'
+import { StatusBar } from 'expo-status-bar'
 
 const SurveyPage = () => {
     const navigation = useNavigation()
@@ -63,6 +64,8 @@ const SurveyPage = () => {
                 <Text style={[textStyles.large, { textAlign: 'center' }]}>
                     Doanh nghiệp chưa thực hiện khảo sát nào
                 </Text>
+                <StatusBar style='dark' />
+
             </View>
         )
 

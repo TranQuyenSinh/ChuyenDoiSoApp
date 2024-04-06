@@ -27,7 +27,7 @@ const AssociationPage = () => {
 
     return (
         <View style={styles.container}>
-            {loading && <Loading containerStyles={{ marginTop: 30, backgroundColor: 'transparent' }} />}
+            {loading && <Loading />}
             {!loading && (
                 <ScrollView
                     style={{ marginTop: 16 }}

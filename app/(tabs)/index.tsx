@@ -91,8 +91,6 @@ export default function TrangTin() {
                         </GradientButton>
                     </View>
                 </View>
-
-                <ThongKeCDSPieChart />
             </ScrollView>
             <StatusBar style='light' />
         </View>

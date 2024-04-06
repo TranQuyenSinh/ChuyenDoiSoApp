@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, memo } from 'react'
 
-import { Text, View, Pressable } from 'react-native'
+import { Text, View, Pressable, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler'
 
@@ -13,12 +13,14 @@ import Loading from '@components/StatusPage/Loading'
 import { DateSelect } from '@components/Input/DatePicker'
 import DropdownComponent, { ValidateDropdownComponent } from '@components/Input/Dropdown'
 import { getLoaiHinhDN } from '@services/doanhNghiepServices'
-import TextInputBox, { TextAreaInputBox, ValidateInputBox } from '@components/Input/InputBox'
+import TextInputBox, { TextAreaInputBox, TextInputBoxWrapper, ValidateInputBox } from '@components/Input/InputBox'
 
 import { formStyles } from './formStyles'
 import { Field, Formik } from 'formik'
 import { dangKyDoanhNghiepValidate } from '@validateSchemas/registerValidate'
 import { useTinhThanh } from '@hooks/useTinhThanh'
+import useToggle from '@hooks/useToggle'
+import ImagePickerModal from '@components/Input/ImagePickerModal'
 const loaiDienThoai = [
     { value: 'Di động', label: 'Di động' },
     { value: 'Bàn', label: 'Bàn' },
@@ -31,6 +33,7 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
     const [loaiHinhs, setLoaiHinhs] = useState([])
     const [localLoading, setLocalLoading] = useState(false)
     const { thanhPhoData, huyenData, xaData } = useTinhThanh(formDN)
+    const { isOpen, toggle } = useToggle()
 
     const handleChangeDate = useCallback(date => {
         const formatedDate = moment(date, 'YYYY/MM/DD').format('DD/MM/YYYY')
@@ -40,6 +43,18 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
     const handleChangeText = useCallback((field, text) => {
         dispatch(setFormDN({ field, value: text }))
     }, [])
+
+    const pickImage = async result => {
+        if (result) {
+            dispatch(
+                setFormDN({
+                    field: 'logo',
+                    value: { uri: result.uri, name: result.name, type: result.type },
+                })
+            )
+            toggle(false)
+        }
+    }
 
     const handleChangeDropdown = useCallback((field, item) => {
         dispatch(
@@ -52,6 +67,11 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
             })
         )
     }, [])
+
+    const handlePickImage = image => {
+        setImage(image)
+        toggle(false)
+    }
 
     const fetchData = async () => {
         setLocalLoading(true)
@@ -76,6 +96,7 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                             loaiHinhId: '',
                             thanhPho: '',
                             huyen: '',
+                            logo: '',
                             xa: '',
                         }}
                         onSubmit={onNextPage}>
@@ -133,6 +154,17 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                                             onChangeText={text => handleChangeText('moTa', text)}
                                             label={'Mô tả doanh nghiệp'}
                                         />
+                                        <TextInputBoxWrapper
+                                            containerStyles={{ gap: 10, alignItems: 'center', paddingVertical: 20 }}
+                                            label={'Logo doanh nghiệp'}>
+                                            {formDN.logo?.uri && (
+                                                <Image
+                                                    source={{ uri: formDN.logo.uri }}
+                                                    style={{ width: '100%', height: 200 }}
+                                                />
+                                            )}
+                                            <Button text='Chọn ảnh' onPress={() => toggle(true)} />
+                                        </TextInputBoxWrapper>
                                     </View>
                                 </View>
                                 <View style={formStyles.sectionContainer}>
@@ -246,6 +278,7 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                             </>
                         )}
                     </Formik>
+                    <ImagePickerModal isOpen={isOpen} toggle={() => toggle()} onPicked={pickImage} />
                 </ScrollView>
             )}
         </>

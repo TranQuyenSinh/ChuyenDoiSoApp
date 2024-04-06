@@ -1,32 +1,13 @@
-import { View, ViewStyle, Dimensions, StyleSheet, ActivityIndicator } from 'react-native'
-import Colors from '@constants/Colors'
-const { width } = Dimensions.get('window')
+import Spinner from 'react-native-loading-spinner-overlay'
 
 interface LoadingProps {
-    containerStyles?: ViewStyle
-    isCoverScreen?: boolean
+    visible?: boolean
+    text?: string
+    color?: string
 }
-export default function Loading({ containerStyles, isCoverScreen = false }: LoadingProps) {
-    return (
-        <View style={[styles.container, containerStyles, isCoverScreen && styles.containerAbsolute]}>
-            <ActivityIndicator size={'large'} color={Colors.default} />
-        </View>
-    )
+const Loading = (props: LoadingProps) => {
+    const { text = 'Đang tải...', visible = true, color = '#fff' } = props
+    return <Spinner visible={visible} textContent={text} textStyle={{ color }} />
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#afafaf1b',
-        width,
-        height: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 19,
-    },
-
-    containerAbsolute: {
-        position: 'absolute',
-        backgroundColor: '#2c2c2c1b',
-    },
-})
+export default Loading

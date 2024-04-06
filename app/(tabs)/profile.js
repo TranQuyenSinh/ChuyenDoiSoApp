@@ -1,4 +1,4 @@
-import { useRef, useMemo, useEffect, useState } from 'react'
+import { useRef, useMemo, useState } from 'react'
 
 import { useRouter } from 'expo-router'
 import { ScrollView, StyleSheet, TextInput } from 'react-native'
@@ -14,7 +14,6 @@ import avatar_default from '@assets/icons/user.jpg'
 import { renewUserProfile } from '@redux/userSlice'
 import { doiAvatar, doiTenUser } from '@services/accountServices'
 import Button, { GradienButton } from '@components/View/Button'
-import TabPageHeader from '@components/View/TabPageHeader'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
@@ -22,6 +21,7 @@ import Constants from '@constants/Constants'
 import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
 import IconButton from '@components/View/IconButton'
+import login from '@assets/images/profile_login.jpg'
 
 const Page = () => {
     const router = useRouter()
@@ -30,26 +30,39 @@ const Page = () => {
 
     return (
         <SafeAreaView style={{ backgroundColor: Colors.background.default, flex: 1 }}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <ProfileItem />
-                {!isLoggedIn && (
-                    <GradienButton
-                        onPress={() => router.push('auth/login')}
-                        btnStyles={{ marginHorizontal: 16, width: '40%', marginTop: 16 }}
-                        text={'Đăng nhập'}
-                    />
-                )}
-
-                {isLoggedIn && userProfile?.vaitro?.[0]?.id === Constants.Role.DoanhNghiep && (
-                    <SettingSection title={'Doanh nghiệp'}>
-                        <SettingSectionItem
-                            title={'Thông tin doanh nghiệp'}
-                            onPress={() => router.push('profile/thongTinDoanhNghiep')}
-                            renderIcon={() => <Ionicons name='business-outline' size={24} color={Colors.bodyText} />}
+            {!isLoggedIn && (
+                <>
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 6,
+                        }}>
+                        <Image source={login} style={{ width: '100%', height: 300, resizeMode: 'contain' }} />
+                        <GradienButton
+                            textStyles={{ fontSize: 18 }}
+                            onPress={() => router.push('auth/login')}
+                            btnStyles={{ marginHorizontal: 16, marginTop: 20, height: 50, width: '50%' }}
+                            text={'Đăng nhập ngay'}
                         />
-                    </SettingSection>
-                )}
-                {isLoggedIn && (
+                    </View>
+                </>
+            )}
+            {isLoggedIn && (
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <ProfileItem />
+                    {userProfile?.vaitro?.[0]?.id === Constants.Role.DoanhNghiep && (
+                        <SettingSection title={'Doanh nghiệp'}>
+                            <SettingSectionItem
+                                title={'Thông tin doanh nghiệp'}
+                                onPress={() => router.push('profile/thongTinDoanhNghiep')}
+                                renderIcon={() => (
+                                    <Ionicons name='business-outline' size={24} color={Colors.bodyText} />
+                                )}
+                            />
+                        </SettingSection>
+                    )}
                     <SettingSection title={'Tài khoản'}>
                         <SettingSectionItem
                             title={'Thiết lập đăng nhập vân tay'}
@@ -71,8 +84,8 @@ const Page = () => {
                             onPress={logOut}
                         />
                     </SettingSection>
-                )}
-            </ScrollView>
+                </ScrollView>
+            )}
         </SafeAreaView>
     )
 }

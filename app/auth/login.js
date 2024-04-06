@@ -13,8 +13,8 @@ import useSinhTracHoc from '@hooks/useSinhTracHoc'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import facebookIcon from '@assets/icons/facebook.jpg'
 import { linkStyles, textStyles, defaultStyles } from '@constants/Styles'
-
 import authStyles from './authStyles'
+import login from '@assets/images/logo.jpg'
 import Loading from '@components/StatusPage/Loading'
 
 const Page = () => {
@@ -47,6 +47,8 @@ const Page = () => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={authStyles.container}>
+                <Image source={login} style={{ width: '100%', height: 50, resizeMode: 'cover', paddingVertical: 50 }} />
+                <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '500' }}>Đăng nhập</Text>
                 <View>
                     <Text style={authStyles.label}>
                         Email

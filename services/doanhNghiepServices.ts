@@ -1,5 +1,15 @@
 import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
-import { authAxios } from '@utils/axios'
+import { authAxios, axios } from '@utils/axios'
+
+export const getDoanhNghieps = async () => {
+    try {
+        const { data } = await axios.get<DoanhNghiep[]>('doanhnghiep/index')
+        return data
+    } catch (err) {
+        console.log('===> Lỗi lấy danh sách doanh nghiệp', err)
+        return []
+    }
+}
 
 export const getLoaiHinhDN = async () => {
     try {

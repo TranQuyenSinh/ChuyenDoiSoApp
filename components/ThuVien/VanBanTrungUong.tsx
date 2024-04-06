@@ -5,9 +5,9 @@ import { router } from 'expo-router'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Text, Pressable, StyleSheet } from 'react-native'
 
-import Loading from '@components/StatusPage/Loading'
 import { getThuViens } from '@services/commonServices'
 import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
+import Loading from '@components/StatusPage/Loading'
 
 const VanBanTrungUong = () => {
     const [data, setData] = useState<ThuVien[]>([])

@@ -1,15 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react'
 
-import { Text, StyleSheet } from 'react-native'
+import { Text, StyleSheet, ViewStyle } from 'react-native'
 import { PieChart } from 'react-native-chart-kit'
 
 import { axios } from '@utils/axios'
 import { screenWidth } from '@utils/window'
 
 import { khaoSatStyles } from '../khaoSatStyles'
-import { collapseTopMarginForChild } from 'react-native-render-html'
 
-const ThongKeCDSPieChart = () => {
+const ThongKeCDSPieChart = ({ backgroundColor = 'white' }: { backgroundColor?: string }) => {
     const [data, setData] = useState<any[]>([])
     const colors = useMemo(() => ['#f53d3dc9', '#ffa600b9', '#f7f72db7', '#008000bf', '#0000ff7b', '#4c0082a4'], [])
     const fetchData = async () => {
@@ -40,22 +39,23 @@ const ThongKeCDSPieChart = () => {
 
     return (
         <>
+            <Text style={[khaoSatStyles.title, { textAlign: 'center', color: 'white', }]}>
+                Mức độ chuyển đổi số của các doanh nghiệp vừa và nhỏ tỉnh An Giang
+            </Text>
             <PieChart
                 data={data}
                 width={screenWidth - 32}
-                height={220}
+                height={180}
                 chartConfig={{
+                    labelColor: () => 'white',
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                 }}
                 accessor={'population'}
-                backgroundColor='white'
+                backgroundColor={backgroundColor}
                 paddingLeft={'15'}
                 absolute={false}
                 style={{ borderRadius: 16 }}
             />
-            <Text style={[khaoSatStyles.title, { textAlign: 'center' }]}>
-                Mức độ chuyển đổi số của các doanh nghiệp vừa và nhỏ tỉnh An Giang
-            </Text>
         </>
     )
 }

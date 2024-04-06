@@ -33,7 +33,7 @@ const TinLienQuan = () => {
     }, [tinTucId])
 
     if (loading) {
-        return <Loading containerStyles={{ width: 'auto' }} />
+        return <Loading />
     }
     return (
         <View>

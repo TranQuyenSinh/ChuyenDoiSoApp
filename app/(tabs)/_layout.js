@@ -1,6 +1,6 @@
 import Colors from '@constants/Colors'
 import Constants from '@constants/Constants'
-import { FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { Entypo, FontAwesome, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Image, StyleSheet } from 'react-native'
@@ -20,9 +20,9 @@ export default function TabLayout() {
             <Tabs
                 screenOptions={{
                     tabBarActiveTintColor: Colors.primary,
+                    headerShown: false,
                     tabBarLabelStyle: {
-                        fontFamily: 'mon',
-                        fontSize: 12,
+                        fontSize: 10,
                     },
                     tabBarStyle: {
                         height: 60,
@@ -41,6 +41,24 @@ export default function TabLayout() {
                                         <Ionicons name='home-sharp' color={color} size={size} />
                                     ) : (
                                         <Ionicons name='home-outline' color={color} size={size} />
+                                    )}
+                                </>
+                            )
+                        },
+                    }}
+                />
+                <Tabs.Screen
+                    name='social'
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: 'Diễn đàn',
+                        tabBarIcon: ({ color, size, focused }) => {
+                            return (
+                                <>
+                                    {focused ? (
+                                        <Entypo name='network' color={color} size={size} />
+                                    ) : (
+                                        <Entypo name='network' color={color} size={size} />
                                     )}
                                 </>
                             )
@@ -67,11 +85,25 @@ export default function TabLayout() {
                     }}
                 />
                 <Tabs.Screen
+                    name='doanhnghiep'
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: 'Doanh nghiệp',
+                        tabBarIcon: ({ color, size, focused }) => {
+                            return (
+                                <>
+                                    {focused ? (
+                                        <FontAwesome name='building' size={size} color={color} />
+                                    ) : (
+                                        <FontAwesome name='building-o' size={size} color={color} />
+                                    )}
+                                </>
+                            )
+                        },
+                    }}
+                />
+                <Tabs.Screen
                     name='expert'
-                    redirect={
-                        userProfile?.vaitro?.[0]?.id !== Constants.Role.DoanhNghiep &&
-                        userProfile?.vaitro?.[0]?.id !== Constants.Role.Admin
-                    }
                     options={{
                         headerShown: false,
                         tabBarLabel: 'Chuyên gia',
@@ -133,7 +165,6 @@ export default function TabLayout() {
                     }}
                 />
             </Tabs>
-            <StatusBar style='dark' />
         </>
     )
 }

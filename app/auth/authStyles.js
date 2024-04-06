@@ -12,7 +12,7 @@ export default authStyles = StyleSheet.create({
         backgroundColor: 'rgb(255, 255, 255)',
         padding: 24,
         gap: 16,
-        paddingTop: 100,
+        paddingTop: 50,
     },
     label: {
         color: Colors.bodyText,

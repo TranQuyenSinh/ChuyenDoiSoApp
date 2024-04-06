@@ -1,5 +1,5 @@
 import { toast } from '@utils/toast'
-import { authAxios, axios } from '@utils/axios'
+import { authAxios, axios, thongtinAxios } from '@utils/axios'
 import { layTinhThanh } from '@services/commonServices'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
@@ -10,44 +10,45 @@ const dangKySlice = createSlice({
         tinhThanhs: [],
 
         formUser: {
-            name: 'ten',
-            email: 'vn.quyensinh@gmail.com',
-            password: 'Anhzer020',
-            rePassword: 'Anhzer020',
+            name: '',
+            email: '',
+            password: '',
+            rePassword: '',
         },
 
         formDN: {
             loaiHinhId: null,
-            tenTiengViet: 'ten',
-            tenTiengAnh: 'ten',
-            tenVietTat: 'ten',
+            tenTiengViet: '',
+            tenTiengAnh: '',
+            tenVietTat: '',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: 'ten',
-            maSoThue: '213123',
-            fax: '432423',
-            soLuongNhanSu: '23',
+            diaChi: '',
+            maSoThue: '',
+            fax: '',
+            soLuongNhanSu: '',
             ngayLap: '',
-            moTa: 'ten',
+            moTa: '',
+            logo: null,
             dienThoais: [
                 {
                     id: Date.now(),
-                    loaiSdt: 'Bàn',
-                    sdt: '094376423',
+                    loaiSdt: '',
+                    sdt: '',
                 },
             ],
         },
 
         formDaiDienDN: {
-            tenNguoiDaiDien: 'ten',
-            dienThoai: '0997327423',
-            email: 'vn.quyensinh@gmail.com',
+            tenNguoiDaiDien: '',
+            dienThoai: '',
+            email: '',
             thanhPho: null,
             huyen: null,
             xa: null,
-            diaChi: 'ten',
-            cccd: '3123223',
+            diaChi: '',
+            cccd: '',
             imgMatTruoc: null,
             imgMatSau: null,
             chucVu: null,
@@ -136,6 +137,7 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             tenTiengViet,
             tenTiengAnh,
             tenVietTat,
+            logo,
             thanhPho: thanhPhoDN,
             huyen: huyenDN,
             xa: xaDN,
@@ -182,12 +184,13 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
         formData.append('doanhnghiep_xa', xaDN.name)
         formData.append('doanhnghiep_diachi', diaChiDN)
         formData.append('doanhnghiep_mota', moTa)
+        formData.append('doanhnghiep_logo', logo)
 
         dienThoaisDN.forEach((item, index) => {
             formData.append(`doanhnghiep_sdt[]`, JSON.stringify(item))
         })
 
-        await axios.post('doanhnghiep/register', formData, {
+        await thongtinAxios.post('doanhnghiep/register', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
     } catch (error) {

@@ -32,18 +32,26 @@ const Button = ({ onPress, text, btnStyles, textStyles, renderIcon, disabled = f
 interface GradienButtonProps extends ButtonProps {
     textStyles: ViewStyle
     colors: string[]
+    renderIcon?: ReactNode
 }
 
-export const GradienButton = ({ onPress, text, btnStyles, textStyles, colors }: GradienButtonProps) => {
+export const GradienButton = ({ onPress, text, btnStyles, textStyles, colors, renderIcon }: GradienButtonProps) => {
     return (
         <LinearGradient
             style={[gradientStyles.btn, btnStyles]}
             colors={colors || ['#7676e8', '#348AC7']}
             start={{ x: 0, y: 0 }}>
             <Pressable
-                style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                }}
                 onPress={onPress}>
                 <Text style={[gradientStyles.text, textStyles]}>{text}</Text>
+                {renderIcon}
             </Pressable>
         </LinearGradient>
     )

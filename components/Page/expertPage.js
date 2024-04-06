@@ -74,7 +74,7 @@ const ExperPage = () => {
                     ))}
                 </ScrollView>
 
-                {loading && <Loading containerStyles={{ marginTop: 30, backgroundColor: 'transparent' }} />}
+                {loading && <Loading />}
                 {!loading && (
                     <>
                         <View style={styles.listContainer}>

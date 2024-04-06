@@ -52,7 +52,7 @@ const DangKyDoanhNghiep = () => {
 
     return (
         <>
-            {status === 'loading' && <Loading isCoverScreen />}
+            {status === 'loading' && <Loading />}
             {status === 'error' && <NotFound message='Có lỗi xảy ra, vui lòng thử lại' />}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={{ backgroundColor: Colors.white }}>
