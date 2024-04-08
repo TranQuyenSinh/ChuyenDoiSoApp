@@ -10,10 +10,16 @@ export interface BaiViet {
     user: User
     luotXem: number
     noiDung: string
-    hinhAnhs?: string[]
+    hinhAnhs?: AnhBaiViet[]
     luotThich: number
     danhMucs: DanhMucBaiViet[]
+    isLike: boolean
     createdAt: string
+}
+
+export interface AnhBaiViet {
+    id: number
+    hinhAnh: string
 }
 
 export interface BinhLuanBaiViet {

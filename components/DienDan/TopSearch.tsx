@@ -3,6 +3,7 @@ import React from "react";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Colors from '@constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
+import CreatePostButton from './CreatePostButton';
 
 interface TopSearchProps {
     value: string
@@ -20,6 +21,7 @@ const TopSearch = (props: TopSearchProps) => {
                     <Ionicons name='close-outline' size={20} color={'white'} />
                 </Pressable>}
             </View>
+            <CreatePostButton />
         </SafeAreaView>
     );
 };
@@ -29,15 +31,20 @@ export default TopSearch;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: Colors.default,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 12,
+        paddingVertical: 12,
+        gap: 6
     },
     inputContainer: {
+        flex: 1,
         flexDirection: 'row',
         gap: 6,
         alignItems: 'center',
         backgroundColor: '#66a1ef',
         borderRadius: 24,
-        marginHorizontal: 12,
-        marginVertical: 12,
+
         paddingHorizontal: 12
     },
     input: {

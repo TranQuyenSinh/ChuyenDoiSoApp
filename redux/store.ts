@@ -25,6 +25,8 @@ store.subscribe(() => {
     const token = store.getState().user.accessToken
     if (token) {
         setTokenAuthAxios(token)
+    } else {
+        setTokenAuthAxios(null)
     }
 })
 

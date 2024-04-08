@@ -10,14 +10,14 @@ const useChonAnh = () => {
         return true
     }
 
-    const pickImageAsync = async (pickType: 'camera' | 'galery') => {
+    const pickImageAsync = async (pickType: 'camera' | 'galery', allowResize = true) => {
         const hasPermission = await verifyPermission()
         if (!hasPermission) {
             return
         }
         const pickImageOptions = {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
+            allowsEditing: allowResize,
             cameraType: ImagePicker.CameraType.back,
             quality: 1,
         }

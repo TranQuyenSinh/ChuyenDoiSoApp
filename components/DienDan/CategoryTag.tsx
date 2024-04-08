@@ -1,19 +1,21 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { DanhMucBaiViet } from '@constants/DienDan/DienDanTypes';
+import Colors from '@constants/Colors';
 
 interface CategoryTagProps {
     data: DanhMucBaiViet
     onPress: (item: DanhMucBaiViet) => void
+    selected?: boolean
 }
 
-const CategoryTag = ({ data, onPress }: CategoryTagProps) => {
+const CategoryTag = ({ data, onPress, selected = false }: CategoryTagProps) => {
 
     return (
-        <TouchableOpacity onPress={() => onPress(data)} style={styles.container}>
-            <FontAwesome name='tag' color={'lightgrey'} size={16} />
-            <Text>{data.name}</Text>
+        <TouchableOpacity activeOpacity={0.5} style={styles.container} onPress={() => onPress(data)} >
+            <FontAwesome name='tag' color={selected ? Colors.default : 'lightgrey'} size={16} />
+            <Text style={{ color: selected ? Colors.default : '#000' }}>{data.name}</Text>
         </TouchableOpacity>
     );
 };
@@ -22,14 +24,13 @@ export default CategoryTag;
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 12,
-        paddingVertical: 10,
+        flexDirection: 'row',
+        gap: 4,
+        alignItems: 'center',
+        padding: 8,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: 'orange',
         backgroundColor: 'white',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
         borderRadius: 6
     }
 });
