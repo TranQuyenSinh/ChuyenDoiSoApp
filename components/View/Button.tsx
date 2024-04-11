@@ -16,6 +16,7 @@ interface ButtonProps {
 const Button = ({ onPress, text, btnStyles, textStyles, renderIcon, disabled = false }: ButtonProps) => {
     return (
         <Pressable
+            android_ripple={{ color: 'white' }}
             style={[
                 styles.defaultBtn,
                 { flexDirection: 'row', gap: 6 },

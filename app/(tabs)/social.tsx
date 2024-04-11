@@ -1,4 +1,4 @@
-import { FlatList, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
+import { FlatList, RefreshControl, ScrollView, StatusBar, StyleSheet, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import TopSearch from '@components/DienDan/TopSearch'
@@ -21,6 +21,7 @@ const SocialPage = () => {
         const tags = await getDanhMucs()
         const posts = await getBaiViets()
         setTags(tags)
+        console.log('===> ', tags)
         setPosts(posts)
         console.log('===> ', posts)
         setLoading(false)
@@ -52,6 +53,7 @@ const SocialPage = () => {
                     <Post key={item.id} data={item} />
                 ))}
             </ScrollView>
+            <StatusBar barStyle={'light-content'} />
         </View>
     )
 }
@@ -66,6 +68,6 @@ const styles = StyleSheet.create({
     tagsContainer: {
         gap: 6,
         paddingHorizontal: 6,
-        marginVertical: 12,
+        marginVertical: 6,
     },
 })

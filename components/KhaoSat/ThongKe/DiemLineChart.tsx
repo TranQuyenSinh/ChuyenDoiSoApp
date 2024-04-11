@@ -1,70 +1,79 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import moment from 'moment'
 import { useRouter } from 'expo-router'
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 
 import { windowWidth } from '@utils/window'
 import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 import { khaoSatStyles } from '../khaoSatStyles'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@redux/store'
 import Loading from '@components/StatusPage/Loading'
+import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import { fetchDanhSachKhaoSat } from '@redux/khaoSatSlice'
 
 const DiemLineChart = () => {
     const router = useRouter()
     const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
-
+    const dispatch = useDispatch<AppDispatch>()
+    const { isLoggedIn } = useSelector((state: RootState) => state.user)
+    const [data, setData] = useState<any>([])
     useEffect(() => {
-        if (khaoSats?.length !== 0) {
-            khaoSats.slice().sort((a, b) => b.id - a.id)
+        if (isLoggedIn) {
+            dispatch(fetchDanhSachKhaoSat())
+            dispatch(fetchDoanhNghiepInfo())
+        }
+    }, [isLoggedIn])
+    useEffect(() => {
+        if (khaoSats && khaoSats?.length !== 0) {
+            const items = khaoSats?.slice()?.reverse()
+            setData(items)
         }
     }, [khaoSats])
 
     const lineChartData = useMemo(() => {
-        if (khaoSats?.length === 0) return undefined
+        if (data && data?.length === 0) return undefined
         return {
-            labels: khaoSats?.map(item => moment(item.createdAt).format('MM/YYYY')),
+            labels: data?.map((item: any) => moment(item.createdAt).format('MM/YYYY')),
             datasets: [
                 {
-                    data: khaoSats?.map(item => item.tongDiem),
+                    data: data?.map((item: any) => item.tongDiem),
                 },
             ],
         }
-    }, [khaoSats])
+    }, [data])
 
-    if (!lineChartData) return <Loading />
+    if (!lineChartData || data?.length === 0) return <View></View>
 
     return (
         <>
             <LineChart
                 data={lineChartData}
                 width={windowWidth - 32}
-                height={300}
-                verticalLabelRotation={30}
+                height={200}
                 chartConfig={{
                     backgroundGradientFrom: '#4ba0fa',
-                    backgroundGradientTo: '#4ee9f2',
+                    backgroundGradientTo: '#4ec4f2',
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     propsForDots: {
                         r: '6',
                         strokeWidth: '2',
-                        stroke: '#4ee9f2',
+                        stroke: '#2db40b',
                     },
                     decimalPlaces: 0,
                 }}
                 onDataPointClick={({ index }) => {
-                    const id = khaoSats[index].id
+                    console.log('===> data[index]?.id: ', data[index]?.id)
+                    const id = data[index].id
                     router.push(`/khaosat/${id}`)
                 }}
-                bezier
                 style={{
                     borderRadius: 16,
                 }}
             />
-            <Text style={[khaoSatStyles.title, { textAlign: 'center' }]}>Thống kê điểm khảo sát của doanh nghiệp</Text>
         </>
     )
 }

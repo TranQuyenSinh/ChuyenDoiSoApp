@@ -65,7 +65,8 @@ export const createBaiViet = async (danhMucs: number[], noiDung: string, hinhAnh
         })
         return true
     } catch (error) {
-        console.log('===> Lỗi tạo bài viết: ', error)
+        console.log('===> ', error)
+        console.log('===> Lỗi tạo bài viết: ', error.response?.data)
         return false
     }
 }

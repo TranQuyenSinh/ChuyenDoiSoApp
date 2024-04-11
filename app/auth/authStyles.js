@@ -9,7 +9,6 @@ export default authStyles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: 'rgb(255, 255, 255)',
         padding: 24,
         gap: 16,
         paddingTop: 50,

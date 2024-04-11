@@ -11,7 +11,8 @@ export const defaultStyles = StyleSheet.create({
     },
     inputField: {
         height: 44,
-        borderWidth: StyleSheet.hairlineWidth,
+        // borderWidth: StyleSheet.hairlineWidth,
+        elevation: 10,
         borderColor: Colors.bodyText,
         borderRadius: 8,
         padding: 10,
@@ -25,7 +26,7 @@ export const defaultStyles = StyleSheet.create({
         alignItems: 'center',
     },
     secondaryBtn: {
-        backgroundColor: Colors.secondaryButton,
+        backgroundColor: '#ffffff',
         height: 48,
         borderRadius: 6,
         flexDirection: 'row',
@@ -33,6 +34,7 @@ export const defaultStyles = StyleSheet.create({
         alignItems: 'center',
         minWidth: 160,
         gap: 10,
+        elevation: 6,
     },
     buttonIcon: { width: 24, height: 24, resizeMode: 'cover' },
     btn: {

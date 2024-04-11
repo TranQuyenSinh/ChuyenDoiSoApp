@@ -1,8 +1,8 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 
 import { useSelector } from 'react-redux'
 import { Link, useRouter, useNavigation } from 'expo-router'
-import { TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { TextInput, StyleSheet, TouchableOpacity, StatusBar } from 'react-native'
 import { Text, View, Image, Keyboard, Pressable, TouchableWithoutFeedback } from 'react-native'
 
 import Colors from '@constants/Colors'
@@ -16,7 +16,7 @@ import { linkStyles, textStyles, defaultStyles } from '@constants/Styles'
 import authStyles from './authStyles'
 import login from '@assets/images/logo.jpg'
 import Loading from '@components/StatusPage/Loading'
-
+import background from '@assets/images/background_blur.jpg'
 const Page = () => {
     const router = useRouter()
     const navigation = useNavigation()
@@ -46,85 +46,102 @@ const Page = () => {
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={authStyles.container}>
-                <Image source={login} style={{ width: '100%', height: 50, resizeMode: 'cover', paddingVertical: 50 }} />
-                <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '500' }}>Đăng nhập</Text>
-                <View>
-                    <Text style={authStyles.label}>
-                        Email
-                        <Text style={authStyles.redStar}>*</Text>
-                    </Text>
-                    <TextInput
-                        style={[defaultStyles.inputField]}
-                        value={email}
-                        onChangeText={text => setEmail(text)}
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                        placeholder='Nhập email...'
+            <React.Fragment>
+                <Image
+                    source={background}
+                    style={[
+                        {
+                            width: '100%',
+                            height: '100%',
+                            resizeMode: 'cover',
+                        },
+                        StyleSheet.absoluteFill,
+                    ]}
+                />
+                <View style={authStyles.container}>
+                    <Image
+                        source={login}
+                        style={{ width: '100%', height: 50, resizeMode: 'cover', paddingVertical: 50 }}
                     />
-                </View>
-                <View>
-                    <Text style={authStyles.label}>
-                        Mật khẩu<Text style={authStyles.redStar}>*</Text>
-                    </Text>
-                    <TextInput
-                        autoCapitalize='none'
-                        placeholder='Nhập mật khẩu...'
-                        secureTextEntry={hidePassword}
-                        style={[defaultStyles.inputField]}
-                        value={password}
-                        onChangeText={text => setPassword(text)}
-                    />
-                    <Pressable style={authStyles.hidePasswordBtn} onPress={() => setHidePassword(!hidePassword)}>
-                        {hidePassword ? (
-                            <Ionicons name='eye-outline' size={24} color={Colors.bodyText} />
-                        ) : (
-                            <Ionicons name='eye-off-outline' size={24} color={Colors.bodyText} />
-                        )}
-                    </Pressable>
-                </View>
-                <TouchableOpacity onPress={() => loginWithPassword(email, password)} style={[defaultStyles.btn]}>
-                    <Text style={defaultStyles.btnText}>Đăng nhập</Text>
-                </TouchableOpacity>
+                    <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '500' }}>Đăng nhập</Text>
+                    <View>
+                        <Text style={authStyles.label}>
+                            Email
+                            <Text style={authStyles.redStar}>*</Text>
+                        </Text>
+                        <TextInput
+                            style={[defaultStyles.inputField]}
+                            value={email}
+                            onChangeText={text => setEmail(text)}
+                            keyboardType='email-address'
+                            autoCapitalize='none'
+                            placeholder='Nhập email...'
+                        />
+                    </View>
+                    <View>
+                        <Text style={authStyles.label}>
+                            Mật khẩu<Text style={authStyles.redStar}>*</Text>
+                        </Text>
+                        <TextInput
+                            autoCapitalize='none'
+                            placeholder='Nhập mật khẩu...'
+                            secureTextEntry={hidePassword}
+                            style={[defaultStyles.inputField]}
+                            value={password}
+                            onChangeText={text => setPassword(text)}
+                        />
+                        <Pressable style={authStyles.hidePasswordBtn} onPress={() => setHidePassword(!hidePassword)}>
+                            {hidePassword ? (
+                                <Ionicons name='eye-outline' size={24} color={Colors.bodyText} />
+                            ) : (
+                                <Ionicons name='eye-off-outline' size={24} color={Colors.bodyText} />
+                            )}
+                        </Pressable>
+                    </View>
+                    <TouchableOpacity onPress={() => loginWithPassword(email, password)} style={[defaultStyles.btn]}>
+                        <Text style={defaultStyles.btnText}>Đăng nhập</Text>
+                    </TouchableOpacity>
 
-                <View style={authStyles.separatorView}>
-                    <View style={authStyles.seperatorLine} />
-                    <Text style={textStyles.small}>hoặc đăng nhập bằng</Text>
-                    <View style={authStyles.seperatorLine} />
-                </View>
+                    <View style={authStyles.separatorView}>
+                        <View style={authStyles.seperatorLine} />
+                        <Text style={textStyles.small}>hoặc đăng nhập bằng</Text>
+                        <View style={authStyles.seperatorLine} />
+                    </View>
 
-                <View style={{ gap: 10, flexDirection: 'column' }}>
-                    <View style={{ flexDirection: 'row', gap: 12 }}>
-                        {/* Login Facebook */}
-                        <TouchableOpacity
-                            style={[defaultStyles.secondaryBtn, { flex: 1 }]}
-                            onPress={() => loginOAuth(Constants.Strategy.Facebook)}>
-                            <Image source={facebookIcon} style={defaultStyles.buttonIcon} />
-                            <Text style={authStyles.btnOtherText}>Facebook</Text>
-                        </TouchableOpacity>
-                        {/* Login Google */}
-                        <TouchableOpacity
-                            style={[defaultStyles.secondaryBtn, { flex: 1 }]}
-                            onPress={() => loginOAuth(Constants.Strategy.Google)}>
-                            <Image source={googleIcon} style={defaultStyles.buttonIcon} />
-                            <Text style={authStyles.btnOtherText}>Google</Text>
+                    <View style={{ gap: 10, flexDirection: 'column' }}>
+                        <View style={{ flexDirection: 'row', gap: 12 }}>
+                            {/* Login Facebook */}
+                            <TouchableOpacity
+                                style={[defaultStyles.secondaryBtn, { flex: 1 }]}
+                                onPress={() => loginOAuth(Constants.Strategy.Facebook)}>
+                                <Image source={facebookIcon} style={defaultStyles.buttonIcon} />
+                                <Text style={authStyles.btnOtherText}>Facebook</Text>
+                            </TouchableOpacity>
+                            {/* Login Google */}
+                            <TouchableOpacity
+                                style={[defaultStyles.secondaryBtn, { flex: 1 }]}
+                                onPress={() => loginOAuth(Constants.Strategy.Google)}>
+                                <Image source={googleIcon} style={defaultStyles.buttonIcon} />
+                                <Text style={authStyles.btnOtherText}>Google</Text>
+                            </TouchableOpacity>
+                        </View>
+                        {/* Login biometric */}
+                        <TouchableOpacity onPress={bioAuthenticate} style={defaultStyles.secondaryBtn}>
+                            <Entypo name='fingerprint' size={30} color='green' />
+                            <Text style={authStyles.btnOtherText}>Đăng nhập sinh trắc học</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* Login biometric */}
-                    <TouchableOpacity onPress={bioAuthenticate} style={defaultStyles.secondaryBtn}>
-                        <Entypo name='fingerprint' size={30} color='green' />
-                        <Text style={authStyles.btnOtherText}>Đăng nhập sinh trắc học</Text>
-                    </TouchableOpacity>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={textStyles.small}>
+                            chưa có tài khoản?{' '}
+                            <Link href={'/auth/register'} asChild>
+                                <Text style={linkStyles.small}>Đăng ký ngay</Text>
+                            </Link>
+                        </Text>
+                    </View>
+                    <StatusBar barStyle={'dark-content'} />
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                    <Text style={textStyles.small}>
-                        chưa có tài khoản?{' '}
-                        <Link href={'/auth/register'} asChild>
-                            <Text style={linkStyles.small}>Đăng ký ngay</Text>
-                        </Link>
-                    </Text>
-                </View>
-            </View>
+            </React.Fragment>
         </TouchableWithoutFeedback>
     )
 }

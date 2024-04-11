@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 export const SettingSection = ({ title, children, contentStyles, containerStyles }) => {
     return (
         <View style={[{ padding: 16 }, containerStyles]}>
-            <Text style={{ marginBottom: 12, fontSize: 15, fontWeight: '500' }}>{title}</Text>
+            <Text style={{ marginBottom: 12, fontSize: 15, fontWeight: '500', color: 'white' }}>{title}</Text>
             <View
                 style={[
                     { backgroundColor: Colors.white, borderRadius: 6, elevation: 10, shadowColor: 'lightblue' },

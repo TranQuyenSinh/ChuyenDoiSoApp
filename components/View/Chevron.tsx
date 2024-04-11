@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         minWidth: 20,
     },
     chevron: {
-        width: 20,
-        height: 20,
+        width: 16,
+        height: 16,
     },
 })

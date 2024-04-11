@@ -1,14 +1,13 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Alert, Image, Pressable, StyleSheet, Text, View, Share } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons'
 import moment from 'moment'
-import { BaiViet } from '@constants/DienDan/DienDanTypes'
+import { AnhBaiViet, BaiViet } from '@constants/DienDan/DienDanTypes'
 import { useRouter } from 'expo-router'
 import { postLikeBaiViet } from '@services/dienDanServices'
 import Colors from '@constants/Colors'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
-
 interface PostProps {
     data: BaiViet
 }
@@ -42,6 +41,13 @@ const Post = ({ data }: PostProps) => {
         setIsLike(response.isLike)
         setTotalLike(response.totalLike)
     }
+
+    const handleShare = async () => {
+        await Share.share({
+            title: 'Chỉa sẻ bài viết',
+            message: `${process.env.EXPO_PUBLIC_MAIN_HOST}/baiviet/${data.id}`,
+        })
+    }
     return (
         <View style={styles.container}>
             <View style={styles.postTop}>
@@ -63,7 +69,25 @@ const Post = ({ data }: PostProps) => {
             </View>
 
             <View style={styles.postCenter}>
-                <Image style={styles.postImage} source={{ uri: data.hinhAnhs?.[0]?.hinhAnh }} />
+                {data.hinhAnhs?.map((image: AnhBaiViet) => {
+                    return (
+                        <View
+                            key={image.id}
+                            style={[
+                                styles.postImageContainer,
+                                {
+                                    width:
+                                        (data.hinhAnhs?.length || 0) > 2
+                                            ? '33.33333%'
+                                            : data.hinhAnhs?.length === 2
+                                            ? '50%'
+                                            : '100%',
+                                },
+                            ]}>
+                            <Image style={styles.postImage} source={{ uri: image.hinhAnh }} />
+                        </View>
+                    )
+                })}
             </View>
             <View style={styles.postBottom}>
                 <Pressable onPress={handleLike} android_ripple={{ color: 'grey' }} style={styles.actionButton}>
@@ -93,7 +117,7 @@ const Post = ({ data }: PostProps) => {
                         {/* {data.luotBinhLuan !== 0 ? data.luotBinhLuan : ''} */}
                     </Text>
                 </Pressable>
-                <Pressable android_ripple={{ color: 'grey' }} style={styles.actionButton}>
+                <Pressable onPress={handleShare} android_ripple={{ color: 'grey' }} style={styles.actionButton}>
                     <FontAwesome name='share' size={16} color={'grey'} />
                     <Text style={styles.actionText}>Chia sẻ</Text>
                 </Pressable>
@@ -109,9 +133,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginHorizontal: 2,
         marginBottom: 12,
-        elevation: 4,
         borderRadius: 2,
         overflow: 'hidden',
+        paddingHorizontal: 10,
     },
     postTop: {
         padding: 12,
@@ -151,11 +175,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
     },
-    postCenter: {},
+    postCenter: {
+        flexDirection: 'row',
+        // gap: 2,
+        flexWrap: 'wrap',
+    },
+    postImageContainer: {
+        padding: 1,
+        columnGap: 1,
+    },
     postImage: {
+        alignSelf: 'center',
         width: '100%',
-        height: 200,
-        resizeMode: 'cover',
+        height: 150,
+        resizeMode: 'contain',
     },
     postBottom: {
         flexDirection: 'row',

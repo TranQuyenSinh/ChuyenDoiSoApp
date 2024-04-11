@@ -31,6 +31,7 @@ const dangKySlice = createSlice({
             ngayLap: '',
             moTa: '',
             logo: null,
+            website: '',
             dienThoais: [
                 {
                     id: Date.now(),
@@ -146,6 +147,7 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
             fax,
             soLuongNhanSu,
             ngayLap,
+            website,
             moTa,
             dienThoais: dienThoaisDN,
         } = getState().dangKy.formDN
@@ -185,6 +187,7 @@ export const dangKyDoanhNghiep = createAsyncThunk('dangKyDoanhNghiep', async (_,
         formData.append('doanhnghiep_diachi', diaChiDN)
         formData.append('doanhnghiep_mota', moTa)
         formData.append('doanhnghiep_logo', logo)
+        formData.append('doanhnghiep_website', website)
 
         dienThoaisDN.forEach((item, index) => {
             formData.append(`doanhnghiep_sdt[]`, JSON.stringify(item))

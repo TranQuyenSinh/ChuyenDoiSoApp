@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useLayoutEffect, useState, useSyncExternalStore } from 'react'
 
-import { StyleSheet } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -8,8 +8,12 @@ import Colors from '@constants/Colors'
 import ExperPage from '@components/Page/expertPage'
 import AssociationPage from '@components/Page/associationPage'
 import { screenWidth } from '@utils/window'
+import { useNavigation } from 'expo-router'
+//@ts-ignore
+import background from '@assets/backgrounds/chuyengiaindex.jpg'
 
 const Page = () => {
+    const navigation = useNavigation()
     const [index, setIndex] = useState(0)
     const [routes] = useState([
         { key: 'exper', title: 'Chuyên gia' },
@@ -19,9 +23,19 @@ const Page = () => {
         exper: ExperPage,
         assiociation: AssociationPage,
     })
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: 'Chuyên gia và hiệp hội DN',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
+        })
+    }, [navigation])
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
             <TabView
                 style={styles.container}
                 navigationState={{ index, routes }}
@@ -40,20 +54,19 @@ const Page = () => {
                 onIndexChange={setIndex}
                 initialLayout={{ width: screenWidth }}
             />
-        </SafeAreaView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background.default,
+        backgroundColor: 'transparent',
     },
     tabContainerStyle: {
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         elevation: 0,
         height: 45,
-        marginBottom: 8,
     },
     indicatorStyle: {
         backgroundColor: Colors.default,
@@ -66,6 +79,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#000',
         height: '100%',
+    },
+    background: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        zIndex: -1,
     },
 })
 

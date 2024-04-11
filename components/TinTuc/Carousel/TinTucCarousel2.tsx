@@ -2,11 +2,10 @@ import * as React from 'react'
 
 import { View } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
-import Animated, { Extrapolate, interpolate, useSharedValue, useAnimatedStyle } from 'react-native-reanimated'
+import { useSharedValue } from 'react-native-reanimated'
 
 import { windowWidth } from '@utils/window'
 import { getSlides } from '@services/commonServices'
-import Loading from '@components/StatusPage/Loading'
 
 import { SBItem } from './SBItem'
 

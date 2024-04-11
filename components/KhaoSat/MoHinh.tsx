@@ -46,12 +46,14 @@ const styles = StyleSheet.create({
     container: {
         overflow: 'hidden',
         borderRadius: 8,
-        backgroundColor: Colors.white,
         elevation: 6,
         marginHorizontal: 16,
         marginBottom: 12,
     },
-    imageContainer: {},
+    imageContainer: {
+        width: '100%',
+        height: 200,
+    },
     imageOverlay: {
         backgroundColor: '#000000aa',
         position: 'absolute',
@@ -65,9 +67,8 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 200,
+        height: '100%',
         resizeMode: 'cover',
-        marginTop: 12,
     },
     title: {
         color: Colors.white,
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     detailContainer: {
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.opacity.white,
         padding: 12,
     },
 })

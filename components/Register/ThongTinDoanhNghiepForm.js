@@ -253,6 +253,12 @@ const ThongTinDoanhNghiepForm = ({ onNextPage, onBackPage }) => {
                                         />
                                         <Field
                                             component={ValidateInputBox}
+                                            name='website'
+                                            onChangeText={(field, text) => handleChangeText(field, text)}
+                                            label={'Website'}
+                                        />
+                                        <Field
+                                            component={ValidateInputBox}
                                             name='fax'
                                             onChangeText={(field, text) => handleChangeText(field, text)}
                                             inputProps={{ keyboardType: 'number-pad' }}

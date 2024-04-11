@@ -1,11 +1,11 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Loading from '@components/StatusPage/Loading'
 import { Conversation } from '@constants/HoiDap/HoiDapType'
 import { fetchChuyenGiaConversations } from '@services/hoiDapServices'
 import TabPageHeader from '@components/View/TabPageHeader'
-import { router } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import Colors from '@constants/Colors'
 //@ts-ignore
 import avatar_default from '@assets/icons/chuyengia.jpg'
@@ -14,6 +14,7 @@ import { RootState } from '@redux/store'
 import NotFound from '@components/StatusPage/NotFound'
 
 const Inbox = () => {
+    const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState<Conversation[]>([])
     const { userProfile } = useSelector((state: RootState) => state.user)
@@ -25,6 +26,16 @@ const Inbox = () => {
             setLoading(false)
         })()
     }, [])
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: 'Tin nhắn doanh nghiệp',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
+        })
+    }, [navigation])
 
     if (loading) {
         return <Loading />

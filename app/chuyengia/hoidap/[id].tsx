@@ -1,12 +1,8 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
-import { getChuyenGia } from '@services/chuyenGiaServices'
-import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
-//@ts-ignore
-import no_avatar from '@assets/icons/user.jpg'
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -15,11 +11,13 @@ import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
 import Button from '@components/View/Button'
 import { fetchMessages, sendMessage } from '@services/hoiDapServices'
-import { Conversation, Message } from '@constants/HoiDap/HoiDapType'
+import { Conversation } from '@constants/HoiDap/HoiDapType'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+//@ts-ignore
+import background from '@assets/backgrounds/hoidap.jpg'
 const ChiTietHoiDap = () => {
     // id = chuyengia_id
     const { id } = useLocalSearchParams()
@@ -66,6 +64,7 @@ const ChiTietHoiDap = () => {
     return (
         <View style={styles.container}>
             <PageHeader
+                tintColor='white'
                 rightItem={
                     <Pressable
                         android_ripple={{ color: 'grey' }}
@@ -73,12 +72,14 @@ const ChiTietHoiDap = () => {
                             toggle(true)
                         }}
                         style={{ padding: 2 }}>
-                        <MaterialIcons name='add' size={24} color='black' />
+                        <MaterialIcons name='add' size={24} color='white' />
                     </Pressable>
                 }
                 title={'Hỏi đáp chuyên gia'}
                 style={{ marginBottom: 12 }}
             />
+            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+
             {conversation?.tinNhans?.length !== 0 && (
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {conversation?.tinNhans?.map(item => (
@@ -129,6 +130,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#e2f4ff',
+    },
+    background: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        zIndex: -1,
     },
     itemContainer: {
         backgroundColor: Colors.white,

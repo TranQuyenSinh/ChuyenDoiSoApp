@@ -1,5 +1,5 @@
 export default {
-    default: '#1877F2',
+    default: '#7700ff',
     success: '#00966D',
     warning: '#f7b800',
     danger: '#C30052',
@@ -16,11 +16,15 @@ export default {
     buttonText: '#667080',
 
     background: {
-        default: '#F2F2F2',
+        default: '#F0F0F0',
     },
 
     error: {
         default: '#ED2E7E',
         dark: '#C30052',
+    },
+
+    opacity: {
+        white: '#ffffffe3',
     },
 }

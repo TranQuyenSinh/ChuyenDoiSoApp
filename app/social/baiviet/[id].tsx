@@ -1,4 +1,14 @@
-import { Image, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+    Image,
+    KeyboardAvoidingView,
+    RefreshControl,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { BaiViet, BinhLuanBaiViet, DanhMucBaiViet } from '@constants/DienDan/DienDanTypes'
@@ -32,7 +42,6 @@ const PostDetail = () => {
         setLoading(true)
         const post = await getBaiViet(+id)
         setPost(post)
-        console.log('===> ', post?.isLike)
         const comments = await getBinhLuans(+id)
         setComments(comments)
         setLoading(false)
@@ -49,6 +58,10 @@ const PostDetail = () => {
         setText('')
     }
 
+    const handleAddReply = (newComments: BinhLuanBaiViet[]) => {
+        setComments(newComments)
+    }
+
     useEffect(() => {
         fetchData()
     }, [id])
@@ -57,6 +70,10 @@ const PostDetail = () => {
         navigation.setOptions({
             headerTitle: 'Bình luận',
             headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
         })
     }, [navigation])
 
@@ -65,7 +82,7 @@ const PostDetail = () => {
     if (!post) return <NotFound message='Không tìm thấy bài viết' />
 
     return (
-        <React.Fragment>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior='height'>
             <ScrollView
                 keyboardShouldPersistTaps='handled'
                 refreshControl={<RefreshControl refreshing={false} onRefresh={() => {}} />}
@@ -74,38 +91,35 @@ const PostDetail = () => {
                 style={styles.container}>
                 {/* BÀI VIẾT */}
                 <Post data={post} />
-
-                {/* SORT */}
-                <View style={styles.sortContainer}>
-                    <View style={styles.sortButton}>
-                        <Text style={styles.sortText}>Mới nhất</Text>
-                        <Ionicons name='chevron-down' size={16} color={'grey'} />
+                <View style={bottomStyles.container}>
+                    <Image
+                        source={userProfile?.image ? { uri: userProfile?.image } : userImage}
+                        style={bottomStyles.image}
+                    />
+                    <View style={bottomStyles.inputContainer}>
+                        <TextInput
+                            style={bottomStyles.input}
+                            value={text}
+                            onChangeText={text => setText(text)}
+                            placeholder='Nhập bình luận...'
+                        />
+                        <IconButton onPress={handleAddBinhLuan}>
+                            <Ionicons name='send' size={20} color={text.length === 0 ? 'grey' : Colors.default} />
+                        </IconButton>
                     </View>
                 </View>
 
+                {/* SORT */}
+                <Text style={styles.sortText}>Tất cả bình luận</Text>
+
                 {/* COMMENT LIST */}
                 {comments.map((comment, index) => (
-                    <PostComment key={comment.id} data={comment} />
+                    <PostComment onPostBinhLuan={handleAddReply} key={comment.id} data={comment} />
                 ))}
             </ScrollView>
-            <View style={bottomStyles.container}>
-                <Image
-                    source={userProfile?.image ? { uri: userProfile?.image } : userImage}
-                    style={bottomStyles.image}
-                />
-                <View style={bottomStyles.inputContainer}>
-                    <TextInput
-                        style={bottomStyles.input}
-                        value={text}
-                        onChangeText={text => setText(text)}
-                        placeholder='Nhập bình luận...'
-                    />
-                    <IconButton onPress={handleAddBinhLuan}>
-                        <Ionicons name='send' size={20} color={text.length === 0 ? 'grey' : Colors.default} />
-                    </IconButton>
-                </View>
-            </View>
-        </React.Fragment>
+
+            <StatusBar barStyle={'light-content'} />
+        </KeyboardAvoidingView>
     )
 }
 
@@ -128,16 +142,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sortText: {
-        fontSize: 16,
+        fontWeight: '500',
+        marginVertical: 12,
+        marginHorizontal: 16,
     },
 })
 
 const bottomStyles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',

@@ -41,9 +41,11 @@ const SurveyPage = () => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: false,
-            presentation: 'modal',
-            animation: 'fade',
+            headerTitle: 'Kết quả khảo sát',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
         })
     }, [navigation])
 
@@ -65,19 +67,11 @@ const SurveyPage = () => {
                     Doanh nghiệp chưa thực hiện khảo sát nào
                 </Text>
                 <StatusBar style='dark' />
-
             </View>
         )
 
     return (
-        <SafeAreaView style={styles.container}>
-            <TabPageHeader title={'Khảo sát doanh nghiệp'} />
-            <Text style={[textStyles.medium, { paddingHorizontal: 16, marginVertical: 6 }]}>
-                {doanhNghiep?.tenTiengViet}
-            </Text>
-            <View style={styles.sectionContainer}>
-                <DiemLineChart />
-            </View>
+        <View style={styles.container}>
             <Text style={[textStyles.title, { paddingHorizontal: 16 }]}>Các phiếu khảo sát của bạn</Text>
             <View style={[styles.sectionContainer, { flex: 1 }]}>
                 <ScrollView
@@ -110,7 +104,7 @@ const SurveyPage = () => {
                     ))}
                 </ScrollView>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 

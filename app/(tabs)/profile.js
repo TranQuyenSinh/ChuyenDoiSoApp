@@ -1,7 +1,7 @@
 import { useRef, useMemo, useState } from 'react'
 
 import { useRouter } from 'expo-router'
-import { ScrollView, StyleSheet, TextInput } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Text, View, Image, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -22,14 +22,16 @@ import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
 import IconButton from '@components/View/IconButton'
 import login from '@assets/images/profile_login.jpg'
-
+import background from '@assets/backgrounds/profile.jpg'
 const Page = () => {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
     const { logOut } = useDangNhap()
 
     return (
-        <SafeAreaView style={{ backgroundColor: Colors.background.default, flex: 1 }}>
+        <View style={{ flex: 1 }}>
+            <StatusBar barStyle={'light-content'} />
+            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
             {!isLoggedIn && (
                 <>
                     <View
@@ -50,7 +52,7 @@ const Page = () => {
                 </>
             )}
             {isLoggedIn && (
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView style={{ marginTop: 30 }} showsVerticalScrollIndicator={false}>
                     <ProfileItem />
                     {userProfile?.vaitro?.[0]?.id === Constants.Role.DoanhNghiep && (
                         <SettingSection title={'Doanh nghiệp'}>
@@ -86,7 +88,7 @@ const Page = () => {
                     </SettingSection>
                 </ScrollView>
             )}
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -215,6 +217,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.white,
+    },
+    background: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
     },
     avatar: {
         width: 60,

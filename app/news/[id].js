@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect, Share } from 'react'
 
 import { useDispatch } from 'react-redux'
 import RenderHTML from 'react-native-render-html'
@@ -56,14 +56,10 @@ const DetailNews = () => {
         }
     }, [])
     const handleSharing = async () => {
-        try {
-            await Share.share({
-                title: '123',
-                url: '123312321',
-            })
-        } catch (err) {
-            console.log(err)
-        }
+        await Share.share({
+            title: 'Chỉa sẻ tin tức',
+            message: `${process.env.EXPO_PUBLIC_MAIN_HOST}/tin/${id}`,
+        })
     }
 
     useEffect(() => {

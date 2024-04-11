@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 
 import PagerView from 'react-native-pager-view'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, Image } from 'react-native'
 import StepIndicator from 'react-native-step-indicator'
 import { useNavigation, useLocalSearchParams } from 'expo-router'
 
@@ -12,7 +12,8 @@ import { MucDo } from '@constants/KhaoSat/MucDoType'
 import Loading from '@components/StatusPage/Loading'
 import PageHeader from '@components/View/PageHeader'
 import { getMucDos } from '@services/khaoSatServices'
-
+//@ts-ignore
+import background from '@assets/images/test2.jpeg'
 const stepIndicatorStyles = {
     stepIndicatorSize: 30,
     currentStepIndicatorSize: 40,
@@ -73,7 +74,9 @@ const MucDoPage = () => {
     }
     return (
         <View style={styles.container}>
-            <PageHeader title={'Mức độ chuyển đổi số'} />
+            <PageHeader tintColor='white' title={'Mức độ chuyển đổi số'} />
+            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+
             <View style={styles.content}>
                 <View style={{ padding: 24 }}>
                     <StepIndicator
@@ -99,8 +102,10 @@ const MucDoPage = () => {
                     {mucDos?.map((item: MucDo) => {
                         return (
                             <View collapsable={false} style={styles.item} key={item.id}>
-                                <Text style={{ fontSize: 24, marginBottom: 12 }}>{item.tenMucDo}</Text>
-                                <Text style={textStyles.longText}>{item.noiDung}</Text>
+                                <Text style={{ fontSize: 24, marginBottom: 12, color: 'white', fontWeight: '500' }}>
+                                    {item.tenMucDo}
+                                </Text>
+                                <Text style={[textStyles.longText, { color: 'white' }]}>{item.noiDung}</Text>
                             </View>
                         )
                     })}
@@ -115,6 +120,12 @@ export default MucDoPage
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    background: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        zIndex: -1,
     },
     content: {
         flex: 1,

@@ -25,6 +25,8 @@ export interface AnhBaiViet {
 export interface BinhLuanBaiViet {
     id: number
     user: User
+    baiVietId: number
     createdAt: string
     noiDung: string
+    phanHois: BinhLuanBaiViet[]
 }

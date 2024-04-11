@@ -1,7 +1,7 @@
 import React, { useMemo, useLayoutEffect } from 'react'
 
 import { useSelector } from 'react-redux'
-import { View, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView, StyleSheet, Image } from 'react-native'
 import { useNavigation, useLocalSearchParams } from 'expo-router'
 
 import { RootState } from '@redux/store'
@@ -10,7 +10,8 @@ import PageHeader from '@components/View/PageHeader'
 import NotFound from '@components/StatusPage/NotFound'
 import KetQuaKhaoSat from '@components/KhaoSat/KetQuaKhaoSat'
 import ChuyenGiaDanhGia from '@components/KhaoSat/ChuyenGiaDanhGia'
-
+//@ts-ignore
+import background from '@assets/images/test2.jpeg'
 const KhaoSatDetail = () => {
     const navigation = useNavigation()
     const { id } = useLocalSearchParams()
@@ -34,7 +35,12 @@ const KhaoSatDetail = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader title={`Kết quả khảo sát #${selectedKhaoSat?.id}`} style={{ marginBottom: 12 }} />
+            <PageHeader
+                tintColor='white'
+                title={`Kết quả khảo sát #${selectedKhaoSat?.id}`}
+                style={{ marginBottom: 12 }}
+            />
+            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
             <ScrollView contentContainerStyle={{ paddingBottom: 12 }} showsVerticalScrollIndicator={false}>
                 {selectedKhaoSat?.mucDo && selectedKhaoSat.tongDiem && (
                     <KetQuaKhaoSat mucDo={selectedKhaoSat.mucDo} tongDiem={selectedKhaoSat.tongDiem} />
@@ -56,5 +62,11 @@ export default KhaoSatDetail
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    background: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        zIndex: -1,
     },
 })

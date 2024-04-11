@@ -48,7 +48,7 @@ const ExperPage = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 {/* Lĩnh vực */}
                 <ScrollView
-                    style={{ gap: 4, paddingTop: 16 }}
+                    style={{ gap: 4, paddingVertical: 12 }}
                     contentContainerStyle={{ gap: 6, paddingHorizontal: 16 }}
                     horizontal
                     showsHorizontalScrollIndicator={false}>
@@ -57,7 +57,7 @@ const ExperPage = () => {
                             key={item.id}
                             style={{
                                 minWidth: 50,
-                                backgroundColor: linhVucSelected?.id === item.id ? '#0073ffb1' : Colors.textGray,
+                                backgroundColor: linhVucSelected?.id === item.id ? '#0073ffb1' : '#80808079',
                                 paddingHorizontal: 12,
                                 paddingVertical: 6,
                                 borderRadius: 12,
@@ -80,6 +80,7 @@ const ExperPage = () => {
                         <View style={styles.listContainer}>
                             {chuyenGias?.map(item => (
                                 <Pressable
+                                    android_ripple={{ color: 'grey' }}
                                     onPress={() => {
                                         router.push(`/chuyengia/${item.id}`)
                                     }}
@@ -92,11 +93,11 @@ const ExperPage = () => {
                                     <View style={{ gap: 3 }}>
                                         <Text style={styles.hoTen}>{item.tenChuyenGia}</Text>
                                         <Text>
-                                            <Ionicons name='call-sharp' size={20} color={Colors.success} /> {item.email}
+                                            <Ionicons name='mail-open-outline' size={14} color={Colors.success} />{' '}
+                                            {item.email}
                                         </Text>
                                         <Text>
-                                            <Ionicons name='mail-open-outline' size={20} color={Colors.success} />{' '}
-                                            {item.sdt}
+                                            <Ionicons name='call-outline' size={14} color={Colors.success} /> {item.sdt}
                                         </Text>
                                     </View>
                                 </Pressable>
@@ -112,17 +113,20 @@ const ExperPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background.default,
+        backgroundColor: 'transparent',
     },
     listContainer: {
-        marginTop: 16,
-        gap: 16,
+        gap: 6,
         paddingHorizontal: 16,
     },
     chuyenGiaItem: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
+        backgroundColor: '#ffffff',
+        padding: 12,
+        borderRadius: 12,
+        elevation: 10,
     },
     hoTen: {
         fontSize: 16,
@@ -131,10 +135,10 @@ const styles = StyleSheet.create({
         color: '#eb8d1f',
     },
     anhDaiDien: {
-        width: 100,
-        height: 100,
-        borderRadius: 4,
-        resizeMode: 'cover',
+        width: 75,
+        height: 75,
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
 })
 

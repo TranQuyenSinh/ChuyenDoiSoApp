@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         flex: 1,
         elevation: 6,
-        marginVertical: 6,
+        marginVertical: 3,
         borderRadius: 6,
         overflow: 'hidden',
     },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         gap: 6,
-        padding: 20,
+        padding: 12,
     },
     textTitle: {
         fontSize: 18,

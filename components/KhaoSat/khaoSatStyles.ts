@@ -5,12 +5,13 @@ export const khaoSatStyles = StyleSheet.create({
     container: {
         overflow: 'hidden',
         borderRadius: 8,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.opacity.white,
         elevation: 6,
         marginHorizontal: 16,
         marginBottom: 12,
     },
     title: {
+        color: 'white',
         marginHorizontal: 16,
         fontSize: 18,
         fontWeight: '500',

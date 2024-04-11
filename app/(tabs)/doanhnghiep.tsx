@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,7 +13,6 @@ import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghieps } from '@services/doanhNghiepServices'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
-import { StatusBar } from 'expo-status-bar'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import Button from '@components/View/Button'
 interface CartItemProps {
@@ -28,8 +27,8 @@ const CardItem = (props: CartItemProps) => {
                     source={
                         data.user?.image
                             ? {
-                                uri: data.user?.image,
-                            }
+                                  uri: data.user?.image,
+                              }
                             : no_avatar
                     }
                     style={cardStyles.cardImage}
@@ -37,7 +36,7 @@ const CardItem = (props: CartItemProps) => {
                 <View style={cardStyles.cardInfo}>
                     <Text style={cardStyles.cardTitle}>{data.tenTiengViet}</Text>
                     <Text style={cardStyles.cardText}>Mã số thuế: {data.maThue}</Text>
-                    <Text style={cardStyles.cardText}>Đại diện pháp luật: {data.daiDien.tenDaiDien}</Text>
+                    <Text style={cardStyles.cardText}>Đại diện pháp luật: {data?.daiDien?.tenDaiDien}</Text>
                     <Text style={cardStyles.cardText}>
                         Địa chỉ trụ sở: {`${data?.diaChi}, ${data?.xa}, ${data?.huyen}, ${data?.thanhPho}`}
                     </Text>
@@ -48,11 +47,13 @@ const CardItem = (props: CartItemProps) => {
                 <Text style={cardStyles.cardBottomTitle}>Thông tin chi tiết</Text>
                 <Text>Tên tiếng Anh: {data.tenTiengAnh}</Text>
                 <Text>Ngày hoạt động: {moment(data.ngayLap).format('DD/MM/YYYY')}</Text>
-                <Text>Ngành nghề kinh doanh chính: {data.loaiHinh.tenLoaiHinh}</Text>
+                <Text>Ngành nghề kinh doanh chính: {data.loaiHinh?.tenLoaiHinh}</Text>
                 <Text style={cardStyles.cardBottomTitle}>Giới thiệu</Text>
-                <Text style={cardStyles.cardBottomText} numberOfLines={6}>{data.moTa}</Text>
+                <Text style={cardStyles.cardBottomText} numberOfLines={6}>
+                    {data.moTa}
+                </Text>
             </View>
-            <Button btnStyles={{ marginTop: 'auto' }} text='Xem chi tiết' onPress={() => { }} />
+            <Button btnStyles={{ marginTop: 'auto' }} text='Xem chi tiết' onPress={() => {}} />
         </View>
     )
 }
@@ -73,14 +74,13 @@ const DoanhNghiepPage = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
 
     useEffect(() => {
-        ; (async () => {
+        ;(async () => {
             const data = await getDoanhNghieps()
             setData(data)
         })()
     }, [])
     return (
         <>
-            <StatusBar style='light' />
             <View style={cardStyles.container}>
                 <SafeAreaView style={topStyles.topContainer}>
                     <ThongKeCDSPieChart backgroundColor='#0a013a' />
@@ -114,13 +114,12 @@ const topStyles = StyleSheet.create({
     topContainer: {
         flex: 1,
         backgroundColor: '#0a013a',
-
     },
     text: {
         color: 'white',
         fontSize: 20,
-        fontWeight: '500'
-    }
+        fontWeight: '500',
+    },
 })
 
 const carouselStyle = StyleSheet.create({
@@ -129,24 +128,20 @@ const carouselStyle = StyleSheet.create({
         backgroundColor: 'white',
         borderTopEndRadius: 30,
         borderTopStartRadius: 30,
-        transform: [
-            { translateY: -20 }
-        ],
+        transform: [{ translateY: -20 }],
         overflow: 'hidden',
-    }
+    },
 })
 
 const cardStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-
     },
     cardContainer: {
         padding: 16,
         width: '100%',
         height: '100%',
-
     },
     cardTop: {
         flexDirection: 'row',
