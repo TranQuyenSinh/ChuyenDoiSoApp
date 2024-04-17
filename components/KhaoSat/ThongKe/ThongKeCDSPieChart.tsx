@@ -39,9 +39,6 @@ const ThongKeCDSPieChart = ({ backgroundColor = 'white' }: { backgroundColor?: s
 
     return (
         <>
-            <Text style={[khaoSatStyles.title, { textAlign: 'center', color: 'white', }]}>
-                Mức độ chuyển đổi số của các doanh nghiệp vừa và nhỏ tỉnh An Giang
-            </Text>
             <PieChart
                 data={data}
                 width={screenWidth - 32}
@@ -56,6 +53,9 @@ const ThongKeCDSPieChart = ({ backgroundColor = 'white' }: { backgroundColor?: s
                 absolute={false}
                 style={{ borderRadius: 16 }}
             />
+            <Text style={[khaoSatStyles.title, { textAlign: 'center', color: 'white' }]}>
+                Mức độ chuyển đổi số của các doanh nghiệp vừa và nhỏ tỉnh An Giang
+            </Text>
         </>
     )
 }

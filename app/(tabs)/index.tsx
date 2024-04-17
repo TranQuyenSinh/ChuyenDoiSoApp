@@ -40,6 +40,7 @@ import Constants from '@constants/Constants'
 import IconButton from '@components/View/IconButton'
 import LienKetDoanhNghiep from '@components/Home/LienKetDoanhNghiep'
 import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
+import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -125,24 +126,6 @@ export default function TrangTin() {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
                         <View style={itemStyles.container}>
                             <Pressable
-                                onPress={() => router.push('/web/khaosat')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={survey} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Đánh giá</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/khaosat')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={result} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Kết quả</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
                                 onPress={() => router.push('/chuyengia')}
                                 android_ripple={{ color: '#140b0b' }}
                                 style={itemStyles.iconContainer}>
@@ -164,6 +147,24 @@ export default function TrangTin() {
                                 <Image source={chat} style={itemStyles.icon} />
                             </Pressable>
                             <Text style={itemStyles.text}>Hỏi đáp</Text>
+                        </View>
+                        <View style={itemStyles.container}>
+                            <Pressable
+                                onPress={() => router.push('/web/khaosat')}
+                                android_ripple={{ color: '#140b0b' }}
+                                style={itemStyles.iconContainer}>
+                                <Image source={survey} style={itemStyles.icon} />
+                            </Pressable>
+                            <Text style={itemStyles.text}>Đánh giá</Text>
+                        </View>
+                        <View style={itemStyles.container}>
+                            <Pressable
+                                onPress={() => router.push('/khaosat')}
+                                android_ripple={{ color: '#140b0b' }}
+                                style={itemStyles.iconContainer}>
+                                <Image source={result} style={itemStyles.icon} />
+                            </Pressable>
+                            <Text style={itemStyles.text}>Kết quả</Text>
                         </View>
                     </ScrollView>
                 </View>
@@ -204,6 +205,11 @@ export default function TrangTin() {
                 <View style={styles.contentContainer}>
                     <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
                     <LienKetDoanhNghiep />
+                </View>
+
+                {/* Thống kê */}
+                <View style={{ alignItems: 'center' }}>
+                    <ThongKeCDSPieChart backgroundColor='#ffffffc0' />
                 </View>
             </ScrollView>
 

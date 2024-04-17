@@ -75,7 +75,7 @@ const Page = () => {
                     </View>
                     <View>
                         <Text style={authStyles.label}>
-                            Email
+                            Điện thoại hoặc email
                             <Text style={authStyles.redStar}>*</Text>
                         </Text>
                         <TextInput
@@ -84,7 +84,7 @@ const Page = () => {
                             onChangeText={text => setEmail(text)}
                             keyboardType='email-address'
                             autoCapitalize='none'
-                            placeholder='Nhập email...'
+                            placeholder=''
                         />
                     </View>
                     <View>
@@ -93,7 +93,7 @@ const Page = () => {
                         </Text>
                         <TextInput
                             autoCapitalize='none'
-                            placeholder='Nhập mật khẩu...'
+                            placeholder=''
                             secureTextEntry={hidePassword}
                             style={[defaultStyles.inputField]}
                             value={password}

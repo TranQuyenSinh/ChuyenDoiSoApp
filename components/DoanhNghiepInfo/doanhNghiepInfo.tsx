@@ -23,7 +23,7 @@ const DoanhNghiepInfo = () => {
             {status === 'error' && <TryAgain onPress={() => dispatch(fetchDoanhNghiepInfo())} />}
             {status === 'success' && (
                 <ScrollView style={dnStyles.contentContainer} showsVerticalScrollIndicator={false}>
-                    <View style={dnStyles.item}>
+                    <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Tên doanh nghiệp</Text>
                         <Text style={dnStyles.itemText}>{doanhNghiep?.tenTiengViet}</Text>
                     </View>
@@ -37,7 +37,9 @@ const DoanhNghiepInfo = () => {
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Ngày hoạt động</Text>
-                        <Text style={dnStyles.itemText}>{moment(doanhNghiep?.ngayLap).format('DD/MM/YYYY')}</Text>
+                        <Text style={dnStyles.itemText}>
+                            {doanhNghiep?.ngayLap && moment(doanhNghiep?.ngayLap).format('DD/MM/YYYY')}
+                        </Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Loại hình doanh nghiệp</Text>
@@ -57,10 +59,7 @@ const DoanhNghiepInfo = () => {
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Địa chỉ</Text>
-                        <Text
-                            style={
-                                dnStyles.itemText
-                            }>{`${doanhNghiep?.diaChi}, ${doanhNghiep?.xa}, ${doanhNghiep?.huyen}, ${doanhNghiep?.thanhPho}`}</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.diaChi}</Text>
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Điện thoại</Text>
@@ -73,6 +72,10 @@ const DoanhNghiepInfo = () => {
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Fax</Text>
                         <Text style={dnStyles.itemText}>{doanhNghiep?.fax}</Text>
+                    </View>
+                    <View style={dnStyles.item}>
+                        <Text style={dnStyles.itemTitle}>Website</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.website}</Text>
                     </View>
                 </ScrollView>
             )}

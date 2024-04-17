@@ -1,8 +1,10 @@
-import { Image, StyleSheet } from 'react-native'
+import { Image, ImageBackground, StyleSheet } from 'react-native'
 import React from 'react'
 
-const BackgroundImage = ({ source }: any) => {
-    return <Image source={source} style={[StyleSheet.absoluteFill, styles.background]} />
+const BackgroundImage = ({ source, blurRadius = 0 }: any) => {
+    return (
+        <ImageBackground blurRadius={blurRadius} source={source} style={[StyleSheet.absoluteFill, styles.background]} />
+    )
 }
 
 export default BackgroundImage

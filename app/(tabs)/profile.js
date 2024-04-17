@@ -23,6 +23,7 @@ import useToggle from '@hooks/useToggle'
 import IconButton from '@components/View/IconButton'
 import login from '@assets/images/profile_login.jpg'
 import background from '@assets/backgrounds/profile.jpg'
+import BackgroundImage from '@components/View/BackgroundImage'
 const Page = () => {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
@@ -31,7 +32,7 @@ const Page = () => {
     return (
         <View style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage blurRadius={10} source={background} />
             {!isLoggedIn && (
                 <>
                     <View

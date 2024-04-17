@@ -39,10 +39,7 @@ const NguoiDaiDienInfo = () => {
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Địa chỉ</Text>
-                        <Text
-                            style={
-                                dnStyles.itemText
-                            }>{`${daidien?.diaChi}, ${daidien?.xa}, ${daidien?.huyen}, ${daidien?.thanhPho}`}</Text>
+                        <Text style={dnStyles.itemText}>{daidien?.diaChi}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>CCCD</Text>
@@ -50,11 +47,13 @@ const NguoiDaiDienInfo = () => {
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Ảnh CCCD mặt trước</Text>
-                        <Image source={{ uri: daidien?.imgMatTruoc }} style={dnStyles.imgCCCD} />
+                        {daidien?.imgMatTruoc && (
+                            <Image source={{ uri: daidien?.imgMatTruoc }} style={dnStyles.imgCCCD} />
+                        )}
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Ảnh CCCD mặt sau</Text>
-                        <Image source={{ uri: daidien?.imgMatSau }} style={dnStyles.imgCCCD} />
+                        {daidien?.imgMatSau && <Image source={{ uri: daidien?.imgMatSau }} style={dnStyles.imgCCCD} />}
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Chức vụ</Text>

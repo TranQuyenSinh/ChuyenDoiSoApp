@@ -11,6 +11,7 @@ import { screenWidth } from '@utils/window'
 import { useNavigation } from 'expo-router'
 //@ts-ignore
 import background from '@assets/backgrounds/chuyengiaindex.jpg'
+import BackgroundImage from '@components/View/BackgroundImage'
 
 const Page = () => {
     const navigation = useNavigation()
@@ -35,7 +36,7 @@ const Page = () => {
 
     return (
         <View style={styles.container}>
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage blurRadius={10} source={background} />
             <TabView
                 style={styles.container}
                 navigationState={{ index, routes }}

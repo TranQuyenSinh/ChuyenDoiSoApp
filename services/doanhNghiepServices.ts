@@ -5,19 +5,19 @@ import { toast } from '@utils/toast'
 export const createUser = async ({
     name,
     email,
-    taxCode,
+    phone,
     dnName,
 }: {
     name: string
     email: string
-    taxCode: string
+    phone: string
     dnName: string
 }) => {
     try {
         const { data } = await axios.post('doanhnghiep/register', {
             name,
             email,
-            mathue: taxCode,
+            phone,
             tendoanhnghiep: dnName,
         })
         if (data?.success) return true

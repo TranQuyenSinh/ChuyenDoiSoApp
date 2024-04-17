@@ -7,7 +7,6 @@ import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { inputStyles } from './inputStyles'
 import moment from 'moment'
-import { ClerkLoading } from '@clerk/clerk-expo'
 interface DateSelectProps {
     value?: string | Date | undefined
     label?: string

@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useEffect } from 'react'
 
 import { StyleSheet, View } from 'react-native'
-import { useNavigation } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view'
 
 import Colors from '@constants/Colors'
@@ -39,7 +39,7 @@ const ThongTinDoanhNghiep = () => {
             },
             headerRight: () => {
                 return (
-                    <IconButton>
+                    <IconButton onPress={() => router.push('/doanhnghiep/edit')}>
                         <MaterialIcons name='edit' size={24} color='white' />
                     </IconButton>
                 )

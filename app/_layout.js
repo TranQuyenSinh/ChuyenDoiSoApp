@@ -11,6 +11,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useDangNhap } from '@hooks/useDangNhap'
 import Constants from '@constants/Constants'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 export {
@@ -59,23 +60,25 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
     return (
-        <BottomSheetModalProvider>
-            <Provider store={store}>
-                <StatusBar barStyle={'dark-content'} />
-                <BootstrapGate>
-                    <Stack>
-                        <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
-                        <Stack.Screen
-                            name='[...missing]'
-                            options={{
-                                animation: 'none',
-                                headerShown: false,
-                            }}
-                        />
-                    </Stack>
-                </BootstrapGate>
-            </Provider>
-        </BottomSheetModalProvider>
+        <AutocompleteDropdownContextProvider>
+            <BottomSheetModalProvider>
+                <Provider store={store}>
+                    <StatusBar barStyle={'dark-content'} />
+                    <BootstrapGate>
+                        <Stack>
+                            <Stack.Screen name='(tabs)' options={{ headerShown: false, animation: 'fade' }} />
+                            <Stack.Screen
+                                name='[...missing]'
+                                options={{
+                                    animation: 'none',
+                                    headerShown: false,
+                                }}
+                            />
+                        </Stack>
+                    </BootstrapGate>
+                </Provider>
+            </BottomSheetModalProvider>
+        </AutocompleteDropdownContextProvider>
     )
 }
 

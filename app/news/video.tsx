@@ -45,7 +45,7 @@ const VideoPage = () => {
 
     return (
         <View style={styles.container}>
-            <BackgroundImage source={background} />
+            <BackgroundImage blurRadius={10} source={background} />
             <PageHeader title={'Video nổi bật'} tintColor='white' />
             <ScrollView style={{ marginTop: 12 }} showsVerticalScrollIndicator={false}>
                 {data.map(item => (

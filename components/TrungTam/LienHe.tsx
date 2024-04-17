@@ -1,15 +1,7 @@
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View,
-} from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import { pagerStyles } from './pagerStyles'
-import { Feather, FontAwesome, FontAwesome5, Fontisto, Ionicons } from '@expo/vector-icons'
+import { Feather, FontAwesome, FontAwesome5, Fontisto } from '@expo/vector-icons'
 import Button from '@components/View/Button'
 import Colors from '@constants/Colors'
 import { toast } from '@utils/toast'
