@@ -4,12 +4,19 @@ import WebView from 'react-native-webview'
 import { useNavigation } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import Colors from '@constants/Colors'
 
 const index = () => {
     const navigation = useNavigation()
     const { selectedChuongTrinh } = useSelector((state: RootState) => state.trungTam)
     useLayoutEffect(() => {
         navigation.setOptions({
+            headerShown: true,
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
             title: selectedChuongTrinh?.name,
         })
     }, [selectedChuongTrinh])

@@ -10,6 +10,7 @@ export interface DoanhNghiep {
     huyen: string
     xa: string
     diaChi: string
+    website: string
     maThue: string
     fax?: any
     soLuongNhanSu: number

@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 export const formStyles = StyleSheet.create({
     container: {
         paddingTop: 0,
-        backgroundColor: '#fafafa',
+        backgroundColor: 'transparent',
         paddingHorizontal: 12,
     },
     title: {
@@ -15,14 +15,14 @@ export const formStyles = StyleSheet.create({
         textAlign: 'center',
     },
     sectionContainer: {
-        backgroundColor: Colors.white,
+        backgroundColor: '#00000043',
         padding: 12,
         borderRadius: 12,
-        // elevation: 6,
         marginBottom: 20,
         // marginHorizontal: 16,
     },
     sectionTitle: {
+        color: 'white',
         marginBottom: 12,
         marginVertical: 6,
         fontSize: 18,

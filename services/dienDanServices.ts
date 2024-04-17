@@ -12,6 +12,16 @@ export const getBaiViets = async () => {
     }
 }
 
+export const getBaiVietsByDoanhNghiep = async (id: number) => {
+    try {
+        const { data } = await authAxios.get<BaiViet[]>(`doanhnghiep/${id}/baiviet`)
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy bài viết của doanh nghiệp: ', error.response)
+        return []
+    }
+}
+
 export const getBaiViet = async (id: number) => {
     try {
         const { data } = await authAxios.get<BaiViet>(`baiviet/${id}/`)
@@ -66,7 +76,7 @@ export const createBaiViet = async (danhMucs: number[], noiDung: string, hinhAnh
         return true
     } catch (error) {
         console.log('===> ', error)
-        console.log('===> Lỗi tạo bài viết: ', error.response?.data)
+        console.log('===> Lỗi tạo bài viết: ', error)
         return false
     }
 }

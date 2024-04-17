@@ -24,15 +24,18 @@ const ThuVienPage = () => {
     const navigation = useNavigation()
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: false,
-            presentation: 'modal',
-            animation: 'fade',
+            headerShown: true,
+            headerTitle: 'Văn bản chuyển đổi số',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
         })
-    }, [])
+    }, [navigation])
 
     return (
         <View style={styles.container}>
-            <PageHeader title={'Văn bản chuyển đổi số'} />
             <TabView
                 style={styles.container}
                 navigationState={{ index, routes }}
@@ -65,8 +68,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         elevation: 0,
         height: 45,
-        marginBottom: 8,
-        marginTop: 12,
     },
     indicatorStyle: {
         backgroundColor: Colors.default,

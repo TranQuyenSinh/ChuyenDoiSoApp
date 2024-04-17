@@ -59,11 +59,20 @@ const Page = () => {
                     ]}
                 />
                 <View style={authStyles.container}>
-                    <Image
-                        source={login}
-                        style={{ width: '100%', height: 50, resizeMode: 'cover', paddingVertical: 50 }}
-                    />
-                    <Text style={{ textAlign: 'center', fontSize: 24, fontWeight: '500' }}>Đăng nhập</Text>
+                    <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                            source={login}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                resizeMode: 'cover',
+                                paddingVertical: 50,
+                            }}
+                        />
+                        <Text style={{ fontSize: 24, color: Colors.default, fontWeight: 'bold' }}>
+                            Chuyển đổi số {'\n'}AN GIANG
+                        </Text>
+                    </View>
                     <View>
                         <Text style={authStyles.label}>
                             Email
@@ -126,10 +135,10 @@ const Page = () => {
                             </TouchableOpacity>
                         </View>
                         {/* Login biometric */}
-                        <TouchableOpacity onPress={bioAuthenticate} style={defaultStyles.secondaryBtn}>
+                        {/* <TouchableOpacity onPress={bioAuthenticate} style={defaultStyles.secondaryBtn}>
                             <Entypo name='fingerprint' size={30} color='green' />
                             <Text style={authStyles.btnOtherText}>Đăng nhập sinh trắc học</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={{ alignItems: 'center' }}>
                         <Text style={textStyles.small}>

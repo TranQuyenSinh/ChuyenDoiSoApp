@@ -38,15 +38,19 @@ const DangKyDoanhNghiep = () => {
             setStatus('idle')
             router.back()
         } else {
-            toast(message)
+            toast(message || 'Có lỗi xảy ra, vui lòng thử lại')
             setStatus('idle')
         }
     }
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: false,
-            animation: 'fade',
-            presentation: 'modal',
+            headerShown: true,
+            headerTitle: 'Đổi mật khẩu',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
         })
     }, [navigation])
 
@@ -56,7 +60,6 @@ const DangKyDoanhNghiep = () => {
             {status === 'error' && <NotFound message='Có lỗi xảy ra, vui lòng thử lại' />}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <View style={{ backgroundColor: Colors.white }}>
-                    <PageHeader title={'Đổi mật khẩu'} />
                     {status === 'idle' && (
                         <View style={styles.container}>
                             <Formik

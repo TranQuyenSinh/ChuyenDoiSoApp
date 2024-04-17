@@ -15,15 +15,7 @@ import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 
 const DoanhNghiepInfo = () => {
     const dispatch = useDispatch<AppDispatch>()
-    const navigation = useNavigation()
     const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-            animation: 'fade',
-            presentation: 'modal',
-        })
-    }, [navigation])
 
     return (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect, Share } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 import RenderHTML from 'react-native-render-html'
 import { useNavigation, useLocalSearchParams } from 'expo-router'
-import { Text, View, Pressable, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import { Text, View, Pressable, StyleSheet, Dimensions, TouchableOpacity, Share } from 'react-native'
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated'
 
 import moment from '@utils/moment'
@@ -55,9 +55,10 @@ const DetailNews = () => {
             opacity: interpolate(scrollOffset.value, [0, IMAGE_HEIGHT / 1.5], [0, 1]),
         }
     }, [])
+
     const handleSharing = async () => {
         await Share.share({
-            title: 'Chỉa sẻ tin tức',
+            title: news?.tieuDe,
             message: `${process.env.EXPO_PUBLIC_MAIN_HOST}/tin/${id}`,
         })
     }

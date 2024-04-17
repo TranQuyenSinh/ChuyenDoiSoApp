@@ -10,6 +10,7 @@ import store from '@redux/store'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useDangNhap } from '@hooks/useDangNhap'
 import Constants from '@constants/Constants'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 export {
@@ -48,9 +49,11 @@ export default function RootLayout() {
     }
 
     return (
+        // <GestureHandlerRootView style={{ flex: 1 }}>
         <ClerkProvider publishableKey={EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}>
             <RootLayoutNav />
         </ClerkProvider>
+        // </GestureHandlerRootView>
     )
 }
 

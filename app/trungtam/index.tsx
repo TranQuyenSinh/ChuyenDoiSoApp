@@ -26,7 +26,7 @@ const TrungTamTinHoc = () => {
         <SafeAreaView style={styles.container}>
             <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
             <Image source={logo} style={styles.image} />
-            <TrungTamCarousel />
+            {/* <TrungTamCarousel /> */}
             <PagerView
                 orientation={'vertical'}
                 ref={scrollRef}

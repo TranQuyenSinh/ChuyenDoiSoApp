@@ -1,5 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { pagerStyles } from './pagerStyles'
 import Colors from '@constants/Colors'
 //@ts-ignore
@@ -41,7 +41,6 @@ const DichVu = () => {
 const TuVan = () => {
     return (
         <View style={cardStyles.container}>
-            <Image source={tuvan} style={cardStyles.image} />
             <View style={cardStyles.content}>
                 <Text style={cardStyles.listTitle}>Tư vấn chuyển đổi số miễn phí</Text>
                 <Text style={cardStyles.listItem}>- Kinh nghiệm thực tế trong lĩnh vực CNTT và chuyển đổi số</Text>
@@ -51,16 +50,32 @@ const TuVan = () => {
                 </Text>
                 <View style={cardStyles.divider} />
                 <Text style={cardStyles.listTitle}>Các chuyên gia</Text>
-                <Text style={cardStyles.listItem}></Text>
+                <View style={cardStyles.chuyenGiaRow}>
+                    <Image
+                        source={{ uri: 'https://thongtin.cdsdnag.com/assets/backend/img/hoso/cg-22.jpg' }}
+                        style={cardStyles.chuyenGiaAvatar}
+                    />
+                    <Text style={{ color: 'white', flexShrink: 1 }}>
+                        Phó giáo sư Tiến sĩ: Đoàn Thanh nghị - Chuyên ngành: Tin học
+                    </Text>
+                </View>
+                <View style={cardStyles.chuyenGiaRow}>
+                    <Image
+                        source={{ uri: 'https://thongtin.cdsdnag.com/assets/backend/img/hoso/nvhoa.jpg' }}
+                        style={cardStyles.chuyenGiaAvatar}
+                    />
+                    <Text style={{ color: 'white', flexShrink: 1 }}>
+                        Tiến sĩ: Nguyễn Văn Hòa - Chuyên ngành: Tin học
+                    </Text>
+                </View>
             </View>
+            <Image source={tuvan} style={cardStyles.image} />
         </View>
     )
 }
 const Website = () => {
     return (
         <View style={cardStyles.container}>
-            <Image source={website1} style={cardStyles.image} />
-            <Image source={website2} style={cardStyles.image} />
             <View style={cardStyles.content}>
                 <Text style={cardStyles.listTitle}>Phát triển website</Text>
                 <Text style={cardStyles.listItem}>- Bảo trì & nâng cấp website</Text>
@@ -74,6 +89,8 @@ const Website = () => {
                     Javascript, Jquery, Java JSP&Servlet).
                 </Text>
             </View>
+            <Image source={website1} style={cardStyles.image} />
+            <Image source={website2} style={cardStyles.image} />
         </View>
     )
 }
@@ -81,7 +98,6 @@ const Website = () => {
 const UngDung = () => {
     return (
         <View style={cardStyles.container}>
-            <Image source={software} style={cardStyles.image} />
             <View style={cardStyles.content}>
                 <Text style={cardStyles.listTitle}>Phát triển phần mềm (software)</Text>
                 <Text style={cardStyles.listItem}>- Phần mềm quản lý hồ sơ trực tuyến</Text>
@@ -94,6 +110,7 @@ const UngDung = () => {
                 <Text style={cardStyles.listItem}>- Dot NET (C# & SQL sevrer)</Text>
                 <Text style={cardStyles.listItem}>- Java & MySQL</Text>
             </View>
+            <Image source={software} style={cardStyles.image} />
         </View>
     )
 }
@@ -101,8 +118,6 @@ const UngDung = () => {
 const PhongMay = () => {
     return (
         <View style={cardStyles.container}>
-            <Image source={phongmay1} style={cardStyles.image} />
-            <Image source={phongmay2} style={cardStyles.image} />
             <View style={cardStyles.content}>
                 <Text style={cardStyles.listTitle}>Cho thuê phòng máy</Text>
                 <Text style={cardStyles.listItem}>
@@ -113,6 +128,8 @@ const PhongMay = () => {
                     thuê khi có yêu cầu.
                 </Text>
             </View>
+            <Image source={phongmay1} style={cardStyles.image} />
+            <Image source={phongmay2} style={cardStyles.image} />
         </View>
     )
 }
@@ -121,15 +138,24 @@ export default DichVu
 
 const cardStyles = StyleSheet.create({
     container: {
-        borderRadius: 20,
-        overflow: 'hidden',
         gap: 6,
         // borderWidth: StyleSheet.hairlineWidth,
         // borderColor: 'white',
         // backgroundColor: '#ffffff4f',
     },
+    chuyenGiaRow: {
+        flexDirection: 'row',
+        gap: 6,
+        marginBottom: 12,
+    },
+    chuyenGiaAvatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        resizeMode: 'cover',
+    },
     content: {
-        marginTop: 12,
+        marginBottom: 12,
     },
     listTitle: {
         fontSize: 18,

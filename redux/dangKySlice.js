@@ -28,7 +28,7 @@ const dangKySlice = createSlice({
             maSoThue: '',
             fax: '',
             soLuongNhanSu: '',
-            ngayLap: '',
+            ngayLap: new Date(),
             moTa: '',
             logo: null,
             website: '',

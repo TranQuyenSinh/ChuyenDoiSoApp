@@ -8,6 +8,9 @@ import YoutubePlayer from 'react-native-youtube-iframe'
 import { getVideos } from '@services/commonServices'
 import { Video } from '@constants/TinTuc/VideoType'
 import Loading from '@components/StatusPage/Loading'
+import BackgroundImage from '@components/View/BackgroundImage'
+//@ts-ignore
+import background from '@assets/images/test2.jpeg'
 const VideoPage = () => {
     const [data, setData] = useState<Video[]>([])
     const [loading, setloading] = useState(false)
@@ -42,8 +45,9 @@ const VideoPage = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader title={'Video nổi bật'} />
-            <ScrollView style={{ marginTop: 24 }} showsVerticalScrollIndicator={false}>
+            <BackgroundImage source={background} />
+            <PageHeader title={'Video nổi bật'} tintColor='white' />
+            <ScrollView style={{ marginTop: 12 }} showsVerticalScrollIndicator={false}>
                 {data.map(item => (
                     <View key={item.id} style={styles.videoContainer}>
                         <View style={styles.videoWrapper}>

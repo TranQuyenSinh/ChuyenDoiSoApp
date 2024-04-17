@@ -14,18 +14,10 @@ import { daiDienDoanhNghiepValidate } from '@validateSchemas/registerValidate'
 import { AppDispatch, RootState } from '@redux/store'
 const NguoiDaiDienInfo = () => {
     const dispatch = useDispatch<AppDispatch>()
-    const navigation = useNavigation()
     const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
     const daidien = useMemo(() => {
         return doanhNghiep?.daiDien
     }, [doanhNghiep])
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-            animation: 'fade',
-            presentation: 'modal',
-        })
-    }, [navigation])
 
     return (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>

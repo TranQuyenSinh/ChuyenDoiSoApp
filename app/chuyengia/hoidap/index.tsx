@@ -13,7 +13,9 @@ import { fetchConversations } from '@services/hoiDapServices'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 import RequireLogin from '@components/StatusPage/RequireLogin'
-
+import BackgroundImage from '@components/View/BackgroundImage'
+//@ts-ignore
+import background from '@assets/backgrounds/hoidap.jpg'
 const HoiDap = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
@@ -44,29 +46,35 @@ const HoiDap = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 12 }} />
+            <BackgroundImage source={background} />
+            <PageHeader tintColor='white' title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 24 }} />
+
             <ScrollView showsVerticalScrollIndicator={false}>
-                {conversations?.map((item: Conversation) => (
-                    <Pressable
-                        android_ripple={{ color: 'gray' }}
-                        onPress={() => router.push(`/chuyengia/hoidap/${item.chuyenGia.id}`)}
-                        key={item.id}
-                        style={styles.itemContainer}>
-                        <View style={{ flexDirection: 'row', gap: 8 }}>
-                            <Image
-                                source={item.chuyenGia?.hinhAnh ? { uri: item.chuyenGia.hinhAnh } : chuyengia_avatar}
-                                style={styles.itemImg}
-                            />
-                            <View style={{ gap: 2, flexShrink: 1 }}>
-                                <Text style={styles.itemName}>{item.chuyenGia?.tenChuyenGia}</Text>
-                                <Text style={{ color: Colors.textGray }}>
-                                    Lĩnh vực:{' '}
-                                    <Text style={{ fontWeight: '600' }}>{item.chuyenGia?.linhVuc?.tenLinhVuc}</Text>
-                                </Text>
+                <View style={styles.listContainer}>
+                    {conversations?.map((item: Conversation) => (
+                        <Pressable
+                            android_ripple={{ color: 'gray' }}
+                            onPress={() => router.push(`/chuyengia/hoidap/${item.chuyenGia.id}`)}
+                            key={item.id}
+                            style={styles.itemContainer}>
+                            <View style={{ flexDirection: 'row', gap: 8, borderRadius: 12 }}>
+                                <Image
+                                    source={
+                                        item.chuyenGia?.hinhAnh ? { uri: item.chuyenGia.hinhAnh } : chuyengia_avatar
+                                    }
+                                    style={styles.itemImg}
+                                />
+                                <View style={{ gap: 2, flexShrink: 1 }}>
+                                    <Text style={styles.itemName}>{item.chuyenGia?.tenChuyenGia}</Text>
+                                    <Text style={{ color: Colors.textGray }}>
+                                        Lĩnh vực:{' '}
+                                        <Text style={{ fontWeight: '600' }}>{item.chuyenGia?.linhVuc?.tenLinhVuc}</Text>
+                                    </Text>
+                                </View>
                             </View>
-                        </View>
-                    </Pressable>
-                ))}
+                        </Pressable>
+                    ))}
+                </View>
             </ScrollView>
         </View>
     )
@@ -77,15 +85,17 @@ export default HoiDap
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e2f4ff',
+        borderRadius: 12,
+        overflow: 'hidden',
+    },
+    listContainer: {
+        marginHorizontal: 16,
+        backgroundColor: Colors.opacity.white,
+        borderRadius: 12,
+        overflow: 'hidden',
     },
     itemContainer: {
-        backgroundColor: Colors.white,
-        // borderRadius: 8,
-        // marginBottom: 18,
-        marginHorizontal: 16,
         padding: 16,
-        // elevation: 4,
     },
     itemImg: {
         width: 50,

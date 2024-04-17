@@ -1,4 +1,5 @@
 import { User } from '@constants/CommonTypes/UserType'
+import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 
 export interface DanhMucBaiViet {
     id: number
@@ -10,6 +11,7 @@ export interface BaiViet {
     user: User
     luotXem: number
     noiDung: string
+    doanhNghiep: DoanhNghiep
     hinhAnhs?: AnhBaiViet[]
     luotThich: number
     danhMucs: DanhMucBaiViet[]

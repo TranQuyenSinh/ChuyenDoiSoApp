@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react'
 
 import { useRouter } from 'expo-router'
-import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
+import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native'
 
 import Seperator from '@components/View/Seperator'
 import Loading from '@components/StatusPage/Loading'
@@ -9,9 +9,6 @@ import { TinTuc } from '@constants/TinTuc/TinTucTypes'
 import { getTinTucXemNhieu } from '@services/tinTucServices'
 
 import { tinTucStyles } from './tinTucStyles'
-import RenderHTML from 'react-native-render-html'
-import { tagStyles } from '@configs/newsHtmlConfig'
-import { windowWidth } from '@utils/window'
 
 const TinXemNhieu = () => {
     const router = useRouter()
@@ -28,7 +25,7 @@ const TinXemNhieu = () => {
     }, [])
 
     if (loading) {
-        return <Loading />
+        return <ActivityIndicator size={'large'} />
     }
 
     return (

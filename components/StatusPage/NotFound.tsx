@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import { Text, View, Pressable, StyleSheet } from 'react-native'
+import { Text, View, Pressable, StyleSheet, ViewStyle } from 'react-native'
 
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
@@ -7,6 +7,7 @@ import { defaultStyles } from '@constants/Styles'
 import { ReactNode } from 'react'
 
 interface NotFoundProps {
+    containerStyle?: ViewStyle | ViewStyle[]
     message: string
     btnText?: string
     isShownBtn?: boolean
@@ -15,6 +16,7 @@ interface NotFoundProps {
 }
 
 export default function NotFound({
+    containerStyle = {},
     message = 'Có lỗi xảy ra',
     btnText = 'Vể trang chủ',
     renderIcon,
@@ -23,7 +25,7 @@ export default function NotFound({
 }: NotFoundProps) {
     const router = useRouter()
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
             <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }}>{message}</Text>
             {isShownBtn && (
                 <Pressable

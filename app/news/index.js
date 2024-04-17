@@ -39,7 +39,7 @@ export default function TinTucPage() {
 
     return (
         <>
-            <StatusBar barStyle={'dark-content'} />
+            <StatusBar barStyle={'light-content'} />
             <SearchBar searchKey={searchKey} onChangeSearchKey={setSearchKey} onSearch={handleSearch} />
             {(!linhVucs || linhVucs?.length == 0) && <Loading />}
             {linhVucs?.length > 0 && (

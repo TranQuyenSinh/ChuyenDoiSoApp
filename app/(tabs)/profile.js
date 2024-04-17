@@ -14,7 +14,7 @@ import avatar_default from '@assets/icons/user.jpg'
 import { renewUserProfile } from '@redux/userSlice'
 import { doiAvatar, doiTenUser } from '@services/accountServices'
 import Button, { GradienButton } from '@components/View/Button'
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
 import Constants from '@constants/Constants'
@@ -52,37 +52,39 @@ const Page = () => {
                 </>
             )}
             {isLoggedIn && (
-                <ScrollView style={{ marginTop: 30 }} showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <ProfileItem />
                     {userProfile?.vaitro?.[0]?.id === Constants.Role.DoanhNghiep && (
                         <SettingSection title={'Doanh nghiệp'}>
                             <SettingSectionItem
                                 title={'Thông tin doanh nghiệp'}
                                 onPress={() => router.push('profile/thongTinDoanhNghiep')}
-                                renderIcon={() => (
-                                    <Ionicons name='business-outline' size={24} color={Colors.bodyText} />
-                                )}
+                                renderIcon={() => <Ionicons name='business-outline' size={24} color={'white'} />}
+                            />
+                            <SettingSectionItemSeperator />
+                            <SettingSectionItem
+                                title={'Sản phẩm của bạn'}
+                                onPress={() => router.push('sanpham')}
+                                renderIcon={() => <AntDesign name='staro' size={24} color={'white'} />}
                             />
                         </SettingSection>
                     )}
                     <SettingSection title={'Tài khoản'}>
-                        <SettingSectionItem
+                        {/* <SettingSectionItem
                             title={'Thiết lập đăng nhập vân tay'}
                             onPress={() => router.push('profile/thietLapSinhTracHoc')}
-                            renderIcon={() => (
-                                <Ionicons name='finger-print-outline' size={24} color={Colors.bodyText} />
-                            )}
-                        />
-                        <SettingSectionItemSeperator />
+                            renderIcon={() => <Ionicons name='finger-print-outline' size={24} color={'white'} />}
+                        /> */}
+                        {/* <SettingSectionItemSeperator /> */}
                         <SettingSectionItem
                             title={'Đổi mật khẩu'}
                             onPress={() => router.push('profile/doiMatKhau')}
-                            renderIcon={() => <Ionicons name='lock-closed-outline' size={24} color={Colors.bodyText} />}
+                            renderIcon={() => <Ionicons name='lock-closed-outline' size={24} color={'white'} />}
                         />
                         <SettingSectionItemSeperator />
                         <SettingSectionItem
                             title={'Đăng xuất'}
-                            renderIcon={() => <Ionicons name='log-out-outline' size={24} color={Colors.bodyText} />}
+                            renderIcon={() => <Ionicons name='log-out-outline' size={24} color={'white'} />}
                             onPress={logOut}
                         />
                     </SettingSection>
@@ -132,7 +134,7 @@ const ProfileItem = () => {
         <>
             {isLoggedIn && userProfile && (
                 <>
-                    <SettingSection containerStyles={{ paddingTop: 0 }}>
+                    <SettingSection contentStyles={{ backgroundColor: 'transparent' }}>
                         <View style={styles.profileContainer}>
                             <View>
                                 <Pressable onPress={() => modalRef.current?.present()}>
@@ -144,18 +146,20 @@ const ProfileItem = () => {
                                         style={{ position: 'absolute', bottom: -8, right: -4 }}
                                         name='camera-reverse-sharp'
                                         size={20}
-                                        color={Colors.textGray}
+                                        color={'white'}
                                     />
                                 </Pressable>
                             </View>
                             <View style={{ gap: 3 }}>
                                 <View style={{ flexDirection: 'row', gap: 3 }}>
-                                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{userProfile.name}</Text>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>
+                                        {userProfile.name}
+                                    </Text>
                                     <IconButton onPress={() => toggle(true)}>
-                                        <MaterialCommunityIcons name='pencil' size={20} color={Colors.bodyText} />
+                                        <MaterialCommunityIcons name='pencil' size={20} color={'white'} />
                                     </IconButton>
                                 </View>
-                                <Text style={{ color: Colors.textGray }}>{userProfile.email}</Text>
+                                <Text style={{ color: Colors.white }}>{userProfile.email}</Text>
                             </View>
                         </View>
                     </SettingSection>
@@ -216,7 +220,6 @@ const ProfileItem = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.white,
     },
     background: {
         width: '100%',

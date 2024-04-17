@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react'
 
 import { useRouter } from 'expo-router'
-import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native'
+import { Text, View, Image, StyleSheet, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native'
 
 import Seperator from '@components/View/Seperator'
 import Loading from '@components/StatusPage/Loading'
@@ -33,7 +33,7 @@ const TinLienQuan = () => {
     }, [tinTucId])
 
     if (loading) {
-        return <Loading />
+        return <ActivityIndicator size={'large'} />
     }
     return (
         <View>

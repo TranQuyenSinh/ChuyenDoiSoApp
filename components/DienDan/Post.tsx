@@ -20,6 +20,7 @@ const Post = ({ data }: PostProps) => {
 
     useEffect(() => {
         if (data) {
+            console.log('===> ', data)
             setIsLike(data.isLike)
             setTotalLike(data.luotThich)
         }
@@ -52,9 +53,13 @@ const Post = ({ data }: PostProps) => {
         <View style={styles.container}>
             <View style={styles.postTop}>
                 <View style={styles.infoContainer}>
-                    <Image style={styles.userAvatar} source={{ uri: data.user.image }} />
+                    <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
+                        <Image style={styles.userAvatar} source={{ uri: data.user.image }} />
+                    </Pressable>
                     <View style={styles.info}>
-                        <Text style={styles.userName}>{data.user.name}</Text>
+                        <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
+                            <Text style={styles.userName}>{data.user.name}</Text>
+                        </Pressable>
                         <View style={styles.timeContainer}>
                             <Ionicons name='time-outline' size={10} color={'orange'} />
                             <Text style={styles.time}>{moment(data.createdAt).fromNow()}</Text>

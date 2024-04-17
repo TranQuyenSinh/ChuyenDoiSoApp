@@ -2,7 +2,7 @@ import { getKhaoSats } from '@services/khaoSatServices'
 import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 type SliceState = {
-    selectedChuongTrinh?: { name: string; link: string; image: any }
+    selectedChuongTrinh?: { name: string; link: string; image?: any }
 }
 
 const initialState: SliceState = {
@@ -18,5 +18,7 @@ const trungTamSlice = createSlice({
         },
     },
 })
+
+export const { actions: trungTamActions } = trungTamSlice
 
 export default trungTamSlice

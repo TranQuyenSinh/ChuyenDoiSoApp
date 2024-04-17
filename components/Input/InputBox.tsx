@@ -34,13 +34,11 @@ export const ValidateInputBox = (props: ValidateInputBoxProps) => {
     return (
         <View style={{ gap: 2 }}>
             <View style={[inputStyles.inputContainer, hasError && inputStyles.errorContainer, containerStyles]}>
-                <Text style={inputStyles.inputLabel}>{label}</Text>
-
                 <TextInput
                     value={value}
                     onChangeText={text => handleChange(name)(text)}
                     style={inputStyles.input}
-                    placeholder={placeholder}
+                    placeholder={label}
                     onBlur={() => {
                         setFieldTouched(name)
                         onBlur(name)

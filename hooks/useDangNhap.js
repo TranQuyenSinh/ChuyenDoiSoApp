@@ -77,7 +77,10 @@ export const useDangNhap = () => {
     }, [isSignedIn])
 
     const loginWithPassword = (email, password) => {
-        if (!email || !password) return
+        if (!email || !password) {
+            toast('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         console.log('===> Đăng nhập password')
         dispatch(loginPasswordAction({ email, password }))
     }

@@ -2,7 +2,8 @@ import { Tabs } from 'expo-router'
 import { Image } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { Entypo, Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import { Entypo, Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
+import Colors from '@constants/Colors'
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
@@ -16,15 +17,15 @@ export default function TabLayout() {
         <>
             <Tabs
                 screenOptions={{
-                    tabBarActiveTintColor: 'white',
-                    tabBarInactiveTintColor: '#bbb',
+                    tabBarActiveTintColor: Colors.default,
+                    tabBarInactiveTintColor: '#aaa',
                     headerShown: false,
                     tabBarLabelStyle: {
-                        fontSize: 10,
+                        fontSize: 12,
                     },
                     tabBarStyle: {
                         height: 55,
-                        backgroundColor: '#7700ff',
+                        backgroundColor: 'white',
                         elevation: 0,
                     },
                     headerTitleAlign: 'center',
@@ -75,9 +76,9 @@ export default function TabLayout() {
                             return (
                                 <>
                                     {focused ? (
-                                        <MaterialCommunityIcons name='electron-framework' size={size} color={color} />
+                                        <Ionicons name='grid-sharp' size={size} color={color} />
                                     ) : (
-                                        <MaterialCommunityIcons name='electron-framework' size={size} color={color} />
+                                        <Ionicons name='grid-outline' size={size} color={color} />
                                     )}
                                 </>
                             )
@@ -93,17 +94,10 @@ export default function TabLayout() {
                         tabBarIcon: ({ color, size, focused }) => {
                             return (
                                 <>
-                                    {userProfile?.image ? (
-                                        <Image
-                                            source={{ uri: userProfile?.image }}
-                                            style={{
-                                                width: 40,
-                                                height: 40,
-                                                borderRadius: 50,
-                                            }}
-                                        />
+                                    {focused ? (
+                                        <FontAwesome5 name='user-alt' size={size} color={color} />
                                     ) : (
-                                        <Ionicons name='settings-outline' color={color} size={size} />
+                                        <FontAwesome5 name='user' size={size} color={color} />
                                     )}
                                 </>
                             )

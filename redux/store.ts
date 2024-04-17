@@ -6,7 +6,7 @@ import tinTucSlice from './tinTucSlice'
 import dangKySlice from './dangKySlice'
 import doanhNghiepSlice from './doanhNghiepSlice'
 import khaoSatSlice from './khaoSatSlice'
-import trungTamSlice from './trungtamSlice'
+import trungTamSlice from './trungTamSlice'
 
 const store = configureStore({
     reducer: {

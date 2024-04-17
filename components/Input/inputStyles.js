@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 
 export const inputStyles = StyleSheet.create({
     inputContainer: {
-        backgroundColor: Colors.white,
+        backgroundColor: '#ebebeb',
         paddingHorizontal: 16,
         borderRadius: 8,
         paddingVertical: 10,
@@ -12,18 +12,18 @@ export const inputStyles = StyleSheet.create({
         height: 50,
     },
     errorContainer: {
-        shadowColor: 'red',
+        shadowColor: '#f23a3a',
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '#f23a3a',
     },
     errorText: {
-        color: 'red',
+        color: '#f23a3a',
     },
     inputLabel: {
+        color: 'white',
         position: 'absolute',
-        backgroundColor: 'white',
-        left: 10,
-        top: -10,
+        backgroundColor: 'transparent',
+        top: -20,
         zIndex: 999,
         paddingHorizontal: 8,
         fontSize: 14,

@@ -15,6 +15,7 @@ import { getDoanhNghieps } from '@services/doanhNghiepServices'
 import no_avatar from '@assets/icons/user.jpg'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import Button from '@components/View/Button'
+import { router } from 'expo-router'
 interface CartItemProps {
     data: DoanhNghiep
 }
@@ -53,7 +54,11 @@ const CardItem = (props: CartItemProps) => {
                     {data.moTa}
                 </Text>
             </View>
-            <Button btnStyles={{ marginTop: 'auto' }} text='Xem chi tiết' onPress={() => {}} />
+            <Button
+                btnStyles={{ marginTop: 'auto', zIndex: 999999 }}
+                text='Xem chi tiết'
+                onPress={() => router.push(`/doanhnghiep/${data.id}`)}
+            />
         </View>
     )
 }
@@ -61,13 +66,13 @@ const CardItem = (props: CartItemProps) => {
 const DoanhNghiepPage = () => {
     const animationStyle = React.useCallback((value: number) => {
         'worklet'
-        const zIndex = interpolate(value, [-1, 0, 1], [10, 20, 30])
+        // const zIndex = interpolate(value, [-1, 0, 1], [10, 20, 30])
         const scale = interpolate(value, [-1, 0, 1], [1.25, 1, 0.25])
         const opacity = interpolate(value, [-0.75, 0, 1], [0, 1, 0])
 
         return {
             transform: [{ scale }],
-            zIndex,
+            // zIndex,
             opacity,
         }
     }, [])

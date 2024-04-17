@@ -5,7 +5,7 @@ import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
-import { MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import moment from 'moment'
 import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
@@ -27,7 +27,6 @@ const ChiTietHoiDap = () => {
     const [loading, setLoading] = useState(false)
     const { isOpen, toggle } = useToggle()
     const [text, setText] = useState('')
-    const { userProfile } = useSelector((state: RootState) => state.user)
 
     const fetchData = async () => {
         setLoading(true)
@@ -63,21 +62,7 @@ const ChiTietHoiDap = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader
-                tintColor='white'
-                rightItem={
-                    <Pressable
-                        android_ripple={{ color: 'grey' }}
-                        onPress={() => {
-                            toggle(true)
-                        }}
-                        style={{ padding: 2 }}>
-                        <MaterialIcons name='add' size={24} color='white' />
-                    </Pressable>
-                }
-                title={'Hỏi đáp chuyên gia'}
-                style={{ marginBottom: 12 }}
-            />
+            <PageHeader tintColor='white' title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 24 }} />
             <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
 
             {conversation?.tinNhans?.length !== 0 && (
@@ -102,9 +87,19 @@ const ChiTietHoiDap = () => {
                 </ScrollView>
             )}
 
+            <Pressable
+                android_ripple={{ color: 'grey' }}
+                onPress={() => {
+                    toggle(true)
+                }}
+                style={floatStyles.container}>
+                <AntDesign name='pluscircle' size={24} color={Colors.default} />
+                <Text>Thêm tin nhắn</Text>
+            </Pressable>
+
             {!loading && conversation?.tinNhans?.length === 0 && (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                    <Text style={{ fontSize: 16 }}>Chọn biểu tượng + để thêm câu hỏi</Text>
+                    <Text style={{ fontSize: 16, color: 'white' }}>Chọn biểu tượng + để thêm câu hỏi</Text>
                 </View>
             )}
 
@@ -172,5 +167,19 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         textAlignVertical: 'top',
         padding: 8,
+    },
+})
+
+const floatStyles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        flexDirection: 'row',
+        padding: 8,
+        gap: 4,
+        alignItems: 'center',
     },
 })

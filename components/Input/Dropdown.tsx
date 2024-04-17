@@ -36,7 +36,6 @@ export const ValidateDropdownComponent = ({
 
     return (
         <View style={[styles.container, containerStyles]}>
-            <Text style={[styles.label]}>{label}</Text>
             <Dropdown
                 style={[styles.dropdown, hasError && { borderColor: 'red' }]}
                 placeholderStyle={styles.placeholderStyle}
@@ -48,7 +47,7 @@ export const ValidateDropdownComponent = ({
                 maxHeight={300}
                 labelField={'label'}
                 valueField={'value'}
-                placeholder={placeholder}
+                placeholder={label}
                 searchPlaceholder='Search...'
                 value={data?.find(x => x.value === value)?.value}
                 onChange={item => {
@@ -84,7 +83,6 @@ const DropdownComponent = ({
 
     return (
         <View style={[styles.container, containerStyles]}>
-            <Text style={[styles.label]}>{label}</Text>
             <Dropdown
                 style={[styles.dropdown]}
                 placeholderStyle={styles.placeholderStyle}
@@ -113,8 +111,10 @@ export default DropdownComponent
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         marginVertical: 10,
+        overflow: 'hidden',
+        borderRadius: 8,
     },
     dropdown: {
         height: 50,
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         paddingHorizontal: 16,
+        backgroundColor: '#ebebeb',
     },
     icon: {
         marginRight: 5,

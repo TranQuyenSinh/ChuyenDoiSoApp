@@ -12,7 +12,7 @@ export const defaultStyles = StyleSheet.create({
     inputField: {
         height: 44,
         // borderWidth: StyleSheet.hairlineWidth,
-        elevation: 10,
+        elevation: 20,
         borderColor: Colors.bodyText,
         borderRadius: 8,
         padding: 10,

@@ -1,5 +1,35 @@
 import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { authAxios, axios } from '@utils/axios'
+import { toast } from '@utils/toast'
+
+export const createUser = async ({
+    name,
+    email,
+    taxCode,
+    dnName,
+}: {
+    name: string
+    email: string
+    taxCode: string
+    dnName: string
+}) => {
+    try {
+        const { data } = await axios.post('doanhnghiep/register', {
+            name,
+            email,
+            mathue: taxCode,
+            tendoanhnghiep: dnName,
+        })
+        if (data?.success) return true
+        else {
+            toast(data?.message || 'Có lỗi xảy ra vui lòng thử lại')
+            return false
+        }
+    } catch (error) {
+        console.log('===> error: ', error)
+        return false
+    }
+}
 
 export const getDoanhNghieps = async () => {
     try {
@@ -8,6 +38,16 @@ export const getDoanhNghieps = async () => {
     } catch (err) {
         console.log('===> Lỗi lấy danh sách doanh nghiệp', err)
         return []
+    }
+}
+
+export const getDoanhNghiep = async (id: number) => {
+    try {
+        const { data } = await axios.get<DoanhNghiep>(`doanhnghiep/${id}`)
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy doanh nghiệp: ', error)
+        return undefined
     }
 }
 
@@ -28,5 +68,15 @@ export const getThongTinDN = async () => {
     } catch (error) {
         console.log('===> error: ', error)
         throw error
+    }
+}
+
+export const getDoanhNghiepWebsite = async () => {
+    try {
+        const { data } = await axios.get<DoanhNghiep[]>('doanhnghiep/website')
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy danh sách website doanh nghiệp: ', error)
+        return []
     }
 }

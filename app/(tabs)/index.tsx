@@ -1,20 +1,12 @@
-import { PropsWithChildren } from 'react'
-
 import { useRouter } from 'expo-router'
 import { useSelector } from 'react-redux'
-import LinearGradient from 'react-native-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Text, Image, Pressable, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from 'react-native'
 
 import Colors from '@constants/Colors'
 import { RootState } from '@redux/store'
 import { textStyles } from '@constants/Styles'
-import { Ionicons, FontAwesome } from '@expo/vector-icons'
-import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
-import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
-import { Feather, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
-// @ts-ignore
-import logo from '@assets/images/logo_cds.jpg'
+import { FontAwesome } from '@expo/vector-icons'
 // @ts-ignore
 import news from '@assets/icons/news.png'
 // @ts-ignore
@@ -34,38 +26,62 @@ import chatbot from '@assets/icons/chatbot.png'
 // @ts-ignore
 import product from '@assets/icons/product.png'
 // @ts-ignore
+import ict from '@assets/images/logo_ict.jpg'
+// @ts-ignore
 import home from '@assets/images/test2.jpeg'
 // @ts-ignore
-import ict from '@assets/images/logo_ict.jpg'
+import home2 from '../../assets/backgrounds/default.jpg'
+// @ts-ignore
+import story from '@assets/icons/story.png'
 import { StatusBar } from 'expo-status-bar'
 import { screenWidth } from '@utils/window'
 import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
 import Constants from '@constants/Constants'
+import IconButton from '@components/View/IconButton'
+import LienKetDoanhNghiep from '@components/Home/LienKetDoanhNghiep'
+import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
-
+    const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
     return (
         <View style={styles.container}>
-            <Image source={home} style={[StyleSheet.absoluteFill, styles.background]} />
+            <ImageBackground blurRadius={10} source={home2} style={[StyleSheet.absoluteFill, styles.background]} />
             <SafeAreaView style={styles.topContainer}>
-                <Image source={logo} style={styles.topImage} />
                 {isLoggedIn && userProfile && <Text style={styles.topText}>Xin chào, {userProfile?.name}</Text>}
                 {!isLoggedIn && (
                     <Pressable onPress={() => router.push('/auth/login')}>
                         <Text style={[styles.topText, {}]}>Đăng nhập</Text>
                     </Pressable>
                 )}
+                <IconButton>
+                    <FontAwesome name='bell' size={24} color='white' />
+                </IconButton>
+                {/* <Image source={logo} style={styles.topImage} /> */}
             </SafeAreaView>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
                 <TinTucCarousel2 />
+
+                <View
+                    style={[
+                        styles.contentContainer,
+                        { alignItems: 'center', justifyContent: 'center', marginVertical: 12 },
+                    ]}>
+                    <DiemLineChart />
+                    {khaoSats.length !== 0 && (
+                        <Text
+                            style={[
+                                textStyles.title,
+                                styles.title,
+                                { marginTop: 6, alignSelf: 'center', marginBottom: 0 },
+                            ]}>
+                            Điếm đánh giá mức độ CĐS
+                        </Text>
+                    )}
+                </View>
                 <View style={styles.contentContainer}>
                     <Text style={[textStyles.title, styles.title]}>Thông tin - Tin tức</Text>
-                    <ScrollView
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 12 }}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
                         <View style={itemStyles.container}>
                             <Pressable
                                 onPress={() => router.push('/news')}
@@ -84,6 +100,15 @@ export default function TrangTin() {
                             </Pressable>
                             <Text style={itemStyles.text}>Video</Text>
                         </View>
+                        {/* <View style={itemStyles.container}>
+                            <Pressable
+                                onPress={() => router.push('/news/video')}
+                                android_ripple={{ color: 'grey' }}
+                                style={itemStyles.iconContainer}>
+                                <Image source={story} style={itemStyles.icon} />
+                            </Pressable>
+                            <Text style={itemStyles.text}>Câu chuyện</Text>
+                        </View> */}
                         <View style={itemStyles.container}>
                             <Pressable
                                 onPress={() => router.push('/thuvien')}
@@ -97,11 +122,7 @@ export default function TrangTin() {
                 </View>
                 <View style={styles.contentContainer}>
                     <Text style={[textStyles.title, styles.title]}>Đánh giá doanh nghiệp</Text>
-                    <ScrollView
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 12 }}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
                         <View style={itemStyles.container}>
                             <Pressable
                                 onPress={() => router.push('/web/khaosat')}
@@ -148,11 +169,7 @@ export default function TrangTin() {
                 </View>
                 <View style={styles.contentContainer}>
                     <Text style={[textStyles.title, styles.title]}>Các dịch vụ khác</Text>
-                    <ScrollView
-                        horizontal
-                        pagingEnabled
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 12 }}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
                         <View style={itemStyles.container}>
                             <Pressable
                                 onPress={() => router.push('/web/chatbot')}
@@ -183,21 +200,10 @@ export default function TrangTin() {
                     </ScrollView>
                 </View>
 
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Text
-                        style={[
-                            textStyles.title,
-                            styles.title,
-                            { marginLeft: 16, marginTop: 0, alignSelf: 'flex-start', marginBottom: 6 },
-                        ]}>
-                        Điểm đánh giá doanh nghiệp của bạn
-                    </Text>
-                    <DiemLineChart />
-                </View>
-
-                <View>
-                    <Text style={[textStyles.title, styles.title]}>Các dịch vụ khác</Text>
-                    {/* <DiemLineChart /> */}
+                {/* LIÊN KẾT DOANH NGHIỆP */}
+                <View style={styles.contentContainer}>
+                    <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
+                    <LienKetDoanhNghiep />
                 </View>
             </ScrollView>
 
@@ -230,7 +236,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         flexShrink: 0,
         alignItems: 'center',
-        backgroundColor: '#e2c7ff68',
+        backgroundColor: '#8c26f97a',
     },
     topImage: {
         width: 40,
@@ -240,12 +246,11 @@ const styles = StyleSheet.create({
         borderRadius: 12,
     },
     topText: {
-        fontSize: 16,
+        fontSize: 18,
         color: Colors.white,
         fontWeight: '500',
         flex: 1,
         textAlignVertical: 'center',
-        textAlign: 'right',
     },
     contentContainer: {
         marginHorizontal: 16,
@@ -280,7 +285,7 @@ const itemStyles = StyleSheet.create({
     container: {
         flexShrink: 0,
         alignItems: 'center',
-        width: 80,
+        width: screenWidth / 5,
         gap: 4,
         padding: 6,
         overflow: 'hidden',

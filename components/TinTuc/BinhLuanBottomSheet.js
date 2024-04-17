@@ -28,8 +28,6 @@ const BinhLuanBottomSheet = ({ isOpen, toggle }) => {
 
     const { tinTucId, binhLuans } = useSelector(state => state.tinTuc)
 
-    const userStore = useSelector(state => state.user)
-
     const snapPoints = useMemo(() => ['90%'], [])
     const modalRef = useRef(null)
     // backdrop là lớp overlay

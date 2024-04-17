@@ -44,7 +44,7 @@ import logo13 from '@assets/images/trungtam/chuongtrinhdaotao/13.jpg'
 import logo14 from '@assets/images/trungtam/chuongtrinhdaotao/14.jpg'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
-import trungTamSlice from '@redux/trungtamSlice'
+import trungTamSlice from '@redux/trungTamSlice'
 import { router } from 'expo-router'
 //@ts-ignore
 
@@ -122,7 +122,6 @@ const ChuongTrinhDaoTao = () => {
         },
     ]
     const dispatch = useDispatch<AppDispatch>()
-
     const onSelect = async (item: any) => {
         dispatch(trungTamSlice.actions.selectChuongTrinh(item))
         router.push('/web')
@@ -134,12 +133,12 @@ const ChuongTrinhDaoTao = () => {
                 data={data}
                 keyExtractor={item => item.name}
                 numColumns={3}
-                renderItem={({ item }) => {
+                renderItem={({ item, index }) => {
                     return (
                         <Pressable
                             android_ripple={{ color: 'white' }}
                             onPress={() => onSelect(item)}
-                            style={styles.item}>
+                            style={[styles.item]}>
                             <Image source={item.image} style={styles.image} />
                             <Text style={styles.name}>{item.name}</Text>
                         </Pressable>

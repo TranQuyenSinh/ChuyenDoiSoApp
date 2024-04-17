@@ -13,6 +13,7 @@ import { getThuVien } from '@services/commonServices'
 import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
 import { windowWidth, windowHeight } from '@utils/window'
 import PageHeader from '@components/View/PageHeader'
+import Colors from '@constants/Colors'
 const ChiTietThuVien = () => {
     const navigation = useNavigation()
     const { id } = useLocalSearchParams()
@@ -67,23 +68,27 @@ const ChiTietThuVien = () => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: false,
-            animation: 'fade',
+            headerShown: true,
+            headerTitle: 'Tài liệu',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerTintColor: 'white',
+            headerRight: () => {
+                return (
+                    <IconButton onPress={downloadFile}>
+                        <MaterialIcons name='file-download' size={24} color='white' />
+                    </IconButton>
+                )
+            },
         })
-    }, [navigation])
+    }, [navigation, downloadFile])
 
     if (loading) return <Loading />
 
     return (
         <View style={styles.container}>
-            <PageHeader
-                title='Tài liệu'
-                rightItem={
-                    <IconButton onPress={downloadFile}>
-                        <MaterialIcons name='file-download' size={24} color='black' />
-                    </IconButton>
-                }
-            />
             <Pdf trustAllCerts={false} source={{ uri: data?.url }} style={styles.pdf} />
         </View>
     )
@@ -100,6 +105,5 @@ const styles = StyleSheet.create({
         flex: 1,
         width: windowWidth,
         height: windowHeight,
-        marginTop: 12,
     },
 })

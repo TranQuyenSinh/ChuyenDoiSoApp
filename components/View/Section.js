@@ -6,11 +6,24 @@ import { Ionicons } from '@expo/vector-icons'
 
 export const SettingSection = ({ title, children, contentStyles, containerStyles }) => {
     return (
-        <View style={[{ padding: 16 }, containerStyles]}>
-            <Text style={{ marginBottom: 12, fontSize: 15, fontWeight: '500', color: 'white' }}>{title}</Text>
+        <View style={[containerStyles]}>
+            <Text
+                style={{
+                    marginBottom: 12,
+                    marginTop: 16,
+                    marginLeft: 16,
+                    fontSize: 18,
+                    fontWeight: '500',
+                    color: 'white',
+                }}>
+                {title}
+            </Text>
             <View
                 style={[
-                    { backgroundColor: Colors.white, borderRadius: 6, elevation: 10, shadowColor: 'lightblue' },
+                    {
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        borderRadius: 6,
+                    },
                     contentStyles,
                 ]}>
                 {children}
@@ -28,17 +41,17 @@ export const SettingSectionItem = ({ title, subTitle, onPress = () => {}, render
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                 {renderIcon && renderIcon()}
                 <View>
-                    <Text style={{ fontSize: 18 }}>{title}</Text>
-                    {subTitle && <Text style={{ fontSize: 14, color: Colors.textGray }}>{subTitle}</Text>}
+                    <Text style={{ fontSize: 18, color: 'white' }}>{title}</Text>
+                    {subTitle && <Text style={{ fontSize: 14, color: Colors.white }}>{subTitle}</Text>}
                 </View>
             </View>
             <View>
-                <Ionicons name='chevron-forward-outline' size={24} color={Colors.bodyText} />
+                <Ionicons name='chevron-forward-outline' size={24} color={'white'} />
             </View>
         </TouchableOpacity>
     )
 }
 
 export const SettingSectionItemSeperator = () => {
-    return <View style={{ height: 1, backgroundColor: '#eeeeee' }} />
+    return <View style={{ height: 1, backgroundColor: 'grey' }} />
 }

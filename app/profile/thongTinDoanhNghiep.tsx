@@ -1,16 +1,19 @@
 import { useState, useLayoutEffect, useEffect } from 'react'
 
-import { View, StyleSheet } from 'react-native'
-import { useRouter, useNavigation } from 'expo-router'
+import { StyleSheet, View } from 'react-native'
+import { useNavigation } from 'expo-router'
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view'
 
 import Colors from '@constants/Colors'
 import { windowWidth } from '@utils/window'
-import PageHeader from '@components/View/PageHeader'
 import DoanhNghiepInfo from '@components/DoanhNghiepInfo/doanhNghiepInfo'
 import NguoiDaiDienInfo from '@components/DoanhNghiepInfo/nguoiDaiDienInfo'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import { AppDispatch } from '@redux/store'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import IconButton from '@components/View/IconButton'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const tabViewData = [
     { key: 'dn', title: 'Hồ sơ doanh nghiệp' },
@@ -18,23 +21,34 @@ const tabViewData = [
 ]
 
 const ThongTinDoanhNghiep = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const navigation = useNavigation()
     const [index, setIndex] = useState(0)
 
     useEffect(() => {
         dispatch(fetchDoanhNghiepInfo())
-    }, [])
+    }, [dispatch])
+
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerShown: false,
-            animation: 'fade',
-            presentation: 'modal',
+            headerShown: true,
+            headerTitle: 'Thông tin doanh nghiệp',
+            headerTitleAlign: 'center',
+            headerStyle: {
+                backgroundColor: Colors.default,
+            },
+            headerRight: () => {
+                return (
+                    <IconButton>
+                        <MaterialIcons name='edit' size={24} color='white' />
+                    </IconButton>
+                )
+            },
+            headerTintColor: 'white',
         })
     }, [navigation])
     return (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>
-            <PageHeader title={'Thông tin doanh nghiệp'} />
             <TabView
                 style={styles.container}
                 navigationState={{ index: index, routes: tabViewData }}

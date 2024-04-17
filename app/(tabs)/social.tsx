@@ -21,9 +21,7 @@ const SocialPage = () => {
         const tags = await getDanhMucs()
         const posts = await getBaiViets()
         setTags(tags)
-        console.log('===> ', tags)
         setPosts(posts)
-        console.log('===> ', posts)
         setLoading(false)
     }
 
