@@ -69,7 +69,7 @@ const Page = () => {
                                 paddingVertical: 50,
                             }}
                         />
-                        <Text style={{ fontSize: 24, color: Colors.default, fontWeight: 'bold' }}>
+                        <Text style={{ fontSize: 24, color: '#00549c', fontWeight: 'bold' }}>
                             Chuyển đổi số {'\n'}AN GIANG
                         </Text>
                     </View>

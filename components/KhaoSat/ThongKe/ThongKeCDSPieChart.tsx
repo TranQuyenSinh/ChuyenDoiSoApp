@@ -44,16 +44,16 @@ const ThongKeCDSPieChart = ({ backgroundColor = 'white' }: { backgroundColor?: s
                 width={screenWidth - 32}
                 height={180}
                 chartConfig={{
-                    labelColor: () => 'white',
-                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`
                 }}
                 accessor={'population'}
                 backgroundColor={backgroundColor}
                 paddingLeft={'15'}
                 absolute={false}
+
                 style={{ borderRadius: 16 }}
             />
-            <Text style={[khaoSatStyles.title, { textAlign: 'center', color: 'white' }]}>
+            <Text style={[khaoSatStyles.title, { textAlign: 'center', color: 'white', marginTop: 4, marginBottom: 24 }]}>
                 Mức độ chuyển đổi số của các doanh nghiệp vừa và nhỏ tỉnh An Giang
             </Text>
         </>

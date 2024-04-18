@@ -6,14 +6,13 @@ import { Ionicons } from '@expo/vector-icons'
 
 export const SettingSection = ({ title, children, contentStyles, containerStyles }) => {
     return (
-        <View style={[containerStyles]}>
+        <View style={[containerStyles, { marginHorizontal: 16, elevation: 20 }]}>
             <Text
                 style={{
-                    marginBottom: 12,
+                    marginBottom: 10,
                     marginTop: 16,
-                    marginLeft: 16,
-                    fontSize: 18,
-                    fontWeight: '500',
+                    fontSize: 17,
+                    fontWeight: 'bold',
                     color: 'white',
                 }}>
                 {title}
@@ -21,7 +20,7 @@ export const SettingSection = ({ title, children, contentStyles, containerStyles
             <View
                 style={[
                     {
-                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        backgroundColor: 'rgba(255,255,255,1)',
                         borderRadius: 6,
                     },
                     contentStyles,
@@ -32,7 +31,7 @@ export const SettingSection = ({ title, children, contentStyles, containerStyles
     )
 }
 
-export const SettingSectionItem = ({ title, subTitle, onPress = () => {}, renderIcon }) => {
+export const SettingSectionItem = ({ title, subTitle, onPress = () => { }, renderIcon }) => {
     return (
         <TouchableOpacity
             activeOpacity={0.6}
@@ -41,17 +40,17 @@ export const SettingSectionItem = ({ title, subTitle, onPress = () => {}, render
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                 {renderIcon && renderIcon()}
                 <View>
-                    <Text style={{ fontSize: 18, color: 'white' }}>{title}</Text>
-                    {subTitle && <Text style={{ fontSize: 14, color: Colors.white }}>{subTitle}</Text>}
+                    <Text style={{ fontSize: 18, color: Colors.bodyText }}>{title}</Text>
+                    {subTitle && <Text style={{ fontSize: 14, color: Colors.bodyText }}>{subTitle}</Text>}
                 </View>
             </View>
             <View>
-                <Ionicons name='chevron-forward-outline' size={24} color={'white'} />
+                <Ionicons name='chevron-forward-outline' size={20} color={'grey'} />
             </View>
         </TouchableOpacity>
     )
 }
 
 export const SettingSectionItemSeperator = () => {
-    return <View style={{ height: 1, backgroundColor: 'grey' }} />
+    return <View style={{ height: 1, backgroundColor: 'lightgrey', width: '90%', alignSelf: 'center' }} />
 }

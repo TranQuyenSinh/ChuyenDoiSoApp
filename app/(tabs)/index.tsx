@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'
+import { useFocusEffect, useRouter } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from 'react-native'
@@ -33,6 +33,8 @@ import home from '@assets/images/test2.jpeg'
 import home2 from '../../assets/backgrounds/default.jpg'
 // @ts-ignore
 import story from '@assets/icons/story.png'
+// @ts-ignore
+import no_avatar from '@assets/icons/user.jpg'
 import { StatusBar } from 'expo-status-bar'
 import { screenWidth } from '@utils/window'
 import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
@@ -41,47 +43,39 @@ import IconButton from '@components/View/IconButton'
 import LienKetDoanhNghiep from '@components/Home/LienKetDoanhNghiep'
 import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
+import { useEffect } from 'react'
+import BackgroundImage from '@components/View/BackgroundImage'
+import LinearGradient from 'react-native-linear-gradient'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
     const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
     return (
-        <View style={styles.container}>
-            <ImageBackground blurRadius={10} source={home2} style={[StyleSheet.absoluteFill, styles.background]} />
-            <SafeAreaView style={styles.topContainer}>
-                {isLoggedIn && userProfile && <Text style={styles.topText}>Xin chào, {userProfile?.name}</Text>}
-                {!isLoggedIn && (
-                    <Pressable onPress={() => router.push('/auth/login')}>
-                        <Text style={[styles.topText, {}]}>Đăng nhập</Text>
-                    </Pressable>
-                )}
-                <IconButton>
-                    <FontAwesome name='bell' size={24} color='white' />
-                </IconButton>
-                {/* <Image source={logo} style={styles.topImage} /> */}
-            </SafeAreaView>
+        <LinearGradient colors={['#32acff', '#94d3fe']} style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
-                <TinTucCarousel2 />
 
-                <View
-                    style={[
-                        styles.contentContainer,
-                        { alignItems: 'center', justifyContent: 'center', marginVertical: 12 },
-                    ]}>
-                    <DiemLineChart />
-                    {khaoSats.length !== 0 && (
-                        <Text
-                            style={[
-                                textStyles.title,
-                                styles.title,
-                                { marginTop: 6, alignSelf: 'center', marginBottom: 0 },
-                            ]}>
-                            Điếm đánh giá mức độ CĐS
-                        </Text>
+                <SafeAreaView style={styles.topContainer}>
+                    {isLoggedIn && userProfile && <>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                            <Image style={styles.avatar} source={userProfile?.image ? { uri: userProfile?.image } : no_avatar} />
+                            <View>
+                                <Text style={{ color: 'white' }}>Xin chào</Text>
+                                <Text style={styles.topText}>{userProfile?.name}</Text>
+                            </View>
+                        </View>
+                    </>}
+                    {!isLoggedIn && (
+                        <Pressable onPress={() => router.push('/auth/login')}>
+                            <Text style={[styles.topText, {}]}>Đăng nhập</Text>
+                        </Pressable>
                     )}
-                </View>
+                    <IconButton>
+                        <FontAwesome name='bell' size={24} color='white' />
+                    </IconButton>
+                </SafeAreaView>
+                <TinTucCarousel2 />
                 <View style={styles.contentContainer}>
-                    <Text style={[textStyles.title, styles.title]}>Thông tin - Tin tức</Text>
+                    <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Thông tin - Tin tức</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
                         <View style={itemStyles.container}>
                             <Pressable
@@ -202,19 +196,35 @@ export default function TrangTin() {
                 </View>
 
                 {/* LIÊN KẾT DOANH NGHIỆP */}
-                <View style={styles.contentContainer}>
+                <View style={[styles.contentContainer, { marginBottom: 24 }]}>
                     <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
                     <LienKetDoanhNghiep />
                 </View>
 
                 {/* Thống kê */}
-                <View style={{ alignItems: 'center' }}>
-                    <ThongKeCDSPieChart backgroundColor='#ffffffc0' />
+                <View style={[styles.contentContainer, { marginBottom: 12 }]}>
+                    <Text style={[textStyles.title, styles.title]}>Biểu đồ thống kê</Text>
                 </View>
-            </ScrollView>
+                <View style={{ alignItems: 'center' }}>
+                    <ThongKeCDSPieChart backgroundColor='#fff' />
 
+
+                    <DiemLineChart />
+                    {khaoSats.length !== 0 && (
+                        <Text
+                            style={[
+                                textStyles.title,
+                                styles.title,
+                                { marginTop: 6, alignSelf: 'center', marginBottom: 0, marginHorizontal: 24, textAlign: 'center' },
+                            ]}>
+                            Điếm đánh giá mức độ CĐS của bạn qua từng phiếu khảo sát
+                        </Text>
+                    )}
+                </View>
+
+            </ScrollView>
             <StatusBar style='light' />
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -226,7 +236,7 @@ const styles = StyleSheet.create({
     title: {
         color: 'white',
         marginBottom: 0,
-        marginTop: 4,
+        marginTop: 24,
     },
     background: {
         width: '100%',
@@ -238,25 +248,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         gap: 6,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        flexShrink: 0,
+        paddingVertical: 20,
+        paddingHorizontal: 16,
         alignItems: 'center',
-        backgroundColor: '#8c26f97a',
+        // backgroundColor: '#8c26f97a',
     },
-    topImage: {
-        width: 40,
-        height: 40,
-        resizeMode: 'contain',
-        backgroundColor: 'white',
-        borderRadius: 12,
+    avatar: {
+        width: 45,
+        height: 45,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 50,
     },
     topText: {
         fontSize: 18,
         color: Colors.white,
         fontWeight: '500',
-        flex: 1,
-        textAlignVertical: 'center',
     },
     contentContainer: {
         marginHorizontal: 16,

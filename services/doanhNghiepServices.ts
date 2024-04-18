@@ -17,6 +17,22 @@ export const updateDoanhNghiep = async (data: any) => {
         return false
     }
 }
+
+export const updateDaiDien = async (data: any) => {
+    try {
+        const { data: returnData } = await authAxios.post('doanhnghiep/editDaiDien', {
+            ...data
+        })
+        if (returnData?.success) return true
+        else {
+            toast(returnData?.message || 'Có lỗi xảy ra vui lòng thử lại')
+            return false
+        }
+    } catch (error) {
+        console.log('===> error: ', error)
+        return false
+    }
+}
 export const createUser = async ({
     name,
     email,

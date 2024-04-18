@@ -14,7 +14,7 @@ import avatar_default from '@assets/icons/user.jpg'
 import { renewUserProfile } from '@redux/userSlice'
 import { doiAvatar, doiTenUser } from '@services/accountServices'
 import Button, { GradienButton } from '@components/View/Button'
-import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { SettingSection, SettingSectionItem, SettingSectionItemSeperator } from '@components/View/Section'
 import Constants from '@constants/Constants'
@@ -22,17 +22,16 @@ import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
 import IconButton from '@components/View/IconButton'
 import login from '@assets/images/profile_login.jpg'
-import background from '@assets/backgrounds/profile.jpg'
-import BackgroundImage from '@components/View/BackgroundImage'
+import LinearGradient from 'react-native-linear-gradient'
 const Page = () => {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector(state => state.user)
     const { logOut } = useDangNhap()
 
     return (
-        <View style={{ flex: 1 }}>
+        <LinearGradient colors={['#01b4ee', '#78e3f3']} style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} />
-            <BackgroundImage blurRadius={10} source={background} />
+
             {!isLoggedIn && (
                 <>
                     <View
@@ -60,13 +59,19 @@ const Page = () => {
                             <SettingSectionItem
                                 title={'Thông tin doanh nghiệp'}
                                 onPress={() => router.push('profile/thongTinDoanhNghiep')}
-                                renderIcon={() => <Ionicons name='business-outline' size={24} color={'white'} />}
+                                renderIcon={() => <Ionicons name='business-outline' size={24} color={'black'} />}
                             />
                             <SettingSectionItemSeperator />
                             <SettingSectionItem
-                                title={'Sản phẩm của bạn'}
+                                title={'Quản lý sản phẩm'}
                                 onPress={() => router.push('sanpham')}
-                                renderIcon={() => <AntDesign name='staro' size={24} color={'white'} />}
+                                renderIcon={() => <AntDesign name='staro' size={24} color={'black'} />}
+                            />
+                            <SettingSectionItem
+                                title={'Quản lý bài viết'}
+                                onPress={() => router.push('social/baiviet')}
+                                renderIcon={() => <Feather name="edit" size={24} color="black" />}
+
                             />
                         </SettingSection>
                     )}
@@ -74,24 +79,24 @@ const Page = () => {
                         {/* <SettingSectionItem
                             title={'Thiết lập đăng nhập vân tay'}
                             onPress={() => router.push('profile/thietLapSinhTracHoc')}
-                            renderIcon={() => <Ionicons name='finger-print-outline' size={24} color={'white'} />}
+                            renderIcon={() => <Ionicons name='finger-print-outline' size={24} color={'black'} />}
                         /> */}
                         {/* <SettingSectionItemSeperator /> */}
                         <SettingSectionItem
                             title={'Đổi mật khẩu'}
                             onPress={() => router.push('profile/doiMatKhau')}
-                            renderIcon={() => <Ionicons name='lock-closed-outline' size={24} color={'white'} />}
+                            renderIcon={() => <Ionicons name='lock-closed-outline' size={24} color={'black'} />}
                         />
                         <SettingSectionItemSeperator />
                         <SettingSectionItem
                             title={'Đăng xuất'}
-                            renderIcon={() => <Ionicons name='log-out-outline' size={24} color={'white'} />}
+                            renderIcon={() => <Ionicons name='log-out-outline' size={24} color={'black'} />}
                             onPress={logOut}
                         />
                     </SettingSection>
                 </ScrollView>
             )}
-        </View>
+        </LinearGradient>
     )
 }
 
@@ -239,7 +244,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 12,
         alignItems: 'center',
-        padding: 12,
+        // padding: 12,
+        paddingVertical: 12
     },
     modalInput: {
         borderWidth: StyleSheet.hairlineWidth,

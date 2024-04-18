@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState, useEffect, useCallback } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { View, ScrollView, StyleSheet, Image, Text, Pressable } from 'react-native'
+import { View, ScrollView, StyleSheet, Image, Text, Pressable, Alert } from 'react-native'
 import { useNavigation, router } from 'expo-router'
 
 import { AppDispatch, RootState } from '@redux/store'
@@ -9,7 +9,7 @@ import PageHeader from '@components/View/PageHeader'
 //@ts-ignore
 import background from '@assets/images/test2.jpeg'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
-import { getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
+import { deleteSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import Loading from '@components/StatusPage/Loading'
 import Button from '@components/View/Button'
@@ -17,9 +17,12 @@ import Colors from '@constants/Colors'
 import { useFocusEffect } from 'expo-router'
 import { FlatList } from 'react-native-gesture-handler'
 //@ts-ignore
-import no_avatar from '@assets/icons/user.jpg'
+import no_avatar from '@assets/images/no_image.png'
 import { formatPrice } from '@utils/format'
 import { Ionicons } from '@expo/vector-icons'
+import BackgroundImage from '@components/View/BackgroundImage'
+import IconButton from '@components/View/IconButton'
+import { toast } from '@utils/toast'
 
 const index = () => {
     const navigation = useNavigation()
@@ -33,6 +36,30 @@ const index = () => {
         const products = await getSanPhamByDoanhNghiep(id)
         setProducts(products)
         setLoading(false)
+    }
+
+    const handleRemoveProduct = async (item: SanPham) => {
+        Alert.alert(
+            'Lưu ý',
+            'Bạn có chắc muốn xóa sản phẩm này?',
+            [{
+                text: 'Đồng ý', onPress: async () => {
+                    const result = await deleteSanPham(item.id)
+                    if (result) {
+                        toast('Xóa sản phẩm thành công')
+                        setProducts(products.filter(p => p.id !== item.id))
+                    }
+                }
+            },
+            {
+                text: 'Hủy bỏ',
+                style: 'cancel'
+            }
+            ],
+            {
+                cancelable: true,
+            }
+        )
     }
 
     useEffect(() => {
@@ -57,7 +84,7 @@ const index = () => {
     return (
         <View style={styles.container}>
             <PageHeader tintColor='white' title={'Sản phẩm nổi bật của bạn'} style={{ marginBottom: 12 }} />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage source={background} blurRadius={10} />
 
             {loading || (status === 'loading' && <Loading />)}
             {!loading && status !== 'loading' && products.length === 0 && (
@@ -92,6 +119,9 @@ const index = () => {
                         <Pressable
                             onPress={() => router.push({ pathname: '/sanpham/edit', params: { id: item.id } })}
                             style={productStyles.container}>
+                            <IconButton style={productStyles.removeBtn} onPress={() => handleRemoveProduct(item)}>
+                                <Ionicons name='close-circle' size={24} color={"black"} />
+                            </IconButton>
                             <Image
                                 source={item.hinhAnhs?.[0]?.hinhAnh ? { uri: item.hinhAnhs[0].hinhAnh } : no_avatar}
                                 style={productStyles.image}
@@ -182,4 +212,12 @@ const productStyles = StyleSheet.create({
     price: {
         color: 'white',
     },
+    removeBtn: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        height: 50,
+        width: 50,
+        zIndex: 999
+    }
 })

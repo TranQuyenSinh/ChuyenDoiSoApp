@@ -45,16 +45,6 @@ const NguoiDaiDienInfo = () => {
                         <Text style={dnStyles.itemTitle}>CCCD</Text>
                         <Text style={dnStyles.itemText}>{daidien?.cccd}</Text>
                     </View>
-                    <View style={[dnStyles.item, dnStyles.itemColumn]}>
-                        <Text style={dnStyles.itemTitle}>Ảnh CCCD mặt trước</Text>
-                        {daidien?.imgMatTruoc && (
-                            <Image source={{ uri: daidien?.imgMatTruoc }} style={dnStyles.imgCCCD} />
-                        )}
-                    </View>
-                    <View style={[dnStyles.item, dnStyles.itemColumn]}>
-                        <Text style={dnStyles.itemTitle}>Ảnh CCCD mặt sau</Text>
-                        {daidien?.imgMatSau && <Image source={{ uri: daidien?.imgMatSau }} style={dnStyles.imgCCCD} />}
-                    </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Chức vụ</Text>
                         <Text style={dnStyles.itemText}>{daidien?.chucVu}</Text>

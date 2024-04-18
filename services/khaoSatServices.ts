@@ -19,7 +19,7 @@ export const getKhaoSats = async () => {
         return data
     } catch (error) {
         // @ts-ignore
-        console.log('===> Lỗi lấy khảo sát doanh nghiệp: ', JSON.stringify(error))
+        console.log('===> Lỗi lấy khảo sát doanh nghiệp: ', error.response)
         return []
     }
 }

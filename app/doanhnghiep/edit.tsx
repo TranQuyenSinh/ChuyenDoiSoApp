@@ -89,7 +89,7 @@ const DoanhNghiepInfo = () => {
         })
     }, [navigation])
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior='height'>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior='height' keyboardVerticalOffset={30}>
             <ScrollView
                 keyboardShouldPersistTaps='handled'
                 style={{ flex: 1 }}

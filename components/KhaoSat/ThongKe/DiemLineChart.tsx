@@ -54,8 +54,8 @@ const DiemLineChart = () => {
                 width={windowWidth - 32}
                 height={200}
                 chartConfig={{
-                    backgroundGradientFrom: '#4ba0fa',
-                    backgroundGradientTo: '#4ec4f2',
+                    backgroundGradientFrom: '#213ff9',
+                    backgroundGradientTo: '#9908c7',
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     propsForDots: {

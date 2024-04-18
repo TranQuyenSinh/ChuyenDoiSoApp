@@ -15,7 +15,7 @@ const LienKetDoanhNghiep = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
     const dispatch = useDispatch<AppDispatch>()
     useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             const data = await getDoanhNghiepWebsite()
             setData(data)
         })()

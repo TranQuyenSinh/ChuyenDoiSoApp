@@ -3,11 +3,11 @@ import React from 'react'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 
-const Modal = ({ isOpen, toggle, showCloseIcon = false, children }) => {
+const Modal = ({ isOpen, toggle, showCloseIcon = false, children, contentStyle = {} }) => {
     return (
         <ReactModal animationType='fade' transparent visible={isOpen}>
             <Pressable onPress={toggle} style={styles.centerdView}>
-                <Pressable onPress={e => e.stopPropagation()} style={styles.modalView}>
+                <Pressable onPress={e => e.stopPropagation()} style={[styles.modalView, contentStyle]}>
                     {showCloseIcon && (
                         <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={toggle}>
                             <Ionicons name='close-sharp' size={24} color={Colors.bodyText} />

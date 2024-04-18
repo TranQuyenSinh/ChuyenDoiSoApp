@@ -2,11 +2,9 @@ import React, { useLayoutEffect, useState } from 'react'
 
 import {
     View,
-    ScrollView,
     StyleSheet,
     Image,
     Text,
-    DevSettings,
     TextInput,
     TouchableWithoutFeedback,
     Keyboard,
@@ -25,6 +23,7 @@ import { toast } from '@utils/toast'
 import useChonAnh from '@hooks/useChonAnh'
 import { createSanPham } from '@services/sanPhamServices'
 import { formatPrice } from '@utils/format'
+import { pick } from 'lodash'
 
 const CreateProduct = () => {
     const navigation = useNavigation()
@@ -33,14 +32,17 @@ const CreateProduct = () => {
         name: '',
         price: '',
         description: '',
+        image: ''
     })
-    const { pickImageAsync } = useChonAnh()
-    const [images, setImages] = useState<any[]>([])
 
-    const handleSelectImage = async (image: any) => {
+    const { pickImageAsync } = useChonAnh()
+    const [pickImage, setPickImage] = useState<any>()
+
+    const handleSelectImage = async () => {
         const data = await pickImageAsync('galery', false)
         if (data) {
-            setImages([...images, data])
+            // setImages([...images, data])
+            setPickImage(data)
         }
     }
 
@@ -51,7 +53,7 @@ const CreateProduct = () => {
             return
         }
         setLoading(true)
-        const result = await createSanPham(name, price, description, images)
+        const result = await createSanPham(name, price, description, pickImage)
         if (result) {
             toast('Đăng sản phẩm thành công')
             router.back()
@@ -83,8 +85,8 @@ const CreateProduct = () => {
                         placeholder='Tên sản phẩm'
                     />
                     <TextInput
-                        value={formatPrice(form.price) + ''}
-                        onChangeText={text => setForm({ ...form, price: text.replaceAll('.', '') })}
+                        value={formatPrice(form.price) == "NaN" ? '' : formatPrice(form.price) + ""}
+                        onChangeText={text => setForm({ ...form, price: text.replaceAll('.', '').replaceAll('NaN', '') })}
                         placeholderTextColor={'white'}
                         cursorColor={'white'}
                         autoCapitalize='none'
@@ -104,14 +106,14 @@ const CreateProduct = () => {
                         numberOfLines={6}
                     />
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                        <Text style={styles.title}>Chọn ảnh ({images.length}/6)</Text>
-                        {images.length < 6 && (
-                            <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
-                                <Ionicons name='add' size={24} color={'white'} />
-                            </Pressable>
-                        )}
+                        <Text style={styles.title}>Chọn ảnh</Text>
+                        <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
+                            <Ionicons name='add' size={24} color={'white'} />
+                        </Pressable>
                     </View>
-                    <FlatList
+
+                    {pickImage?.uri && <Image source={{ uri: pickImage?.uri }} style={{ alignSelf: 'center', width: '60%', height: 120, resizeMode: 'cover' }} />}
+                    {/* <FlatList
                         scrollEnabled={false}
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{ gap: 6 }}
@@ -128,7 +130,8 @@ const CreateProduct = () => {
                                 />
                             </Pressable>
                         )}
-                    />
+                    /> */}
+
                     <Button
                         text='Đăng'
                         btnStyles={formStyles.button}

@@ -1,28 +1,29 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 import { router, useNavigation } from 'expo-router'
-import { StyleSheet, ScrollView, Text, KeyboardAvoidingView, TextInput, Image } from 'react-native'
+import { StyleSheet, ScrollView, Text, KeyboardAvoidingView, TextInput, Image, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Colors from '@constants/Colors'
 import Loading from '@components/StatusPage/Loading'
 import TryAgain from '@components/StatusPage/TryAgain'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
-import moment from 'moment'
 import { AppDispatch, RootState } from '@redux/store'
-import DatePicker from 'react-native-date-picker'
 import useToggle from '@hooks/useToggle'
 import { Dropdown } from 'react-native-element-dropdown'
-import { getLoaiHinhDN, updateDoanhNghiep } from '@services/doanhNghiepServices'
+import { updateDaiDien } from '@services/doanhNghiepServices'
 import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
 import { chucVuData } from '@constants/DoanhNghiep/ChucVus'
+import PickImageModal from '@components/View/PickImageModal'
 
 const DoanhNghiepInfo = () => {
     const dispatch = useDispatch<AppDispatch>()
     const navigation = useNavigation()
     const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
     const [loading, setLoading] = useState(false)
+    const { isOpen, toggle } = useToggle()
+    const [imageType, setImageType] = useState<"truoc" | "sau" | "">('')
 
     const [images, setImages] = useState<any>()
 
@@ -41,14 +42,6 @@ const DoanhNghiepInfo = () => {
     useEffect(() => {
         if (!doanhNghiep) return
         const { daiDien } = doanhNghiep
-        // email: '',
-        // sdt: '',
-        // diaChi: '',
-        // cccd: '',
-        // imgMatTruoc: '',
-        // imgMatSau: '',
-        // chucVu: '',
-        // moTa: '',
         setForm({
             tenDaiDien: daiDien?.tenDaiDien,
             email: daiDien?.email,
@@ -62,9 +55,17 @@ const DoanhNghiepInfo = () => {
         })
     }, [doanhNghiep])
 
+    const handlePickImage = async (data: any) => {
+        if (imageType === 'truoc') {
+            setForm({ ...form, imgMatTruoc: data.uri })
+        } else if (imageType === 'sau') {
+            setForm({ ...form, imgMatSau: data.uri })
+        }
+    }
+
     const handleSubmit = async () => {
         setLoading(true)
-        const isSuccess = await updateDoanhNghiep(form)
+        const isSuccess = await updateDaiDien(form)
         if (isSuccess) {
             toast("Cập nhật thành công")
             dispatch(fetchDoanhNghiepInfo())
@@ -126,6 +127,14 @@ const DoanhNghiepInfo = () => {
                             style={inputStyles.input}
                         />
 
+                        <Text style={inputStyles.label}>CCCD</Text>
+                        <TextInput
+                            value={form.cccd}
+                            onChangeText={text => setForm({ ...form, cccd: text })}
+                            keyboardType='number-pad'
+                            style={inputStyles.input}
+                        />
+
                         <Text style={inputStyles.label}>Mô tả</Text>
                         <TextInput
                             value={form.moTa}
@@ -152,26 +161,11 @@ const DoanhNghiepInfo = () => {
                             mode={'modal'}
                         />
 
-                        <Text style={inputStyles.label}>CCCD</Text>
-                        <TextInput
-                            value={form.cccd}
-                            onChangeText={text => setForm({ ...form, cccd: text })}
-                            keyboardType='number-pad'
-                            style={inputStyles.input}
-                        />
-
-                        <Text style={inputStyles.label}>Ảnh mặt trước</Text>
-                        {form.imgMatTruoc && (
-                            <Image
-                                source={{ uri: form.imgMatTruoc }}
-                                style={inputStyles.image}
-                            />
-                        )}
-
 
                         <Button btnStyles={inputStyles.button} text='Cập nhật' onPress={handleSubmit} />
                     </>
                 )}
+
             </ScrollView>
         </KeyboardAvoidingView>
     )

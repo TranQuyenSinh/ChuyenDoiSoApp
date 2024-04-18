@@ -23,6 +23,7 @@ import Animated, {
 import { getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import SanPhamComponent, { ITEM_WIDTH } from '@components/SanPham/SanPham'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
+import BackgroundImage from '@components/View/BackgroundImage'
 
 const ITEM_GAP = 12
 
@@ -89,7 +90,7 @@ const DoanhNghiepDetail = () => {
 
     return (
         <View style={styles.container}>
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage source={background} blurRadius={8} />
             <PageHeader tintColor='white' title={'Doanh nghiệp'} style={{ marginBottom: 12 }} />
             <Animated.ScrollView ref={scrollViewRef} onScroll={scrollHandler} showsVerticalScrollIndicator={false}>
                 <View
@@ -182,9 +183,9 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 12,
         marginTop: 6,
-        fontSize: 14,
-        textTransform: 'uppercase',
-        fontWeight: '500',
+        fontSize: 16,
+        // textTransform: 'uppercase',
+        fontWeight: '700',
         color: 'white',
     },
     infoItem: {
