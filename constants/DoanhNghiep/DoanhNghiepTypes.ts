@@ -18,6 +18,7 @@ export interface DoanhNghiep {
     loaiHinh: LoaiHinh
     daiDien: DaiDienDoanhNghiep
     sdts: Sdt[]
+    sdt: string
     user?: User
 }
 

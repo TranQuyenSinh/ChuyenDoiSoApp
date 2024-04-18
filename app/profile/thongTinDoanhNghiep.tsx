@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useEffect } from 'react'
 
 import { StyleSheet, View } from 'react-native'
-import { router, useNavigation } from 'expo-router'
+import { router, useFocusEffect, useNavigation } from 'expo-router'
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view'
 
 import Colors from '@constants/Colors'
@@ -27,7 +27,7 @@ const ThongTinDoanhNghiep = () => {
 
     useEffect(() => {
         dispatch(fetchDoanhNghiepInfo())
-    }, [dispatch])
+    }, [])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -39,14 +39,14 @@ const ThongTinDoanhNghiep = () => {
             },
             headerRight: () => {
                 return (
-                    <IconButton onPress={() => router.push('/doanhnghiep/edit')}>
+                    <IconButton onPress={() => router.push(index === 0 ? '/doanhnghiep/edit' : '/doanhnghiep/editDaiDien')}>
                         <MaterialIcons name='edit' size={24} color='white' />
                     </IconButton>
                 )
             },
             headerTintColor: 'white',
         })
-    }, [navigation])
+    }, [navigation, index])
     return (
         <View style={{ flex: 1, backgroundColor: Colors.white }}>
             <TabView

@@ -2,6 +2,21 @@ import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { authAxios, axios } from '@utils/axios'
 import { toast } from '@utils/toast'
 
+export const updateDoanhNghiep = async (data: any) => {
+    try {
+        const { data: returnData } = await authAxios.post('doanhnghiep/edit', {
+            ...data
+        })
+        if (returnData?.success) return true
+        else {
+            toast(returnData?.message || 'Có lỗi xảy ra vui lòng thử lại')
+            return false
+        }
+    } catch (error) {
+        console.log('===> error: ', error)
+        return false
+    }
+}
 export const createUser = async ({
     name,
     email,
@@ -31,6 +46,8 @@ export const createUser = async ({
     }
 }
 
+
+
 export const getDoanhNghieps = async () => {
     try {
         const { data } = await axios.get<DoanhNghiep[]>('doanhnghiep/index')
@@ -53,7 +70,7 @@ export const getDoanhNghiep = async (id: number) => {
 
 export const getLoaiHinhDN = async () => {
     try {
-        const { data } = await authAxios.get<LoaiHinh>('loaihinhdoanhnghiep')
+        const { data } = await authAxios.get<LoaiHinh[]>('loaihinhdoanhnghiep')
         return data
     } catch (err) {
         console.log('===> Lỗi lấy loại hình doanh nghiệp')

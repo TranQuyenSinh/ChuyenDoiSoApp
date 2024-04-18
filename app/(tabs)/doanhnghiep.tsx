@@ -28,8 +28,8 @@ const CardItem = (props: CartItemProps) => {
                     source={
                         data.user?.image
                             ? {
-                                  uri: data.user?.image,
-                              }
+                                uri: data.user?.image,
+                            }
                             : no_avatar
                     }
                     style={cardStyles.cardImage}
@@ -39,7 +39,7 @@ const CardItem = (props: CartItemProps) => {
                     <Text style={cardStyles.cardText}>Mã số thuế: {data.maThue}</Text>
                     <Text style={cardStyles.cardText}>Đại diện pháp luật: {data?.daiDien?.tenDaiDien}</Text>
                     <Text style={cardStyles.cardText}>
-                        Địa chỉ trụ sở: {`${data?.diaChi}, ${data?.xa}, ${data?.huyen}, ${data?.thanhPho}`}
+                        Địa chỉ trụ sở: {data.diaChi}
                     </Text>
                 </View>
             </View>
@@ -79,7 +79,7 @@ const DoanhNghiepPage = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
 
     useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             const data = await getDoanhNghieps()
             setData(data)
         })()

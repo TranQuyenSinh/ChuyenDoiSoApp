@@ -27,7 +27,7 @@ const DoanhNghiepInfo = () => {
                         <Text style={dnStyles.itemTitle}>Tên doanh nghiệp</Text>
                         <Text style={dnStyles.itemText}>{doanhNghiep?.tenTiengViet}</Text>
                     </View>
-                    <View style={dnStyles.item}>
+                    <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Tên tiếng anh</Text>
                         <Text style={dnStyles.itemText}>{doanhNghiep?.tenTiengAnh}</Text>
                     </View>
@@ -41,7 +41,7 @@ const DoanhNghiepInfo = () => {
                             {doanhNghiep?.ngayLap && moment(doanhNghiep?.ngayLap).format('DD/MM/YYYY')}
                         </Text>
                     </View>
-                    <View style={dnStyles.item}>
+                    <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Loại hình doanh nghiệp</Text>
                         <Text style={dnStyles.itemText}>{doanhNghiep?.loaiHinh?.tenLoaiHinh}</Text>
                     </View>
@@ -63,11 +63,7 @@ const DoanhNghiepInfo = () => {
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
                         <Text style={dnStyles.itemTitle}>Điện thoại</Text>
-                        {doanhNghiep?.sdts.map(dt => (
-                            <Text style={dnStyles.itemText} key={dt.id}>
-                                - {dt.sdt} ({dt.loaiSdt})
-                            </Text>
-                        ))}
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.sdt}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Fax</Text>
