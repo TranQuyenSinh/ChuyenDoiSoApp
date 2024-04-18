@@ -17,7 +17,7 @@ export const getBaiVietsByDoanhNghiep = async (id: number) => {
         const { data } = await authAxios.get<BaiViet[]>(`doanhnghiep/${id}/baiviet`)
         return data
     } catch (error) {
-        console.log('===> Lỗi lấy bài viết của doanh nghiệp: ', error.response)
+        console.log('===> Lỗi lấy bài viết của doanh nghiệp: ', error)
         return []
     }
 }
@@ -55,8 +55,10 @@ export const postBinhLuan = async (id: number, noiDung: string, binhLuanChaId?: 
 export const deleteBaiViet = async (id: number) => {
     try {
         await authAxios.delete(`baiviet/${id}`)
+        return true
     } catch (error) {
         console.log(`===> Lỗi xóa bài viết (${id}):`, error)
+        return false
     }
 }
 
@@ -117,5 +119,17 @@ export const postLikeBaiViet = async (id: number) => {
         return data
     } catch (error) {
         console.log(`===> Lỗi thích bài viết (${id}):`, error)
+    }
+}
+
+export const getBaiVietBySearch = async (search: string) => {
+    try {
+        const { data } = await authAxios.get<BaiViet[]>(`baiviet/search`, {
+            params: { search }
+        })
+        return data
+    } catch (error) {
+        console.log(`===> Lỗi tìm kiếm bài viết (${search}):`, error)
+        return []
     }
 }

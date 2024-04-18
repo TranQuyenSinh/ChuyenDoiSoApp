@@ -18,7 +18,7 @@ export const getChuyenGia = async (id: number) => {
         const { data } = await axios.get<ChuyenGia>(`chuyengia/${id}`)
         return data
     } catch (error) {
-        console.log('===> Lỗi lấy chuyên gia', JSON.stringify(error))
+        console.log('===> Lỗi lấy chuyên gia', error)
         return undefined
     }
 }

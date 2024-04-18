@@ -13,6 +13,7 @@ import Colors from '@constants/Colors'
 import { defaultStyles, textStyles } from '@constants/Styles'
 import Button from '@components/View/Button'
 import { Ionicons } from '@expo/vector-icons'
+import BackgroundImage from '@components/View/BackgroundImage'
 
 const ChuyenGiaDetail = () => {
     const { id } = useLocalSearchParams()
@@ -46,7 +47,7 @@ const ChuyenGiaDetail = () => {
     return (
         <View style={styles.container}>
             <PageHeader tintColor='white' title={'Thông tin chuyên gia'} style={{ marginBottom: 24 }} />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage source={background} blurRadius={10} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={[styles.section, { flexDirection: 'row', gap: 12 }]}>
                     <Image source={chuyenGia.hinhAnh ? { uri: chuyenGia.hinhAnh } : no_avatar} style={styles.image} />

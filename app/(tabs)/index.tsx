@@ -46,6 +46,7 @@ import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import { useEffect } from 'react'
 import BackgroundImage from '@components/View/BackgroundImage'
 import LinearGradient from 'react-native-linear-gradient'
+import { toast } from '@utils/toast'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -69,7 +70,7 @@ export default function TrangTin() {
                             <Text style={[styles.topText, {}]}>Đăng nhập</Text>
                         </Pressable>
                     )}
-                    <IconButton>
+                    <IconButton onPress={() => toast("Tính năng đang phát triển")}>
                         <FontAwesome name='bell' size={24} color='white' />
                     </IconButton>
                 </SafeAreaView>

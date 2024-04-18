@@ -8,15 +8,19 @@ import CreatePostButton from './CreatePostButton'
 interface TopSearchProps {
     value: string
     onChangeText: (text: string) => void
+    onSubmitEditing: (e: any) => void
 }
 
 const TopSearch = (props: TopSearchProps) => {
-    const { value, onChangeText } = props
+    const { value, onChangeText, onSubmitEditing } = props
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.inputContainer}>
                 <Ionicons name='search-outline' size={16} color={'white'} />
                 <TextInput
+                    returnKeyLabel='Tìm'
+                    returnKeyType='search'
+                    onSubmitEditing={onSubmitEditing}
                     cursorColor={'white'}
                     value={value}
                     onChangeText={onChangeText}

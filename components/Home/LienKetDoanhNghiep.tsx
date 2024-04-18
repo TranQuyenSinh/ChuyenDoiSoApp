@@ -1,25 +1,27 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { screenWidth } from '@utils/window'
-import chatbot from '@app/web/chatbot'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghiepWebsite } from '@services/doanhNghiepServices'
 //@ts-ignore
 import no_image from '@assets/images/no_image.png'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
-import trungTamSlice, { trungTamActions } from '@redux/trungTamSlice'
-import TrungTamCarousel from '@components/TrungTam/Carousel'
+import { trungTamActions } from '@redux/trungTamSlice'
 const LienKetDoanhNghiep = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
     const dispatch = useDispatch<AppDispatch>()
-    useEffect(() => {
-        ; (async () => {
-            const data = await getDoanhNghiepWebsite()
-            setData(data)
-        })()
-    }, [])
+
+    const fetchData = async () => {
+        const data = await getDoanhNghiepWebsite()
+        setData(data)
+    }
+    useFocusEffect(
+        useCallback(() => {
+            fetchData()
+        }, [])
+    )
 
     const handlePress = (doanhNghiep: DoanhNghiep) => {
         dispatch(trungTamActions.selectChuongTrinh({ name: doanhNghiep.tenTiengViet, link: doanhNghiep.website }))

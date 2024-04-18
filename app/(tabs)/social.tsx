@@ -29,6 +29,8 @@ const SocialPage = () => {
         fetchData()
     }, [])
 
+
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -36,7 +38,9 @@ const SocialPage = () => {
     }, [navigation])
     return (
         <View style={styles.container}>
-            <TopSearch value={search} onChangeText={text => setSearch(text)} />
+            <TopSearch onSubmitEditing={() => {
+                router.push({ pathname: '/social/baiviet/search', params: { search } })
+            }} value={search} onChangeText={text => setSearch(text)} />
             <ScrollView
                 horizontal
                 style={{ flexShrink: 0 }}

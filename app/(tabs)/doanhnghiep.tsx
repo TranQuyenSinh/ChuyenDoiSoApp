@@ -1,5 +1,5 @@
 import { FlatList, Image, ImageBackground, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
@@ -15,7 +15,7 @@ import { getDoanhNghieps } from '@services/doanhNghiepServices'
 import no_image from '@assets/images/no_image.png'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import Button from '@components/View/Button'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import BackgroundImage from '@components/View/BackgroundImage'
 import LinearGradient from 'react-native-linear-gradient'
 import { Keyboard } from 'react-native'
@@ -31,13 +31,17 @@ const DoanhNghiepPage = () => {
         setFilteredData(filteredData)
     }, [search])
 
-    useEffect(() => {
-        ; (async () => {
-            const data = await getDoanhNghieps()
-            setData(data)
-            setFilteredData(data)
-        })()
-    }, [])
+    const fetchData = async () => {
+        const data = await getDoanhNghieps()
+        setData(data)
+        setFilteredData(data)
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchData()
+        }, [])
+    )
     return (
         // <StatusBar barStyle='light-content' />
         <View style={styles.container}>

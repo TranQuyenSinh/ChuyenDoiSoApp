@@ -8,6 +8,8 @@ import { postLikeBaiViet } from '@services/dienDanServices'
 import Colors from '@constants/Colors'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+//@ts-ignore
+import no_avatar from '@assets/icons/user.jpg'
 interface PostProps {
     data: BaiViet
 }
@@ -54,7 +56,7 @@ const Post = ({ data }: PostProps) => {
             <View style={styles.postTop}>
                 <View style={styles.infoContainer}>
                     <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
-                        <Image style={styles.userAvatar} source={{ uri: data.user.image }} />
+                        <Image style={styles.userAvatar} source={data.user.image ? { uri: data.user.image } : no_avatar} />
                     </Pressable>
                     <View style={styles.info}>
                         <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>

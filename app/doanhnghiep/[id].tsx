@@ -104,7 +104,7 @@ const DoanhNghiepDetail = () => {
                             <Text style={styles.ten}>{data?.tenTiengViet}</Text>
                             <Text style={styles.text}>Địa chỉ: {data.diaChi}</Text>
                             <Text style={styles.text}>
-                                Điện thoại: {data.sdts?.[0]?.sdt} {data.sdts?.[1]?.sdt}
+                                Điện thoại: {data.sdt}
                             </Text>
                             <Text style={styles.text}>Email: {data.user?.email}</Text>
                             {data.website && <Text style={styles.text}>Website: {data.website}</Text>}
@@ -132,7 +132,7 @@ const DoanhNghiepDetail = () => {
                     {posts?.length === 0 && (
                         <Text style={{ fontSize: 12, color: 'white' }}>Doanh nghiệp chưa có bài viết nào</Text>
                     )}
-                    {posts.map(item => (
+                    {posts?.map(item => (
                         <Post data={item} key={item.id} />
                     ))}
                 </View>

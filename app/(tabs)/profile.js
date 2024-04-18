@@ -67,6 +67,7 @@ const Page = () => {
                                 onPress={() => router.push('sanpham')}
                                 renderIcon={() => <AntDesign name='staro' size={24} color={'black'} />}
                             />
+                            <SettingSectionItemSeperator />
                             <SettingSectionItem
                                 title={'Quản lý bài viết'}
                                 onPress={() => router.push('social/baiviet')}

@@ -5,7 +5,7 @@ import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
-import { AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
@@ -14,10 +14,9 @@ import { fetchMessages, sendMessage } from '@services/hoiDapServices'
 import { Conversation } from '@constants/HoiDap/HoiDapType'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
 //@ts-ignore
 import background from '@assets/backgrounds/hoidap.jpg'
+import BackgroundImage from '@components/View/BackgroundImage'
 const ChiTietHoiDap = () => {
     // id = chuyengia_id
     const { id } = useLocalSearchParams()
@@ -63,7 +62,7 @@ const ChiTietHoiDap = () => {
     return (
         <View style={styles.container}>
             <PageHeader tintColor='white' title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 24 }} />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage source={background} />
 
             {conversation?.tinNhans?.length !== 0 && (
                 <ScrollView showsVerticalScrollIndicator={false}>
