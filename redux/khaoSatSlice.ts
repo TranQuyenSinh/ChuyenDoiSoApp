@@ -44,6 +44,7 @@ export const { selectKhaoSat } = khaoSatSlice.actions
 
 export const fetchDanhSachKhaoSat = createAsyncThunk('fetchDanhSachKhaoSat', async (_, { rejectWithValue }) => {
     const data = await getKhaoSats()
+    console.log('===> data: ', data);
     return data
 })
 

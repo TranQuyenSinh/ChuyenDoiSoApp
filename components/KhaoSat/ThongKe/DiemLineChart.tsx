@@ -6,13 +6,11 @@ import { StyleSheet, Text, View } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 
 import { windowWidth } from '@utils/window'
-import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
-import { khaoSatStyles } from '../khaoSatStyles'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
-import Loading from '@components/StatusPage/Loading'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import { fetchDanhSachKhaoSat } from '@redux/khaoSatSlice'
+import { textStyles } from '@constants/Styles'
 
 const DiemLineChart = () => {
     const router = useRouter()
@@ -28,7 +26,7 @@ const DiemLineChart = () => {
     }, [isLoggedIn])
     useEffect(() => {
         if (khaoSats && khaoSats?.length !== 0) {
-            const items = khaoSats?.slice()?.reverse()
+            const items = khaoSats?.slice?.()?.reverse() || []
             setData(items)
         }
     }, [khaoSats])
@@ -66,7 +64,6 @@ const DiemLineChart = () => {
                     decimalPlaces: 0,
                 }}
                 onDataPointClick={({ index }) => {
-                    console.log('===> data[index]?.id: ', data[index]?.id)
                     const id = data[index].id
                     router.push(`/khaosat/${id}`)
                 }}
@@ -74,6 +71,16 @@ const DiemLineChart = () => {
                     borderRadius: 16,
                 }}
             />
+            <Text
+                style={[
+                    textStyles.title,
+                    {
+                        color: 'white',
+                        marginTop: 6, alignSelf: 'center', marginBottom: 0, marginHorizontal: 24, textAlign: 'center'
+                    },
+                ]}>
+                Điếm đánh giá mức độ CĐS của bạn qua từng phiếu khảo sát
+            </Text>
         </>
     )
 }

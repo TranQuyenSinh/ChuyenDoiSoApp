@@ -47,6 +47,7 @@ import { useEffect } from 'react'
 import BackgroundImage from '@components/View/BackgroundImage'
 import LinearGradient from 'react-native-linear-gradient'
 import { toast } from '@utils/toast'
+import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
 export default function TrangTin() {
     const router = useRouter()
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -208,19 +209,9 @@ export default function TrangTin() {
                 </View>
                 <View style={{ alignItems: 'center' }}>
                     <ThongKeCDSPieChart backgroundColor='#fff' />
-
-
                     <DiemLineChart />
-                    {khaoSats.length !== 0 && (
-                        <Text
-                            style={[
-                                textStyles.title,
-                                styles.title,
-                                { marginTop: 6, alignSelf: 'center', marginBottom: 0, marginHorizontal: 24, textAlign: 'center' },
-                            ]}>
-                            Điếm đánh giá mức độ CĐS của bạn qua từng phiếu khảo sát
-                        </Text>
-                    )}
+                    <RadarChart />
+
                 </View>
 
             </ScrollView>

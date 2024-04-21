@@ -1,6 +1,7 @@
 import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 import { MucDo } from './MucDoType'
 import { MoHinh } from './MoHinhType'
+import { KetQuaTruCot } from './KetQuaTruCot'
 
 export interface KhaoSat {
     id: number
@@ -13,4 +14,5 @@ export interface KhaoSat {
     tongDiem: number
     createdAt: string
     khaoSatCount?: number
+    ketQuaTruCots: KetQuaTruCot[]
 }

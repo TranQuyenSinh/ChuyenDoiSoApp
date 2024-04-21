@@ -6,7 +6,6 @@ import Loading from '@components/StatusPage/Loading'
 //@ts-ignore
 import Colors from '@constants/Colors'
 import { textStyles } from '@constants/Styles'
-import { MaterialIcons } from '@expo/vector-icons'
 import moment from 'moment'
 import Modal from '@components/View/Modal'
 import useToggle from '@hooks/useToggle'
@@ -17,6 +16,8 @@ import { Conversation } from '@constants/HoiDap/HoiDapType'
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 //@ts-ignore
 import background from '@assets/backgrounds/hoidap.jpg'
+import BackgroundImage from '@components/View/BackgroundImage'
+import { AntDesign } from '@expo/vector-icons'
 const ChiTietHoiDap = () => {
     // id = doanhnghiep_id
     const { id } = useLocalSearchParams()
@@ -30,6 +31,9 @@ const ChiTietHoiDap = () => {
     const fetchData = async () => {
         setLoading(true)
         const data = await fetchMessagesChuyenGia(+id)
+        if (data) {
+            console.log('===> data?.[1]: ', data.tinNhans?.[1]);
+        }
         setConversation(data)
         setLoading(false)
     }
@@ -61,8 +65,8 @@ const ChiTietHoiDap = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader tintColor='white' title={'Giải đáp doanh nghiệp'} style={{ marginBottom: 12 }} />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <PageHeader tintColor='white' title={'Trả lời tin nhắn'} style={{ marginBottom: 12 }} />
+            <BackgroundImage source={background} />
 
             {conversation?.tinNhans.length !== 0 && (
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -85,6 +89,16 @@ const ChiTietHoiDap = () => {
                     ))}
                 </ScrollView>
             )}
+
+            <Pressable
+                android_ripple={{ color: 'grey' }}
+                onPress={() => {
+                    toggle(true)
+                }}
+                style={floatStyles.container}>
+                <AntDesign name='pluscircle' size={24} color={Colors.default} />
+                <Text>Thêm tin nhắn</Text>
+            </Pressable>
 
             {!loading && conversation?.tinNhans?.length === 0 && (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
@@ -156,5 +170,19 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         textAlignVertical: 'top',
         padding: 8,
+    },
+})
+
+const floatStyles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        flexDirection: 'row',
+        padding: 8,
+        gap: 4,
+        alignItems: 'center',
     },
 })

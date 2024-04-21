@@ -94,7 +94,7 @@ const DoanhNghiepInfo = () => {
                 keyboardShouldPersistTaps='handled'
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ padding: 16, paddingBottom: 40 }}>
+                contentContainerStyle={{ padding: 16, paddingBottom: 50 }}>
                 {(status === 'loading') && <Loading />}
                 {status === 'error' && <TryAgain onPress={() => dispatch(fetchDoanhNghiepInfo())} />}
                 {status === 'success' && (

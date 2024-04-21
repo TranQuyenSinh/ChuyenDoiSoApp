@@ -12,6 +12,8 @@ import KetQuaKhaoSat from '@components/KhaoSat/KetQuaKhaoSat'
 import ChuyenGiaDanhGia from '@components/KhaoSat/ChuyenGiaDanhGia'
 //@ts-ignore
 import background from '@assets/images/test2.jpeg'
+import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
+import BackgroundImage from '@components/View/BackgroundImage'
 const KhaoSatDetail = () => {
     const navigation = useNavigation()
     const { id } = useLocalSearchParams()
@@ -40,7 +42,7 @@ const KhaoSatDetail = () => {
                 title={`Kết quả khảo sát #${selectedKhaoSat?.id}`}
                 style={{ marginBottom: 12 }}
             />
-            <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+            <BackgroundImage blurRadius={10} source={background} />
             <ScrollView contentContainerStyle={{ paddingBottom: 12 }} showsVerticalScrollIndicator={false}>
                 {selectedKhaoSat?.mucDo && selectedKhaoSat.tongDiem && (
                     <KetQuaKhaoSat mucDo={selectedKhaoSat.mucDo} tongDiem={selectedKhaoSat.tongDiem} />
@@ -52,6 +54,7 @@ const KhaoSatDetail = () => {
                     deXuat={selectedKhaoSat?.chuyenGiaDeXuat}
                     danhGiaAt={selectedKhaoSat?.chuyenGiaDanhGiaAt}
                 />
+                <RadarChart data={selectedKhaoSat} />
             </ScrollView>
         </View>
     )
