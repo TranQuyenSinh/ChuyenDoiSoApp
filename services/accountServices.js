@@ -1,6 +1,17 @@
 import { authAxios, thongtinAuthAxios } from '@utils/axios'
 import { toast } from '@utils/toast'
 
+export const saveDeviceToken = async deviceToken => {
+    try {
+        await authAxios.post('taikhoan/savedevicetoken', { deviceToken })
+        return true
+    } catch (error) {
+        console.log('===> error: ', error)
+        return false
+    }
+
+}
+
 export const doiMatKhau = async (currentPassword, newPassword) => {
     try {
         const result = await authAxios.post('taikhoan/changepassword', { currentPassword, newPassword })

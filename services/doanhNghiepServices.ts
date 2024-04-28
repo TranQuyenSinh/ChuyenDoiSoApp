@@ -99,7 +99,7 @@ export const getThongTinDN = async () => {
         const { data } = await authAxios.get<DoanhNghiep>('doanhnghiep/profile')
         return data
     } catch (error) {
-        console.log('===> error: ', error)
+        console.log('===> Lỗi lấy profile doanh nghiệp: ', error)
         throw error
     }
 }

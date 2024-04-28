@@ -3,21 +3,31 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { authAxios, axios } from '@utils/axios'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
 import { toast } from '@utils/toast'
+import { RootState } from './store'
+type SliceState = {
+    loading: boolean,
 
+    isLoggedIn: boolean,
+    userProfile?: any,
+    accessToken?: string,
+
+    OAuthLoading: 'idle' | 'pending',
+    currentRequestId: any,
+}
+
+const initialState: SliceState = {
+    loading: false,
+    isLoggedIn: false,
+    userProfile: undefined,
+    accessToken: undefined,
+    OAuthLoading: 'idle',
+    currentRequestId: undefined,
+}
 const userSlice = createSlice({
     name: 'user',
-    initialState: {
-        loading: false,
-
-        isLoggedIn: false,
-        userProfile: undefined,
-        accessToken: 'undefined',
-
-        OAuthLoading: 'idle',
-        currentRequestId: undefined,
-    },
+    initialState,
     reducers: {
-        logout: (state, action) => {
+        logout: (state) => {
             state.isLoggedIn = false
             state.userProfile = undefined
             state.accessToken = undefined
@@ -40,7 +50,7 @@ const userSlice = createSlice({
                 state.loading = false
                 state.isLoggedIn = false
                 state.userProfile = null
-                state.accessToken = null
+                state.accessToken = undefined
             })
             // OAuth
             .addCase(loginWithOAuth.pending, (state, action) => {
@@ -77,7 +87,7 @@ const userSlice = createSlice({
     },
 })
 
-export const loginWithPassword = createAsyncThunk('user/login', async ({ email, password }) => {
+export const loginWithPassword = createAsyncThunk('user/login', async ({ email, password }: any) => {
     try {
         let { data } = await axios.post('doanhnghiep/login', { email, password })
         const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
@@ -92,17 +102,14 @@ export const loginWithPassword = createAsyncThunk('user/login', async ({ email, 
         console.log('===> login password server thành công')
         return data
     } catch (err) {
-        let error = err.response?.data?.error
-        if (error) toast(error)
-        console.log('===> error: ')
-        return Promise.reject({ error })
+        return Promise.reject({ err })
     }
 })
 export const loginWithOAuth = createAsyncThunk(
     'user/login-oauth',
-    async (userInfo, { getState, requestId, rejectWithValue, dispatch }) => {
+    async (userInfo: any, { getState, requestId, dispatch }) => {
         try {
-            const { currentRequestId, OAuthLoading } = getState().user
+            const { currentRequestId, OAuthLoading } = (getState() as RootState).user
             if (OAuthLoading !== 'pending' || currentRequestId !== requestId) {
                 return
             }
@@ -120,10 +127,8 @@ export const loginWithOAuth = createAsyncThunk(
             console.log('===> login no password server thành công')
             return data
         } catch (err) {
-            let error = err.response?.data?.error
-            if (error) toast(error)
             dispatch(userSlice.actions.logout())
-            return Promise.reject({ error })
+            return Promise.reject({ err })
         }
     }
 )

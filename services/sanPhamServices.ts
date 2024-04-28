@@ -33,7 +33,7 @@ export const createSanPham = async (name: string, price: string, description: st
         })
         return true
     } catch (error) {
-        console.log('===> Lỗi tạo sản phẩm: ', error)
+        console.log('===> Lỗi tạo sản phẩm: ', error.response)
         return false
     }
 }

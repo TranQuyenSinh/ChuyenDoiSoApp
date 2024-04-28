@@ -38,7 +38,7 @@ function TinTucCarousel2() {
                 style={{
                     width: PAGE_WIDTH,
                     height: 125,
-                    marginTop: 12,
+                    marginBottom: 20,
                 }}
                 loop
                 pagingEnabled={true}

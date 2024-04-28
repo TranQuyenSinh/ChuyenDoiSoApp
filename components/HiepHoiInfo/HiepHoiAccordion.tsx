@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Accordion from '@components/View/Accordion'
 import { HiepHoi } from '@constants/HiepHoiDoanhNghiep/HiepHoiDoanhNghiepTypes'
+//@ts-ignore
+import no_avatar from '@assets/images/no_image.png'
 
 type Props = {
     hiepHoiItem: HiepHoi
@@ -10,6 +12,8 @@ const HiepHoiAccordion = ({ hiepHoiItem }: Props) => {
     return (
         <Accordion title={hiepHoiItem.tenTiengViet}>
             <View style={styles.accordionContainer}>
+                <Image source={hiepHoiItem.hinhAnh ? { uri: hiepHoiItem.hinhAnh } : no_avatar} style={styles.logo} />
+
                 <View style={styles.itemContainer}>
                     <Text style={styles.itemTitle}>
                         Tên tiếng anh: <Text style={styles.itemText}>{hiepHoiItem.tenTiengAnh}</Text>
@@ -60,6 +64,14 @@ const HiepHoiAccordion = ({ hiepHoiItem }: Props) => {
 export default HiepHoiAccordion
 
 const styles = StyleSheet.create({
+    logo: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        alignSelf: 'center',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: 'grey',
+    },
     accordionContainer: {
         paddingVertical: 16,
         paddingHorizontal: 12,

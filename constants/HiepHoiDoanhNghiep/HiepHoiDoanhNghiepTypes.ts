@@ -6,6 +6,7 @@ export interface HiepHoi {
     diaChi?: string
     moTa?: string
     daiDien: DaiDienHiepHoi
+    hinhAnh?: string
 }
 
 export interface DaiDienHiepHoi {

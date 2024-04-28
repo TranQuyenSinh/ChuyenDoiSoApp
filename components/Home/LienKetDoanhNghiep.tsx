@@ -32,10 +32,7 @@ const LienKetDoanhNghiep = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
             {data?.map(item => (
                 <View key={item.id} style={styles.container}>
-                    <Pressable
-                        onPress={() => handlePress(item)}
-                        android_ripple={{ color: '#140b0b' }}
-                        style={styles.iconContainer}>
+                    <Pressable onPress={() => handlePress(item)} style={styles.iconContainer}>
                         <Image source={item.user?.image ? { uri: item.user.image } : no_image} style={styles.icon} />
                     </Pressable>
                     <Text numberOfLines={3} style={styles.text}>
@@ -70,6 +67,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: 60,
         height: 60,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: 'grey',
         resizeMode: 'cover',
     },
     text: {
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         flexShrink: 0,
         textAlign: 'center',
-        color: 'white',
         fontWeight: '500',
     },
 })

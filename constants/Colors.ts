@@ -14,6 +14,7 @@ export default {
     placeHolder: '#A0A3BD',
     secondaryButton: '#EEF1F4',
     buttonText: '#667080',
+    blue: '#0000cd',
 
     background: {
         default: '#F0F0F0',

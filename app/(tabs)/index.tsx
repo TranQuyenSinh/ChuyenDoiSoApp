@@ -1,18 +1,31 @@
-import { useFocusEffect, useRouter } from 'expo-router'
+import { router, useRouter } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, ScrollView, Dimensions } from 'react-native'
 
 import Colors from '@constants/Colors'
 import { RootState } from '@redux/store'
 import { textStyles } from '@constants/Styles'
-import { FontAwesome } from '@expo/vector-icons'
+
+//@ts-ignore
+import nhucau from '@assets/icons/home/nhucau.png'
+//@ts-ignore
+import chuyengia from '@assets/icons/home/chuyengia.png'
+//@ts-ignore
+import tintuc from '@assets/icons/home/tintuc.png'
+//@ts-ignore
+import video from '@assets/icons/home/video.png'
+//@ts-ignore
+import document from '@assets/icons/home/document.png'
+//@ts-ignore
+import hoidap from '@assets/icons/home/hoidap.png'
+
+//@ts-ignore
+import no_avatar from '@assets/icons/user.jpg'
+
 // @ts-ignore
 import news from '@assets/icons/news.png'
-// @ts-ignore
-import video from '@assets/icons/video.png'
-// @ts-ignore
-import document from '@assets/icons/document.png'
+
 // @ts-ignore
 import survey from '@assets/icons/survey.png'
 // @ts-ignore
@@ -27,208 +40,237 @@ import chatbot from '@assets/icons/chatbot.png'
 import product from '@assets/icons/product.png'
 // @ts-ignore
 import ict from '@assets/images/logo_ict.jpg'
-// @ts-ignore
-import home from '@assets/images/test2.jpeg'
-// @ts-ignore
-import home2 from '../../assets/backgrounds/default.jpg'
-// @ts-ignore
-import story from '@assets/icons/story.png'
-// @ts-ignore
-import no_avatar from '@assets/icons/user.jpg'
 import { StatusBar } from 'expo-status-bar'
 import { screenWidth } from '@utils/window'
 import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
 import Constants from '@constants/Constants'
-import IconButton from '@components/View/IconButton'
 import LienKetDoanhNghiep from '@components/Home/LienKetDoanhNghiep'
-import TinTucCarousel2 from '@components/TinTuc/Carousel/TinTucCarousel2'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
-import { useEffect } from 'react'
-import BackgroundImage from '@components/View/BackgroundImage'
+import { ReactNode, useEffect } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
-import { toast } from '@utils/toast'
-import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
-export default function TrangTin() {
-    const router = useRouter()
-    const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
-    const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
-    return (
-        <LinearGradient colors={['#32acff', '#94d3fe']} style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
+import { usePushNotifications } from '@hooks/usePushNotifications'
+import { saveDeviceToken } from '@services/accountServices'
+import ThongBaoIcon from '@components/Home/ThongBaoIcon'
+import TopSumary from '@components/Home/TopSumary'
+import { AntDesign, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 
-                <SafeAreaView style={styles.topContainer}>
-                    {isLoggedIn && userProfile && <>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                            <Image style={styles.avatar} source={userProfile?.image ? { uri: userProfile?.image } : no_avatar} />
-                            <View>
-                                <Text style={{ color: 'white' }}>Xin chào</Text>
-                                <Text style={styles.topText}>{userProfile?.name}</Text>
+export default function TrangTin() {
+    const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
+    const { registerForPushNotificationsAsync } = usePushNotifications()
+    useEffect(() => {
+        ;(async () => {
+            if (isLoggedIn) {
+                const token = await registerForPushNotificationsAsync()
+                if (token && token.data) {
+                    await saveDeviceToken(token.data)
+                }
+            }
+        })()
+    }, [isLoggedIn])
+
+    return (
+        <View style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
+                <LinearGradient colors={['#32acff', '#94d3fe']} style={styles.container}>
+                    {/* Top header */}
+                    <SafeAreaView style={styles.topContainer}>
+                        {isLoggedIn && userProfile && (
+                            <>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                                    <Image
+                                        style={styles.avatar}
+                                        defaultSource={no_avatar}
+                                        source={userProfile?.image ? { uri: userProfile?.image } : no_avatar}
+                                    />
+                                    <View>
+                                        <Text style={{ color: 'white' }}>Xin chào</Text>
+                                        <Text style={styles.topText}>{userProfile?.name}</Text>
+                                    </View>
+                                </View>
+                            </>
+                        )}
+                        {!isLoggedIn && (
+                            <Pressable onPress={() => router.push('/auth/login')}>
+                                <Text style={[styles.topText, {}]}>Đăng nhập</Text>
+                            </Pressable>
+                        )}
+                        <ThongBaoIcon />
+                    </SafeAreaView>
+                    {/* End top header */}
+                    <TopSumary />
+                </LinearGradient>
+                <View style={styles.body}>
+                    <View style={styles.contentContainer}>
+                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 25, paddingVertical: 12 }}>
+                            <HomeButtonIcon
+                                text='Nhu cầu'
+                                imageSource={nhucau}
+                                onPress={() => router.push('/news')}
+                                backgroundColor={['#2eb4fe', '#20a0f9']}
+                            />
+                            <HomeButtonIcon
+                                text='Chuyên gia'
+                                imageSource={chuyengia}
+                                onPress={() => router.push('/chuyengia')}
+                                backgroundColor={['#3078ff', '#4385f6']}
+                            />
+                            <HomeButtonIcon
+                                text='Hỏi đáp'
+                                imageSource={hoidap}
+                                onPress={() => router.push('/chuyengia/hoidap')}
+                                backgroundColor={['#03bf5e', '#00b157']}
+                            />
+                        </ScrollView>
+                    </View>
+                    <View style={styles.contentContainer}>
+                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Tin tức - Kiến thức</Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 16, paddingVertical: 12 }}>
+                            <HomeCard
+                                text='Tin tức'
+                                imageSource={tintuc}
+                                onPress={() => router.push('/news')}
+                                backgroundColor={['#3078ff', '#4385f6']}
+                            />
+                            <HomeCard
+                                text='Video'
+                                imageSource={video}
+                                onPress={() => router.push('/news/video')}
+                                backgroundColor={['#2eb4fe', '#20a0f9']}
+                            />
+                            <HomeCard
+                                text='Văn bản'
+                                imageSource={document}
+                                onPress={() => router.push('/thuvien')}
+                                backgroundColor={['#03bf5e', '#00b157']}
+                            />
+                        </ScrollView>
+                    </View>
+                    <View style={styles.contentContainer}>
+                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Khám phá</Text>
+                        <View style={{ gap: 16, paddingVertical: 12 }}>
+                            <View style={exploreStyles.row}>
+                                <ExploreCard
+                                    icon={<Ionicons name='chatbox-outline' size={24} color={Colors.default} />}
+                                    text='Chat bot tư vấn'
+                                    onPress={() => router.push('/web/chatbot')}
+                                />
+                                <ExploreCard
+                                    icon={<Ionicons name='fast-food-outline' size={24} color={Colors.default} />}
+                                    text='Đặc sản An Giang'
+                                    onPress={() => router.push('/web/dacsan')}
+                                />
+                            </View>
+                            <View style={exploreStyles.row}>
+                                <ExploreCard
+                                    icon={
+                                        <MaterialCommunityIcons
+                                            name='format-list-bulleted-square'
+                                            size={24}
+                                            color={Colors.default}
+                                        />
+                                    }
+                                    text='Khảo sát trực tuyến'
+                                    onPress={() => router.push('/web/khaosat')}
+                                />
+                                <ExploreCard
+                                    icon={<AntDesign name='customerservice' size={24} color={Colors.default} />}
+                                    text='Trung tâm tin học DHAG'
+                                    onPress={() => router.push('/trungtam')}
+                                />
                             </View>
                         </View>
-                    </>}
-                    {!isLoggedIn && (
-                        <Pressable onPress={() => router.push('/auth/login')}>
-                            <Text style={[styles.topText, {}]}>Đăng nhập</Text>
-                        </Pressable>
-                    )}
-                    <IconButton onPress={() => toast("Tính năng đang phát triển")}>
-                        <FontAwesome name='bell' size={24} color='white' />
-                    </IconButton>
-                </SafeAreaView>
-                <TinTucCarousel2 />
-                <View style={styles.contentContainer}>
-                    <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Thông tin - Tin tức</Text>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/news')}
-                                android_ripple={{ color: 'grey' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={news} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Tin tức</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/news/video')}
-                                android_ripple={{ color: 'grey' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={video} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Video</Text>
-                        </View>
-                        {/* <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/news/video')}
-                                android_ripple={{ color: 'grey' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={story} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Câu chuyện</Text>
-                        </View> */}
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/thuvien')}
-                                android_ripple={{ color: 'grey' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={document} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Thư viện</Text>
-                        </View>
-                    </ScrollView>
-                </View>
-                <View style={styles.contentContainer}>
-                    <Text style={[textStyles.title, styles.title]}>Đánh giá doanh nghiệp</Text>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/chuyengia')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={exper} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Chuyên gia</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() =>
-                                    router.push(
-                                        userProfile?.vaitro?.[0]?.id === Constants.Role.ChuyenGia
-                                            ? '/chuyengia/inbox'
-                                            : '/chuyengia/hoidap'
-                                    )
-                                }
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={chat} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Hỏi đáp</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/web/khaosat')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={survey} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Đánh giá</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/khaosat')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={result} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Kết quả</Text>
-                        </View>
-                    </ScrollView>
-                </View>
-                <View style={styles.contentContainer}>
-                    <Text style={[textStyles.title, styles.title]}>Các dịch vụ khác</Text>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/web/chatbot')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={chatbot} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Chatbot</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/web/dacsan')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={product} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Đặc sản AG</Text>
-                        </View>
-                        <View style={itemStyles.container}>
-                            <Pressable
-                                onPress={() => router.push('/trungtam')}
-                                android_ripple={{ color: '#140b0b' }}
-                                style={itemStyles.iconContainer}>
-                                <Image source={ict} style={itemStyles.icon} />
-                            </Pressable>
-                            <Text style={itemStyles.text}>Trung tâm tin học</Text>
-                        </View>
-                    </ScrollView>
-                </View>
+                    </View>
 
-                {/* LIÊN KẾT DOANH NGHIỆP */}
-                <View style={[styles.contentContainer, { marginBottom: 24 }]}>
-                    <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
-                    <LienKetDoanhNghiep />
+                    {/* LIÊN KẾT DOANH NGHIỆP */}
+                    <View style={[styles.contentContainer]}>
+                        <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
+                        <LienKetDoanhNghiep />
+                    </View>
                 </View>
-
-                {/* Thống kê */}
-                <View style={[styles.contentContainer, { marginBottom: 12 }]}>
-                    <Text style={[textStyles.title, styles.title]}>Biểu đồ thống kê</Text>
-                </View>
-                <View style={{ alignItems: 'center' }}>
-                    <ThongKeCDSPieChart backgroundColor='#fff' />
-                    <DiemLineChart />
-                    <RadarChart />
-
-                </View>
-
             </ScrollView>
-            <StatusBar style='light' />
-        </LinearGradient>
+            <StatusBar style='light' backgroundColor='#365ef6' />
+        </View>
+    )
+}
+
+interface HomeButtonIconProps {
+    imageSource: any
+    text: string
+    backgroundColor: string[]
+    onPress: () => void
+}
+
+interface HomeCardProps {
+    imageSource: any
+    text: string
+    backgroundColor: string[]
+    onPress: () => void
+}
+
+interface ExploreCardProps {
+    icon: ReactNode
+    text: string
+    onPress: () => void
+}
+
+const HomeButtonIcon = (props: HomeButtonIconProps) => {
+    const { imageSource, onPress, text, backgroundColor } = props
+    return (
+        <Pressable onPress={onPress} style={itemStyles.container}>
+            <LinearGradient colors={backgroundColor} style={itemStyles.iconContainer}>
+                <Image source={imageSource} style={itemStyles.icon} />
+            </LinearGradient>
+            <Text style={itemStyles.text}>{text}</Text>
+        </Pressable>
+    )
+}
+
+const HomeCard = (props: HomeCardProps) => {
+    const { imageSource, onPress, text, backgroundColor } = props
+    return (
+        <Pressable onPress={onPress} style={cardStyles.container}>
+            <LinearGradient colors={backgroundColor} style={cardStyles.iconContainer}>
+                <Text numberOfLines={2} style={cardStyles.text}>
+                    {text}
+                </Text>
+                <Image source={imageSource} style={cardStyles.icon} />
+            </LinearGradient>
+        </Pressable>
+    )
+}
+
+const ExploreCard = (props: ExploreCardProps) => {
+    const { icon, onPress, text } = props
+    return (
+        <Pressable onPress={onPress} style={exploreStyles.container}>
+            {icon}
+            <Text numberOfLines={2} style={exploreStyles.text}>
+                {text}
+            </Text>
+        </Pressable>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background.default,
+        backgroundColor: 'white',
+    },
+    body: {
+        backgroundColor: 'white',
+        paddingVertical: 24,
+        // paddingHorizontal: 8,
     },
     title: {
-        color: 'white',
-        marginBottom: 0,
-        marginTop: 24,
+        color: '#35404b',
+        fontWeight: 'bold',
     },
     background: {
         width: '100%',
@@ -259,6 +301,7 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         marginHorizontal: 16,
+        marginBottom: 16,
     },
     btnContainer: {
         // flex: 1,
@@ -290,22 +333,16 @@ const itemStyles = StyleSheet.create({
     container: {
         flexShrink: 0,
         alignItems: 'center',
-        width: screenWidth / 5,
         gap: 4,
-        padding: 6,
         overflow: 'hidden',
-        borderRadius: 12,
     },
     iconContainer: {
-        borderRadius: 12,
-        padding: 6,
+        width: 50,
+        height: 50,
+        borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
-        backgroundColor: 'white',
-        elevation: 10,
-        width: 50,
-        height: 50,
     },
     icon: {
         width: 30,
@@ -316,7 +353,57 @@ const itemStyles = StyleSheet.create({
         fontSize: 14,
         flexShrink: 0,
         textAlign: 'center',
+        color: '#393f46',
+    },
+})
+
+const cardStyles = StyleSheet.create({
+    container: {
+        width: 130,
+        borderRadius: 16,
+        overflow: 'hidden',
+    },
+    iconContainer: {
+        justifyContent: 'space-between',
+    },
+    icon: {
+        width: '80%',
+        height: 130,
+        resizeMode: 'contain',
+        alignSelf: 'flex-end',
+    },
+    text: {
         color: 'white',
-        // flex: 1,
+        fontWeight: 'bold',
+        fontSize: 18,
+        paddingVertical: 18,
+        paddingHorizontal: 16,
+    },
+})
+
+const exploreStyles = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+        gap: 16,
+        width: '100%',
+        flex: 1,
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f8fd',
+        flexDirection: 'row',
+        gap: 8,
+        alignItems: 'center',
+        padding: 16,
+        borderRadius: 12,
+    },
+    icon: {
+        width: 50,
+        height: 50,
+        resizeMode: 'contain',
+    },
+    text: {
+        fontSize: 16,
+        flexShrink: 1,
     },
 })

@@ -27,7 +27,8 @@
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.tranquyensinh.ChuyenDoiSoApp"
+      "package": "com.tranquyensinh.ChuyenDoiSoApp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -51,8 +52,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "cbf87da9-5cc3-48be-b19a-8e32ff48475a"
+        "projectId": "2bb71fc9-3114-4b9c-bcef-2819a5237711"
       }
-    }
+    },
+    "owner": "tqsinh"
   }
 }

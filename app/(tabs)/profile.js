@@ -74,6 +74,23 @@ const Page = () => {
                                 renderIcon={() => <Feather name="edit" size={24} color="black" />}
 
                             />
+                            <SettingSectionItemSeperator />
+                            <SettingSectionItem
+                                title={'Lịch sử khảo sát'}
+                                onPress={() => router.push('/khaosat')}
+                                renderIcon={() => <MaterialCommunityIcons name="file-document-edit-outline" size={24} color="black" />}
+
+                            />
+                        </SettingSection>
+                    )}
+                    {userProfile?.vaitro?.[0]?.id === Constants.Role.ChuyenGia && (
+                        <SettingSection title={'Chuyên gia'}>
+                            <SettingSectionItem
+                                title={'Quản lý bài viết'}
+                                onPress={() => router.push('social/baiviet')}
+                                renderIcon={() => <Feather name="edit" size={24} color="black" />}
+
+                            />
                         </SettingSection>
                     )}
                     <SettingSection title={'Tài khoản'}>

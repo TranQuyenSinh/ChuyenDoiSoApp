@@ -7,6 +7,7 @@ import dangKySlice from './dangKySlice'
 import doanhNghiepSlice from './doanhNghiepSlice'
 import khaoSatSlice from './khaoSatSlice'
 import trungTamSlice from './trungTamSlice'
+import thongBaoSlice from './thongBaoSlice'
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         doanhNghiep: doanhNghiepSlice.reducer,
         khaoSat: khaoSatSlice.reducer,
         trungTam: trungTamSlice.reducer,
+        thongBao: thongBaoSlice.reducer,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

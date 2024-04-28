@@ -22,7 +22,6 @@ const Post = ({ data }: PostProps) => {
 
     useEffect(() => {
         if (data) {
-            console.log('===> ', data)
             setIsLike(data.isLike)
             setTotalLike(data.luotThich)
         }
@@ -71,6 +70,8 @@ const Post = ({ data }: PostProps) => {
                 </View>
 
                 <Text style={styles.content} >
+                    {data.danhMucs?.map(item => <Text key={item.id} style={styles.tag}>#{item.name} </Text>)}
+                    {'\n'}
                     {data.noiDung}
                 </Text>
             </View>
@@ -156,6 +157,10 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 50,
         resizeMode: 'contain',
+    },
+    tag: {
+        color: Colors.blue,
+        fontSize: 14,
     },
     info: {
         gap: 3,

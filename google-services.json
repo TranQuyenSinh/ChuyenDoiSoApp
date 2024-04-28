@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "822949521889",
+    "project_id": "chuyendoisoapp",
+    "storage_bucket": "chuyendoisoapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822949521889:android:d5abec6bb3beca66e48aa0",
+        "android_client_info": {
+          "package_name": "com.tranquyensinh.ChuyenDoiSoApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhwLa5qL1Ax_rKrqvE4-g6sW4QLbYAi88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

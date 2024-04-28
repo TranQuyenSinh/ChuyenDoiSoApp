@@ -22,6 +22,16 @@ export const getBaiVietsByDoanhNghiep = async (id: number) => {
     }
 }
 
+export const getBaiVietsByUser = async (id: number) => {
+    try {
+        const { data } = await authAxios.get<BaiViet[]>(`baiviet/user/${id}`)
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy bài viết của user: ', error)
+        return []
+    }
+}
+
 export const getBaiViet = async (id: number) => {
     try {
         const { data } = await authAxios.get<BaiViet>(`baiviet/${id}/`)

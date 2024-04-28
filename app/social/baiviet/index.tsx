@@ -18,7 +18,7 @@ import { useFocusEffect } from 'expo-router'
 import BackgroundImage from '@components/View/BackgroundImage'
 import { toast } from '@utils/toast'
 import { BaiViet } from '@constants/DienDan/DienDanTypes'
-import { deleteBaiViet, getBaiVietsByDoanhNghiep } from '@services/dienDanServices'
+import { deleteBaiViet, getBaiVietsByDoanhNghiep, getBaiVietsByUser } from '@services/dienDanServices'
 import Post from '@components/DienDan/Post'
 import IconButton from '@components/View/IconButton'
 import { Ionicons } from '@expo/vector-icons'
@@ -28,19 +28,19 @@ const QuanLyBaiViet = () => {
     const navigation = useNavigation()
     const [posts, setPosts] = useState<BaiViet[]>([])
     const [loading, setLoading] = useState(false)
-    const { doanhNghiep } = useSelector((state: RootState) => state.doanhNghiep)
+    const { userProfile } = useSelector((state: RootState) => state.user)
 
     const fetchData = async (id: number) => {
         setLoading(true)
-        const data = await getBaiVietsByDoanhNghiep(id)
+        const data = await getBaiVietsByUser(id)
         setPosts(data)
         setLoading(false)
     }
 
     useEffect(() => {
-        if (doanhNghiep?.id)
-            fetchData(doanhNghiep?.id)
-    }, [doanhNghiep])
+        if (userProfile?.id)
+            fetchData(userProfile?.id)
+    }, [userProfile])
 
     const handleDelete = async (item: BaiViet) => {
         Alert.alert(

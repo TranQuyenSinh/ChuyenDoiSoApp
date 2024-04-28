@@ -42,19 +42,20 @@ const index = () => {
         Alert.alert(
             'Lưu ý',
             'Bạn có chắc muốn xóa sản phẩm này?',
-            [{
-                text: 'Đồng ý', onPress: async () => {
-                    const result = await deleteSanPham(item.id)
-                    if (result) {
-                        toast('Xóa sản phẩm thành công')
-                        setProducts(products.filter(p => p.id !== item.id))
+            [
+                {
+                    text: 'Hủy bỏ',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Đồng ý', onPress: async () => {
+                        const result = await deleteSanPham(item.id)
+                        if (result) {
+                            toast('Xóa sản phẩm thành công')
+                            setProducts(products.filter(p => p.id !== item.id))
+                        }
                     }
-                }
-            },
-            {
-                text: 'Hủy bỏ',
-                style: 'cancel'
-            }
+                },
             ],
             {
                 cancelable: true,
