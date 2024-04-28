@@ -1,4 +1,16 @@
-import { FlatList, Image, ImageBackground, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import {
+    FlatList,
+    Image,
+    ImageBackground,
+    Pressable,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -37,11 +49,9 @@ const DoanhNghiepPage = () => {
         setFilteredData(data)
     }
 
-    useFocusEffect(
-        useCallback(() => {
-            fetchData()
-        }, [])
-    )
+    useEffect(() => {
+        fetchData()
+    }, [])
     return (
         // <StatusBar barStyle='light-content' />
         <View style={styles.container}>
@@ -54,7 +64,12 @@ const DoanhNghiepPage = () => {
                         </View>
                         <View style={searchStyles.container}>
                             <Ionicons name='search-outline' color={Colors.bodyText} size={20} />
-                            <TextInput value={search} onChangeText={t => setSearch(t)} placeholder='Tìm kiếm doanh nghiệp' style={searchStyles.input} />
+                            <TextInput
+                                value={search}
+                                onChangeText={t => setSearch(t)}
+                                placeholder='Tìm kiếm doanh nghiệp'
+                                style={searchStyles.input}
+                            />
                         </View>
                     </SafeAreaView>
                 </TouchableWithoutFeedback>
@@ -64,15 +79,19 @@ const DoanhNghiepPage = () => {
                     showsVerticalScrollIndicator={false}
                     data={filteredData}
                     numColumns={2}
-                    keyExtractor={(item, index) => item.id + ""}
-                    renderItem={({ item }) => <Pressable onPress={() => router.push(`/doanhnghiep/${item.id}`)} style={cardStyles.container}>
-                        <Image source={item.user?.image ? { uri: item.user.image } : no_image} style={cardStyles.logo} />
-                        <Text style={cardStyles.name}>{item.tenTiengViet}</Text>
-                    </Pressable>} />
+                    keyExtractor={(item, index) => item.id + ''}
+                    renderItem={({ item }) => (
+                        <Pressable onPress={() => router.push(`/doanhnghiep/${item.id}`)} style={cardStyles.container}>
+                            <Image
+                                source={item.user?.image ? { uri: item.user.image } : no_image}
+                                style={cardStyles.logo}
+                            />
+                            <Text style={cardStyles.name}>{item.tenTiengViet}</Text>
+                        </Pressable>
+                    )}
+                />
             </View>
         </View>
-
-
     )
 }
 
@@ -83,22 +102,20 @@ const cardStyles = StyleSheet.create({
         backgroundColor: '#f8f8f8',
         flex: 0.5,
         padding: 12,
-        margin: 6
+        margin: 6,
     },
     logo: {
         width: '100%',
         height: 100,
-
     },
     name: {
         fontSize: 12,
         textAlign: 'center',
         fontWeight: '500',
         textTransform: 'uppercase',
-        marginTop: 8
+        marginTop: 8,
     },
 })
-
 
 const contentStyles = StyleSheet.create({
     container: {
@@ -106,7 +123,6 @@ const contentStyles = StyleSheet.create({
         backgroundColor: 'white',
         marginHorizontal: 12,
     },
-
 })
 const searchStyles = StyleSheet.create({
     container: {
@@ -118,13 +134,13 @@ const searchStyles = StyleSheet.create({
         borderRadius: 12,
         elevation: 12,
         gap: 8,
-        marginBottom: 18
+        marginBottom: 18,
     },
     input: {
         color: Colors.bodyText,
         fontSize: 16,
-        flex: 1
-    }
+        flex: 1,
+    },
 })
 
 const styles = StyleSheet.create({
@@ -146,8 +162,5 @@ const styles = StyleSheet.create({
     subTitle: {
         color: 'white',
         fontSize: 16,
-
-    }
+    },
 })
-
-

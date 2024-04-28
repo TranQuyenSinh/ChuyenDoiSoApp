@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react'
 
 import { StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, View, Image, Pressable, ScrollView } from 'react-native'
 
 import Colors from '@constants/Colors'
-import Modal from '@components/View/Modal'
 import Loading from '@components/StatusPage/Loading'
 import { getLinhVucs } from '@services/tinTucServices'
-import TabPageHeader from '@components/View/TabPageHeader'
 import { getChuyenGias } from '@services/chuyenGiaServices'
 import no_avatar from '@assets/icons/user.jpg'
 import { Ionicons } from '@expo/vector-icons'

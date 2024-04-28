@@ -8,18 +8,28 @@ import { LineChart } from 'react-native-chart-kit'
 import { windowWidth } from '@utils/window'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
+import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 
-const DiemLineChart = () => {
+interface DiemLineChartProps {
+    khaoSatsInput?: KhaoSat[]
+    width?: number
+}
+
+const DiemLineChart = (props: DiemLineChartProps) => {
+    const { khaoSatsInput, width } = props
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
 
     useEffect(() => {
-        if (khaoSats && khaoSats?.length !== 0) {
+        if (khaoSatsInput && khaoSatsInput.length !== 0) {
+            const items = khaoSatsInput?.slice?.()?.reverse() || []
+            setData(items)
+        } else if (khaoSats && khaoSats?.length !== 0) {
             const items = khaoSats?.slice?.()?.reverse() || []
             setData(items)
         }
-    }, [khaoSats])
+    }, [khaoSats, khaoSatsInput])
 
     const lineChartData = useMemo(() => {
         if (data && data?.length === 0) return undefined
@@ -38,7 +48,7 @@ const DiemLineChart = () => {
     return (
         <LineChart
             data={lineChartData}
-            width={windowWidth - 75}
+            width={width || windowWidth - 75}
             height={230}
             chartConfig={{
                 backgroundGradientFrom: '#213ff9',

@@ -1,3 +1,4 @@
+import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
 import { User } from '@constants/CommonTypes/UserType'
 
 export interface DoanhNghiep {
@@ -16,10 +17,12 @@ export interface DoanhNghiep {
     soLuongNhanSu: number
     moTa: string
     loaiHinh: LoaiHinh
+    linhVuc?: LinhVuc
     daiDien: DaiDienDoanhNghiep
     sdts: Sdt[]
     sdt: string
     user?: User
+    nhuCau?: NhuCau[]
 }
 
 export interface Sdt {
@@ -55,4 +58,12 @@ export interface DienThoai {
     id: string
     sdt: string
     loaisdt: string
+}
+
+export interface NhuCau {
+    id: number
+    nhuCau: string
+    caiThien: string
+    createdAt: string
+    updatedAt: string
 }

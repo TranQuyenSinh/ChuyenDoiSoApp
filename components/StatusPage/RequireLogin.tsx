@@ -9,16 +9,18 @@ import Button from '@components/View/Button'
 interface RequireLoginProps {
     message?: string
     redirectHref?: any
+    tintColor?: string
 }
 
 const RequireLogin = ({
     message = 'Đăng nhập để sử dụng chức năng này',
     redirectHref = 'auth/login',
+    tintColor = '#000',
 }: RequireLoginProps) => {
     const router = useRouter()
     return (
         <View style={[defaultStyles.container, styles.container]}>
-            <Text style={styles.messageText}>{message}</Text>
+            <Text style={[styles.messageText, { color: tintColor }]}>{message}</Text>
             <Button btnStyles={{ marginTop: 12 }} text={'Đăng nhập ngay'} onPress={() => router.push(redirectHref)} />
         </View>
     )

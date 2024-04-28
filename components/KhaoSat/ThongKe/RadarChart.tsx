@@ -9,10 +9,12 @@ import LinearGradient from 'react-native-linear-gradient'
 
 interface RadarChartProps {
     data: KhaoSat
+    width?: number
+    backgroundColor?: string[]
 }
 
 const RadarChart = (props: RadarChartProps) => {
-    const { data } = props
+    const { data, width, backgroundColor } = props
 
     const dataset = useMemo(() => {
         if (data?.ketQuaTruCots?.length === 0) return undefined
@@ -57,9 +59,12 @@ const RadarChart = (props: RadarChartProps) => {
     if (!dataset) return <View />
 
     return (
-        <LinearGradient start={{ x: 0, y: 0 }} colors={['#03b65a', '#54af48']} style={styles.container}>
+        <LinearGradient
+            start={{ x: 0, y: 0 }}
+            colors={backgroundColor || ['#03b65a', '#54af48']}
+            style={[styles.container, { height: 230, width: width || 300 }]}>
             <RDChart
-                style={styles.chart}
+                style={{ height: 230, width: width || 300 }}
                 chartBackgroundColor={processColor('transparent')}
                 data={dataset}
                 xAxis={xAxis}
@@ -86,9 +91,6 @@ const styles = StyleSheet.create({
     container: {
         borderRadius: 16,
         overflow: 'hidden',
-    },
-    chart: {
-        height: 230,
-        width: 300,
+        alignItems: 'center',
     },
 })

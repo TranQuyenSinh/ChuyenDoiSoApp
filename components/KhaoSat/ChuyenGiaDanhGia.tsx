@@ -10,6 +10,7 @@ import moment from 'moment'
 import Seperator from '@components/View/Seperator'
 import Colors from '@constants/Colors'
 import _ from 'lodash'
+import Button from '@components/View/Button'
 
 type ChuyenGiaDanhGiaProps = {
     chuyenGia?: ChuyenGia
@@ -49,6 +50,11 @@ const ChuyenGiaDanhGia = ({ chuyenGia, danhGia, deXuat, danhGiaAt }: ChuyenGiaDa
                             <Text style={styles.chuyengiaTitle}>Đề xuất:</Text>
                             <Text style={textStyles.longText}>{deXuat}</Text>
                         </View>
+                        <Button
+                            text='Liên hệ ngay'
+                            onPress={() => router.push(`/chuyengia/hoidap/${chuyenGia.id}`)}
+                            btnStyles={{ marginTop: 12, borderRadius: 24 }}
+                        />
                     </>
                 ) : (
                     <Text style={[textStyles.medium, { textAlign: 'center' }]}>Chưa có ý kiến chuyên gia...</Text>

@@ -113,3 +113,14 @@ export const getDoanhNghiepWebsite = async () => {
         return []
     }
 }
+
+export const createNhuCau = async (nhuCau: string, caiThien: string) => {
+    try {
+        await authAxios.post('doanhnghiep/nhucau', { nhuCau, caiThien })
+        return true
+    } catch (error) {
+        console.log('===> Lỗi gửi nhu cầu: ', error)
+        return false
+    }
+}
+

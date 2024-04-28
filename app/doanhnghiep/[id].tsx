@@ -1,12 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, View, Pressable } from 'react-native'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, View, Pressable, ScrollViewBase } from 'react-native'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
 //@ts-ignore
-import background from '@assets/images/test2.jpeg'
+import background from '@assets/backgrounds/doanhnghiepdetail.png'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghiep } from '@services/doanhNghiepServices'
 import NotFound from '@components/StatusPage/NotFound'
@@ -24,6 +24,12 @@ import { getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import SanPhamComponent, { ITEM_WIDTH } from '@components/SanPham/SanPham'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import BackgroundImage from '@components/View/BackgroundImage'
+import moment from 'moment'
+import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
+import { getKhaoSatByDoanhNghiep } from '@services/khaoSatServices'
+import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
+import { windowWidth } from '@utils/window'
+import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
 
 const ITEM_GAP = 12
 
@@ -32,39 +38,22 @@ const DoanhNghiepDetail = () => {
     const navigation = useNavigation()
     const [data, setData] = useState<DoanhNghiep | undefined>()
     const [products, setProducts] = useState<SanPham[]>([])
-
-    const [posts, setPosts] = useState<BaiViet[]>([])
     const [loading, setLoading] = useState(false)
-    const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-    const scrollY = useSharedValue<number>(0)
-    const scrollViewRef = useRef<Animated.ScrollView>(null)
-    const scrollTopButtonStyle = useAnimatedStyle(() => {
-        return {
-            opacity: interpolate(scrollY.value, [300, 500], [0, 1]),
+    const [khaoSats, setKhaoSats] = useState<KhaoSat[]>([])
+    const nhuCauMoiNhat = useMemo(() => {
+        if (data && data.nhuCau && data.nhuCau.length > 0) {
+            return data.nhuCau.sort((a, b) => b.id - a.id)[0]
         }
-    }, [])
-
-    const scrollHandler = useAnimatedScrollHandler({
-        onScroll: event => {
-            scrollY.value = event.contentOffset.y
-        },
-    })
-
-    const scrollToTop = () => {
-        scrollViewRef.current?.scrollTo({
-            y: 0,
-            animated: true,
-        })
-    }
+    }, [data])
 
     const fetchData = async (id: number) => {
         setLoading(true)
         const data = await getDoanhNghiep(id)
         setData(data)
-        const posts = await getBaiVietsByDoanhNghiep(id)
-        setPosts(posts)
         const products = await getSanPhamByDoanhNghiep(id)
         setProducts(products)
+        const khaoSats = await getKhaoSatByDoanhNghiep(id)
+        setKhaoSats(khaoSats)
         setLoading(false)
     }
 
@@ -89,58 +78,81 @@ const DoanhNghiepDetail = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <BackgroundImage source={background} blurRadius={8} />
-            <PageHeader tintColor='white' title={'Doanh nghiệp'} style={{ marginBottom: 12 }} />
-            <Animated.ScrollView ref={scrollViewRef} onScroll={scrollHandler} showsVerticalScrollIndicator={false}>
-                <View
-                    style={[
-                        styles.section,
-                        { flexDirection: 'row', gap: 12, backgroundColor: '#ffffff41', padding: 12 },
-                    ]}>
+        <ScrollView style={styles.container}>
+            <View style={{ height: 200 }}>
+                <PageHeader tintColor='white' title={''} style={{ marginBottom: 12 }} />
+                <BackgroundImage source={background} />
+                <View style={styles.info}>
                     <Image source={data.user?.image ? { uri: data.user?.image } : no_avatar} style={styles.image} />
                     <View style={{ justifyContent: 'space-between', flex: 1 }}>
                         <View style={styles.infoContainer}>
                             <Text style={styles.ten}>{data?.tenTiengViet}</Text>
                             <Text style={styles.text}>Địa chỉ: {data.diaChi}</Text>
-                            <Text style={styles.text}>
-                                Điện thoại: {data.sdt}
-                            </Text>
+                            <Text style={styles.text}>Điện thoại: {data.sdt}</Text>
                             <Text style={styles.text}>Email: {data.user?.email}</Text>
                             {data.website && <Text style={styles.text}>Website: {data.website}</Text>}
                         </View>
                     </View>
                 </View>
+            </View>
 
-                <View style={[styles.section]}>
-                    <Text style={[styles.title]}>Sản phẩm nổi bật</Text>
-                    <ScrollView
-                        horizontal
-                        disableIntervalMomentum={true}
-                        snapToInterval={ITEM_WIDTH + ITEM_GAP}
-                        contentContainerStyle={{ gap: ITEM_GAP }}
-                        showsHorizontalScrollIndicator={false}>
-                        {products?.length === 0 && <Text style={styles.text}>Chưa cập nhật</Text>}
-                        {products.map(item => (
-                            <SanPhamComponent data={item} key={item.id} />
-                        ))}
-                    </ScrollView>
-                </View>
-
+            <View style={styles.body}>
                 <View style={styles.section}>
-                    <Text style={styles.title}>Bài viết trên diễn đàn</Text>
-                    {posts?.length === 0 && (
-                        <Text style={{ fontSize: 12, color: 'white' }}>Doanh nghiệp chưa có bài viết nào</Text>
-                    )}
-                    {posts?.map(item => (
-                        <Post data={item} key={item.id} />
-                    ))}
+                    <Text style={styles.title}>Mô tả</Text>
+                    <View style={styles.row}>
+                        <Text style={styles.rowTitle}>Người đại diện:</Text>
+                        <Text style={styles.rowText}>{data.daiDien.tenDaiDien}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.rowTitle}>Ngày thành lập:</Text>
+                        {data.ngayLap && (
+                            <Text style={styles.rowText}>{moment(data.ngayLap).format('DD/MM/YYYY')}</Text>
+                        )}
+                    </View>
+                    {data.moTa && <Text style={styles.description}>{data.moTa}</Text>}
                 </View>
-            </Animated.ScrollView>
-            <AnimatedPressable onPress={scrollToTop} style={[styles.scrollToTopButton, scrollTopButtonStyle]}>
-                <Ionicons name='arrow-up' size={24} color={'white'} />
-            </AnimatedPressable>
-        </View>
+
+                {products.length > 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.title}>Sản phẩm nổi bật</Text>
+                        <ScrollView
+                            horizontal
+                            disableIntervalMomentum={true}
+                            snapToInterval={ITEM_WIDTH + ITEM_GAP}
+                            contentContainerStyle={{ gap: ITEM_GAP }}
+                            showsHorizontalScrollIndicator={false}>
+                            {products?.length === 0 && <Text style={styles.text}>Chưa cập nhật</Text>}
+                            {products.map(item => (
+                                <SanPhamComponent data={item} key={item.id} />
+                            ))}
+                        </ScrollView>
+                    </View>
+                )}
+                {khaoSats && khaoSats.length !== 0 && (
+                    <View style={styles.section}>
+                        <Text style={styles.title}>Hiện trạng Chuyển đổi số</Text>
+                        <View style={{ alignSelf: 'center' }}>
+                            <DiemLineChart khaoSatsInput={khaoSats} width={windowWidth - 60} />
+                            <View style={{ marginVertical: 4 }} />
+                            <RadarChart data={khaoSats[0]} width={windowWidth - 60} />
+                        </View>
+                    </View>
+                )}
+                {nhuCauMoiNhat && (
+                    <View style={styles.section}>
+                        <Text style={[styles.title, { marginBottom: 2 }]}>Nhu cầu Chuyển đổi số</Text>
+                        {nhuCauMoiNhat.nhuCau.split('; ').map(item => (
+                            <Text style={styles.rowTitle}>• {item}</Text>
+                        ))}
+
+                        <Text style={[styles.title, { marginBottom: 2, marginTop: 6 }]}>Mong muốn cải thiện</Text>
+                        {nhuCauMoiNhat.caiThien.split('; ').map(item => (
+                            <Text style={styles.rowTitle}>• {item}</Text>
+                        ))}
+                    </View>
+                )}
+            </View>
+        </ScrollView>
     )
 }
 
@@ -149,23 +161,53 @@ export default DoanhNghiepDetail
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e2f4ff',
+        backgroundColor: '#f5f8fd',
     },
-    background: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        zIndex: -1,
+    info: {
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: -50,
+        left: 16,
+        right: 16,
+        elevation: 10,
+        borderRadius: 12,
+        flexDirection: 'row',
+        gap: 12,
+        padding: 12,
+        alignItems: 'center',
+    },
+    body: {
+        marginTop: 75,
+        flex: 1,
     },
     section: {
+        backgroundColor: 'white',
         borderRadius: 12,
-        marginBottom: 12,
+        padding: 12,
         marginHorizontal: 16,
+        marginBottom: 12,
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+    },
+    rowTitle: {},
+    rowText: {
+        color: '#080808',
+        fontWeight: '500',
+    },
+    description: {
+        marginTop: 8,
     },
     image: {
         width: 100,
         height: 100,
-        resizeMode: 'cover',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: 'grey',
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
     infoContainer: {
         gap: 4,
@@ -173,36 +215,16 @@ const styles = StyleSheet.create({
     ten: {
         fontSize: 14,
         textTransform: 'uppercase',
-        fontWeight: '500',
-        color: 'white',
+        fontWeight: 'bold',
+        color: '#344049',
     },
     text: {
         fontSize: 12,
-        color: 'white',
     },
     title: {
         marginBottom: 12,
-        marginTop: 6,
         fontSize: 16,
-        // textTransform: 'uppercase',
-        fontWeight: '700',
-        color: 'white',
-    },
-    infoItem: {
-        marginBottom: 12,
-    },
-    scrollToTopButton: {
-        position: 'absolute',
-        bottom: 24,
-        right: 24,
-        borderRadius: 50,
-        backgroundColor: '#00000092',
-        elevation: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 4,
-        height: 50,
-        width: 50,
-        zIndex: 999,
+        fontWeight: '600',
+        color: '#343c48',
     },
 })

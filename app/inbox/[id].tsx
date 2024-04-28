@@ -32,7 +32,7 @@ const ChiTietHoiDap = () => {
         setLoading(true)
         const data = await fetchMessagesChuyenGia(+id)
         if (data) {
-            console.log('===> data?.[1]: ', data.tinNhans?.[1]);
+            console.log('===> data?.[1]: ', data.tinNhans?.[1])
         }
         setConversation(data)
         setLoading(false)
@@ -69,7 +69,7 @@ const ChiTietHoiDap = () => {
             <BackgroundImage source={background} />
 
             {conversation?.tinNhans.length !== 0 && (
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
                     {conversation?.tinNhans?.map(item => (
                         <View key={item.id} style={styles.itemContainer}>
                             <View style={{ flexDirection: 'row', gap: 8 }}>
@@ -184,5 +184,6 @@ const floatStyles = StyleSheet.create({
         padding: 8,
         gap: 4,
         alignItems: 'center',
+        elevation: 20,
     },
 })

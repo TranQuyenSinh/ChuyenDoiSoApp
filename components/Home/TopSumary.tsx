@@ -24,7 +24,7 @@ const TopSumary = () => {
     }, [isLoggedIn])
 
     const lastestKhaoSat = useMemo(() => {
-        return khaoSats?.slice?.()?.reverse()?.[0]
+        return khaoSats?.[0]
     }, [khaoSats])
 
     return (

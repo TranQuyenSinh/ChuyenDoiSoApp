@@ -17,6 +17,9 @@ import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 //@ts-ignore
 import background from '@assets/backgrounds/hoidap.jpg'
 import BackgroundImage from '@components/View/BackgroundImage'
+import { RootState } from '@redux/store'
+import { useSelector } from 'react-redux'
+import RequireLogin from '@components/StatusPage/RequireLogin'
 const ChiTietHoiDap = () => {
     // id = chuyengia_id
     const { id } = useLocalSearchParams()
@@ -26,6 +29,7 @@ const ChiTietHoiDap = () => {
     const [loading, setLoading] = useState(false)
     const { isOpen, toggle } = useToggle()
     const [text, setText] = useState('')
+    const { isLoggedIn } = useSelector((state: RootState) => state.user)
 
     const fetchData = async () => {
         setLoading(true)
@@ -33,6 +37,12 @@ const ChiTietHoiDap = () => {
         setConversation(data)
         setLoading(false)
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            fetchData()
+        }
+    }, [id, isLoggedIn])
 
     const handleSubmit = async () => {
         if (text && conversation) {
@@ -42,10 +52,6 @@ const ChiTietHoiDap = () => {
             fetchData()
         }
     }
-
-    useEffect(() => {
-        fetchData()
-    }, [id])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -64,56 +70,62 @@ const ChiTietHoiDap = () => {
             <PageHeader tintColor='white' title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 24 }} />
             <BackgroundImage source={background} />
 
-            {conversation?.tinNhans?.length !== 0 && (
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {conversation?.tinNhans?.map(item => (
-                        <View key={item.id} style={styles.itemContainer}>
-                            <View style={{ flexDirection: 'row', gap: 8 }}>
-                                <Image
-                                    source={item.user.image ? { uri: item.user.image } : chuyengia_avatar}
-                                    style={styles.itemImg}
-                                />
-                                <View style={{ gap: 2 }}>
-                                    <Text style={styles.itemName}>{item.user.name}</Text>
-                                    <Text style={styles.itemDate}>
-                                        {moment(item.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
-                                    </Text>
+            {!isLoggedIn ? (
+                <RequireLogin tintColor='white' />
+            ) : (
+                <>
+                    {conversation?.tinNhans?.length !== 0 && (
+                        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 50 }}>
+                            {conversation?.tinNhans?.map(item => (
+                                <View key={item.id} style={styles.itemContainer}>
+                                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                                        <Image
+                                            source={item.user.image ? { uri: item.user.image } : chuyengia_avatar}
+                                            style={styles.itemImg}
+                                        />
+                                        <View style={{ gap: 2 }}>
+                                            <Text style={styles.itemName}>{item.user.name}</Text>
+                                            <Text style={styles.itemDate}>
+                                                {moment(item.createdAt).format('DD/MM/YYYY, HH:mm:ss')}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <Text style={[textStyles.longText]}>{item.noiDung}</Text>
                                 </View>
-                            </View>
-                            <Text style={[textStyles.longText]}>{item.noiDung}</Text>
+                            ))}
+                        </ScrollView>
+                    )}
+
+                    <Pressable
+                        android_ripple={{ color: 'grey' }}
+                        onPress={() => {
+                            toggle(true)
+                        }}
+                        style={floatStyles.container}>
+                        <AntDesign name='pluscircle' size={24} color={Colors.default} />
+                        <Text>Thêm tin nhắn</Text>
+                    </Pressable>
+
+                    {!loading && conversation?.tinNhans?.length === 0 && (
+                        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                            <Text style={{ fontSize: 16, color: 'white' }}>Chọn biểu tượng + để thêm câu hỏi</Text>
                         </View>
-                    ))}
-                </ScrollView>
+                    )}
+
+                    <Modal isOpen={isOpen} toggle={toggle}>
+                        <Text style={styles.modalTitle}>Gửi câu hỏi đến chuyên gia</Text>
+                        <TextInput
+                            placeholder='Nhập câu hỏi tại đây...'
+                            style={styles.modalInput}
+                            multiline
+                            numberOfLines={10}
+                            value={text}
+                            onChangeText={text => setText(text)}
+                        />
+                        <Button btnStyles={{ width: '100%', marginTop: 12 }} text='Gửi' onPress={handleSubmit} />
+                    </Modal>
+                </>
             )}
-
-            <Pressable
-                android_ripple={{ color: 'grey' }}
-                onPress={() => {
-                    toggle(true)
-                }}
-                style={floatStyles.container}>
-                <AntDesign name='pluscircle' size={24} color={Colors.default} />
-                <Text>Thêm tin nhắn</Text>
-            </Pressable>
-
-            {!loading && conversation?.tinNhans?.length === 0 && (
-                <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                    <Text style={{ fontSize: 16, color: 'white' }}>Chọn biểu tượng + để thêm câu hỏi</Text>
-                </View>
-            )}
-
-            <Modal isOpen={isOpen} toggle={toggle}>
-                <Text style={styles.modalTitle}>Gửi câu hỏi đến chuyên gia</Text>
-                <TextInput
-                    placeholder='Nhập câu hỏi tại đây...'
-                    style={styles.modalInput}
-                    multiline
-                    numberOfLines={10}
-                    value={text}
-                    onChangeText={text => setText(text)}
-                />
-                <Button btnStyles={{ width: '100%', marginTop: 12 }} text='Gửi' onPress={handleSubmit} />
-            </Modal>
         </View>
     )
 }
@@ -180,5 +192,6 @@ const floatStyles = StyleSheet.create({
         padding: 8,
         gap: 4,
         alignItems: 'center',
+        elevation: 10,
     },
 })

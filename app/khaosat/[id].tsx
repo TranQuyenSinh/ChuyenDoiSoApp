@@ -1,7 +1,7 @@
 import React, { useMemo, useLayoutEffect } from 'react'
 
 import { useSelector } from 'react-redux'
-import { View, ScrollView, StyleSheet, Image } from 'react-native'
+import { View, ScrollView, StyleSheet, Image, Text } from 'react-native'
 import { useNavigation, useLocalSearchParams } from 'expo-router'
 
 import { RootState } from '@redux/store'
@@ -14,6 +14,8 @@ import ChuyenGiaDanhGia from '@components/KhaoSat/ChuyenGiaDanhGia'
 import background from '@assets/images/test2.jpeg'
 import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
 import BackgroundImage from '@components/View/BackgroundImage'
+import { windowWidth } from '@utils/window'
+import { khaoSatStyles } from '@components/KhaoSat/khaoSatStyles'
 const KhaoSatDetail = () => {
     const navigation = useNavigation()
     const { id } = useLocalSearchParams()
@@ -47,6 +49,11 @@ const KhaoSatDetail = () => {
                 {selectedKhaoSat?.mucDo && selectedKhaoSat.tongDiem && (
                     <KetQuaKhaoSat mucDo={selectedKhaoSat.mucDo} tongDiem={selectedKhaoSat.tongDiem} />
                 )}
+
+                <Text style={khaoSatStyles.title}>Trên từng trụ cột</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <RadarChart data={selectedKhaoSat} width={windowWidth - 30} />
+                </View>
                 {selectedKhaoSat.moHinh && <MoHinh data={selectedKhaoSat.moHinh} />}
                 <ChuyenGiaDanhGia
                     chuyenGia={selectedKhaoSat?.chuyenGia}
@@ -54,7 +61,6 @@ const KhaoSatDetail = () => {
                     deXuat={selectedKhaoSat?.chuyenGiaDeXuat}
                     danhGiaAt={selectedKhaoSat?.chuyenGiaDanhGiaAt}
                 />
-                <RadarChart data={selectedKhaoSat} />
             </ScrollView>
         </View>
     )

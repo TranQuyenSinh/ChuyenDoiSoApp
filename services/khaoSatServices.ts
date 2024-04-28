@@ -9,6 +9,17 @@ export const getKhaoSats = async () => {
         return data
     } catch (error) {
         // @ts-ignore
+        console.log('===> Lỗi lấy khảo sát: ', error.response)
+        return []
+    }
+}
+
+export const getKhaoSatByDoanhNghiep = async (doanhNghiepId: number) => {
+    try {
+        const { data } = await axios.get<KhaoSat[]>(`khaosat/doanhnghiep/${doanhNghiepId}?type=all`)
+        return data
+    } catch (error) {
+        // @ts-ignore
         console.log('===> Lỗi lấy khảo sát doanh nghiệp: ', error.response)
         return []
     }

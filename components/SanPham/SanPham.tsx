@@ -43,11 +43,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 12,
-        color: 'white',
     },
     price: {
         fontSize: 12,
         fontWeight: '500',
-        color: 'white',
     },
 })

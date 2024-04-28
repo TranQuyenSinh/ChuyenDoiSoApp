@@ -1,7 +1,7 @@
-import { router, useRouter } from 'expo-router'
+import { router } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Text, Image, Pressable, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { View, Text, Image, Pressable, StyleSheet, ScrollView, Linking } from 'react-native'
 
 import Colors from '@constants/Colors'
 import { RootState } from '@redux/store'
@@ -24,39 +24,40 @@ import hoidap from '@assets/icons/home/hoidap.png'
 import no_avatar from '@assets/icons/user.jpg'
 
 // @ts-ignore
-import news from '@assets/icons/news.png'
-
-// @ts-ignore
-import survey from '@assets/icons/survey.png'
-// @ts-ignore
-import result from '@assets/icons/result.png'
-// @ts-ignore
-import exper from '@assets/icons/exper.png'
-// @ts-ignore
-import chat from '@assets/icons/chat.png'
-// @ts-ignore
-import chatbot from '@assets/icons/chatbot.png'
-// @ts-ignore
-import product from '@assets/icons/product.png'
-// @ts-ignore
-import ict from '@assets/images/logo_ict.jpg'
 import { StatusBar } from 'expo-status-bar'
 import { screenWidth } from '@utils/window'
-import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
-import Constants from '@constants/Constants'
 import LienKetDoanhNghiep from '@components/Home/LienKetDoanhNghiep'
-import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
-import { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
 import { usePushNotifications } from '@hooks/usePushNotifications'
 import { saveDeviceToken } from '@services/accountServices'
 import ThongBaoIcon from '@components/Home/ThongBaoIcon'
 import TopSumary from '@components/Home/TopSumary'
-import { AntDesign, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
+import { getChuyenGias } from '@services/chuyenGiaServices'
+import Button from '@components/View/Button'
+import Constants from '@constants/Constants'
 
 export default function TrangTin() {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
+    const { doanhNghiep } = useSelector((state: RootState) => state.doanhNghiep)
     const { registerForPushNotificationsAsync } = usePushNotifications()
+    const [chuyenGias, setChuyenGias] = useState<ChuyenGia[] | undefined>([])
+
+    useEffect(() => {
+        ;(async () => {
+            var linhVucId = doanhNghiep?.linhVuc?.id
+            if (linhVucId) {
+                const data = await getChuyenGias(linhVucId)
+                setChuyenGias(data)
+            } else {
+                const data = await getChuyenGias()
+                setChuyenGias(data)
+            }
+        })()
+    }, [doanhNghiep])
+
     useEffect(() => {
         ;(async () => {
             if (isLoggedIn) {
@@ -109,7 +110,7 @@ export default function TrangTin() {
                             <HomeButtonIcon
                                 text='Nhu cầu'
                                 imageSource={nhucau}
-                                onPress={() => router.push('/news')}
+                                onPress={() => router.push('/nhucau')}
                                 backgroundColor={['#2eb4fe', '#20a0f9']}
                             />
                             <HomeButtonIcon
@@ -118,12 +119,21 @@ export default function TrangTin() {
                                 onPress={() => router.push('/chuyengia')}
                                 backgroundColor={['#3078ff', '#4385f6']}
                             />
-                            <HomeButtonIcon
-                                text='Hỏi đáp'
-                                imageSource={hoidap}
-                                onPress={() => router.push('/chuyengia/hoidap')}
-                                backgroundColor={['#03bf5e', '#00b157']}
-                            />
+                            {userProfile?.vaitro?.[0]?.id === Constants.Role.ChuyenGia ? (
+                                <HomeButtonIcon
+                                    text='Trả lời hỏi đáp'
+                                    imageSource={hoidap}
+                                    onPress={() => router.push('/chuyengia/inbox')}
+                                    backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                            ) : (
+                                <HomeButtonIcon
+                                    text='Hỏi đáp'
+                                    imageSource={hoidap}
+                                    onPress={() => router.push('/chuyengia/hoidap')}
+                                    backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                            )}
                         </ScrollView>
                     </View>
                     <View style={styles.contentContainer}>
@@ -152,6 +162,20 @@ export default function TrangTin() {
                             />
                         </ScrollView>
                     </View>
+                    <View style={styles.contentContainer}>
+                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>
+                            Chuyên gia tư vấn{' '}
+                            {doanhNghiep?.linhVuc?.tenLinhVuc && `${doanhNghiep?.linhVuc?.tenLinhVuc}`}
+                        </Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 16, paddingVertical: 12 }}>
+                            {chuyenGias?.length !== 0 &&
+                                chuyenGias?.map(item => <ChuyenGiaCard key={item.id} chuyenGia={item} />)}
+                        </ScrollView>
+                    </View>
+
                     <View style={styles.contentContainer}>
                         <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Khám phá</Text>
                         <View style={{ gap: 16, paddingVertical: 12 }}>
@@ -220,6 +244,10 @@ interface ExploreCardProps {
     onPress: () => void
 }
 
+interface ChuyenGiaCardProps {
+    chuyenGia: ChuyenGia
+}
+
 const HomeButtonIcon = (props: HomeButtonIconProps) => {
     const { imageSource, onPress, text, backgroundColor } = props
     return (
@@ -255,6 +283,37 @@ const ExploreCard = (props: ExploreCardProps) => {
                 {text}
             </Text>
         </Pressable>
+    )
+}
+
+const ChuyenGiaCard = (props: ChuyenGiaCardProps) => {
+    const { chuyenGia } = props
+    return (
+        <View style={chuyenGiaStyles.container}>
+            <View style={chuyenGiaStyles.top}>
+                <Image
+                    style={chuyenGiaStyles.image}
+                    source={chuyenGia?.hinhAnh ? { uri: chuyenGia.hinhAnh } : no_avatar}
+                />
+                <View style={chuyenGiaStyles.info}>
+                    <Text style={chuyenGiaStyles.text}>Tiến sĩ</Text>
+                    <Text style={chuyenGiaStyles.name}>{chuyenGia.tenChuyenGia}</Text>
+                    <Text style={chuyenGiaStyles.text}>{chuyenGia.linhVuc.tenLinhVuc}</Text>
+                </View>
+            </View>
+            <View style={chuyenGiaStyles.bottom}>
+                <Button
+                    btnStyles={[chuyenGiaStyles.button, { backgroundColor: Colors.success }]}
+                    text='Gọi điện'
+                    onPress={() => Linking.openURL(`tel:${chuyenGia.sdt}`)}
+                />
+                <Button
+                    btnStyles={[chuyenGiaStyles.button, { backgroundColor: Colors.orange }]}
+                    text='Nhắn tin'
+                    onPress={() => router.push(`/chuyengia/hoidap/${chuyenGia.id}`)}
+                />
+            </View>
+        </View>
     )
 }
 
@@ -405,5 +464,44 @@ const exploreStyles = StyleSheet.create({
     text: {
         fontSize: 16,
         flexShrink: 1,
+    },
+})
+
+const chuyenGiaStyles = StyleSheet.create({
+    container: {
+        padding: 12,
+        backgroundColor: '#e8f4ff',
+        borderRadius: 16,
+    },
+    top: {
+        flexDirection: 'row',
+        gap: 12,
+    },
+    image: {
+        width: 100,
+        height: 100,
+        borderRadius: 12,
+    },
+    info: {
+        flex: 1,
+        gap: 6,
+    },
+    name: {
+        fontWeight: '600',
+        color: '#38383a',
+        fontSize: 15,
+    },
+    text: {
+        color: '#595959',
+    },
+    bottom: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 6,
+        gap: 16,
+    },
+    button: {
+        flex: 1,
+        minHeight: 30,
     },
 })
