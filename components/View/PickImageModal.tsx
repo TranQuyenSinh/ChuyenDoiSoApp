@@ -7,7 +7,14 @@ import Modal from './Modal'
 import Button from './Button'
 import Colors from '@constants/Colors'
 
-const PickImageModal = ({ isOpen, toggle, onPickAsync }: any) => {
+interface PickImageModalProps {
+    isOpen: boolean
+    toggle: (value: boolean) => void
+    onPickAsync: (result: any) => void
+}
+
+const PickImageModal = (props: PickImageModalProps) => {
+    const { isOpen, toggle, onPickAsync } = props
     const { pickImageAsync } = useChonAnh()
     const handlePick = async (type: 'galery' | 'camera') => {
         const result = await pickImageAsync(type)
@@ -18,7 +25,17 @@ const PickImageModal = ({ isOpen, toggle, onPickAsync }: any) => {
     return (
         <Modal contentStyle={{ padding: 0, overflow: 'hidden' }} isOpen={isOpen} toggle={toggle}>
             <View style={{ width: '100%', alignItems: 'center' }}>
-                <Text style={{ paddingVertical: 8, textAlign: 'center', color: 'white', fontSize: 18, backgroundColor: Colors.default, width: '100%' }}>Chọn ảnh</Text>
+                <Text
+                    style={{
+                        paddingVertical: 8,
+                        textAlign: 'center',
+                        color: 'white',
+                        fontSize: 18,
+                        backgroundColor: Colors.default,
+                        width: '100%',
+                    }}>
+                    Chọn ảnh
+                </Text>
             </View>
             <View
                 style={{
@@ -42,7 +59,7 @@ const PickImageModal = ({ isOpen, toggle, onPickAsync }: any) => {
                     btnStyles={{ minWidth: 120 }}
                 />
             </View>
-        </Modal >
+        </Modal>
     )
 }
 

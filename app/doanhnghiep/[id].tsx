@@ -109,6 +109,14 @@ const DoanhNghiepDetail = () => {
                             <Text style={styles.rowText}>{moment(data.ngayLap).format('DD/MM/YYYY')}</Text>
                         )}
                     </View>
+                    <View style={styles.row}>
+                        <Text style={styles.rowTitle}>Lĩnh vực hoạt động:</Text>
+                        {data?.linhVuc?.tenLinhVuc && <Text style={styles.rowText}>{data.linhVuc.tenLinhVuc}</Text>}
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.rowTitle}>Loại hình kinh doanh:</Text>
+                        {data?.loaiHinh?.tenLoaiHinh && <Text style={styles.rowText}>{data.loaiHinh.tenLoaiHinh}</Text>}
+                    </View>
                     {data.moTa && <Text style={styles.description}>{data.moTa}</Text>}
                 </View>
 
@@ -121,7 +129,6 @@ const DoanhNghiepDetail = () => {
                             snapToInterval={ITEM_WIDTH + ITEM_GAP}
                             contentContainerStyle={{ gap: ITEM_GAP }}
                             showsHorizontalScrollIndicator={false}>
-                            {products?.length === 0 && <Text style={styles.text}>Chưa cập nhật</Text>}
                             {products.map(item => (
                                 <SanPhamComponent data={item} key={item.id} />
                             ))}
@@ -132,6 +139,16 @@ const DoanhNghiepDetail = () => {
                     <View style={styles.section}>
                         <Text style={styles.title}>Hiện trạng Chuyển đổi số</Text>
                         <View style={{ alignSelf: 'center' }}>
+                            <View style={{ marginBottom: 8, gap: 2 }}>
+                                <View style={styles.row}>
+                                    <Text style={styles.rowTitle}>Điểm đánh giá:</Text>
+                                    <Text style={styles.rowText}>{khaoSats[0].tongDiem}</Text>
+                                </View>
+                                <View style={styles.row}>
+                                    <Text style={styles.rowTitle}>Mức độ:</Text>
+                                    <Text style={styles.rowText}>{khaoSats[0]?.mucDo?.tenMucDo}</Text>
+                                </View>
+                            </View>
                             <DiemLineChart khaoSatsInput={khaoSats} width={windowWidth - 60} />
                             <View style={{ marginVertical: 4 }} />
                             <RadarChart data={khaoSats[0]} width={windowWidth - 60} />
@@ -142,12 +159,16 @@ const DoanhNghiepDetail = () => {
                     <View style={styles.section}>
                         <Text style={[styles.title, { marginBottom: 2 }]}>Nhu cầu Chuyển đổi số</Text>
                         {nhuCauMoiNhat.nhuCau.split('; ').map(item => (
-                            <Text style={styles.rowTitle}>• {item}</Text>
+                            <Text key={item} style={styles.rowTitle}>
+                                • {item}
+                            </Text>
                         ))}
 
                         <Text style={[styles.title, { marginBottom: 2, marginTop: 6 }]}>Mong muốn cải thiện</Text>
                         {nhuCauMoiNhat.caiThien.split('; ').map(item => (
-                            <Text style={styles.rowTitle}>• {item}</Text>
+                            <Text key={item} style={styles.rowTitle}>
+                                • {item}
+                            </Text>
                         ))}
                     </View>
                 )}
@@ -189,7 +210,6 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 4,
     },
@@ -197,6 +217,8 @@ const styles = StyleSheet.create({
     rowText: {
         color: '#080808',
         fontWeight: '500',
+        flexShrink: 1,
+        textAlign: 'right',
     },
     description: {
         marginTop: 8,

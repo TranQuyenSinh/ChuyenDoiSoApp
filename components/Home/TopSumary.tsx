@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { setWith } from 'lodash'
 import Colors from '@constants/Colors'
@@ -9,6 +9,8 @@ import { fetchDanhSachKhaoSat } from '@redux/khaoSatSlice'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
+//@ts-ignore
+import star from '@assets/icons/home/star.png'
 
 const TopSumary = () => {
     const [index, setIndex] = useState(0)
@@ -29,17 +31,27 @@ const TopSumary = () => {
 
     return (
         <View style={styles.container}>
-            <View style={switchStyles.container}>
-                <Pressable
-                    onPress={() => setIndex(0)}
-                    style={[switchStyles.item, index === 0 && switchStyles.itemActive]}>
-                    <Text style={[switchStyles.text, index === 0 && switchStyles.textActive]}>Doanh nghiệp</Text>
-                </Pressable>
-                <Pressable
-                    onPress={() => setIndex(1)}
-                    style={[switchStyles.item, index === 1 && switchStyles.itemActive]}>
-                    <Text style={[switchStyles.text, index === 1 && switchStyles.textActive]}>Toàn tỉnh</Text>
-                </Pressable>
+            <View style={styles.top}>
+                <View style={switchStyles.container}>
+                    <Pressable
+                        onPress={() => setIndex(0)}
+                        style={[switchStyles.item, index === 0 && switchStyles.itemActive]}>
+                        <Text style={[switchStyles.text, index === 0 && switchStyles.textActive]}>Doanh nghiệp</Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => setIndex(1)}
+                        style={[switchStyles.item, index === 1 && switchStyles.itemActive]}>
+                        <Text style={[switchStyles.text, index === 1 && switchStyles.textActive]}>Toàn tỉnh</Text>
+                    </Pressable>
+                </View>
+                {lastestKhaoSat?.mucDo?.tenMucDo && (
+                    <View style={switchStyles.mucDo}>
+                        <Image source={star} style={switchStyles.iconStar} />
+                        <Text style={switchStyles.mucDoText}>
+                            {lastestKhaoSat?.mucDo?.tenMucDo.replace(/Mức \d - /g, '')}
+                        </Text>
+                    </View>
+                )}
             </View>
             <View style={chartStyles.container}>
                 {index === 0 && khaoSats && khaoSats.length !== 0 && (
@@ -88,19 +100,19 @@ const switchStyles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.1)',
         padding: 4,
         borderRadius: 30,
-        marginHorizontal: 12,
-        marginBottom: 12,
     },
     item: {
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 30,
-        padding: 6,
+        paddingVertical: 4,
+        paddingHorizontal: 0,
         backgroundColor: 'transparent',
     },
     text: {
         color: 'white',
         paddingHorizontal: 8,
+        fontSize: 12,
     },
     itemActive: {
         backgroundColor: 'white',
@@ -108,6 +120,28 @@ const switchStyles = StyleSheet.create({
     textActive: {
         fontWeight: 'bold',
         color: Colors.default,
+    },
+    // Mức độ
+    mucDo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+        borderRadius: 30,
+        padding: 4,
+        paddingHorizontal: 6,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: 'white',
+        backgroundColor: 'rgba(255,255,255,0.3)',
+        // maxWidth: 150,
+    },
+    iconStar: {
+        width: 20,
+        height: 20,
+    },
+    mucDoText: {
+        color: 'white',
+        flexShrink: 1,
+        fontSize: 12,
     },
 })
 
@@ -129,4 +163,11 @@ const chartStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
     container: {},
+    top: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 12,
+        marginBottom: 12,
+    },
 })

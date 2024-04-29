@@ -19,6 +19,8 @@ import video from '@assets/icons/home/video.png'
 import document from '@assets/icons/home/document.png'
 //@ts-ignore
 import hoidap from '@assets/icons/home/hoidap.png'
+//@ts-ignore
+import documentcds from '@assets/icons/home/documentcds.png'
 
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
@@ -106,7 +108,7 @@ export default function TrangTin() {
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ gap: 25, paddingVertical: 12 }}>
+                            contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
                             <HomeButtonIcon
                                 text='Nhu cầu'
                                 imageSource={nhucau}
@@ -141,7 +143,12 @@ export default function TrangTin() {
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ gap: 16, paddingVertical: 12 }}>
+                            contentContainerStyle={{
+                                gap: 16,
+                                paddingVertical: 12,
+                                flexGrow: 1,
+                                alignItems: 'stretch',
+                            }}>
                             <HomeCard
                                 text='Tin tức'
                                 imageSource={tintuc}
@@ -155,10 +162,16 @@ export default function TrangTin() {
                                 backgroundColor={['#2eb4fe', '#20a0f9']}
                             />
                             <HomeCard
+                                text='Tài liệu Chuyển đổi số'
+                                imageSource={documentcds}
+                                onPress={() => router.push('/thuvien/chuyendoiso')}
+                                backgroundColor={['#03bf5e', '#00b157']}
+                            />
+                            <HomeCard
                                 text='Văn bản'
                                 imageSource={document}
                                 onPress={() => router.push('/thuvien')}
-                                backgroundColor={['#03bf5e', '#00b157']}
+                                backgroundColor={['#fe9961', '#fc8744']}
                             />
                         </ScrollView>
                     </View>
@@ -418,16 +431,18 @@ const itemStyles = StyleSheet.create({
 
 const cardStyles = StyleSheet.create({
     container: {
-        width: 130,
+        width: 150,
         borderRadius: 16,
         overflow: 'hidden',
+        flex: 1,
     },
     iconContainer: {
         justifyContent: 'space-between',
+        flex: 1,
     },
     icon: {
         width: '80%',
-        height: 130,
+        height: 120,
         resizeMode: 'contain',
         alignSelf: 'flex-end',
     },

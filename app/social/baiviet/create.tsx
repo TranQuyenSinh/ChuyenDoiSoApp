@@ -21,6 +21,9 @@ import CategoryTag from '@components/DienDan/CategoryTag'
 import { toast } from '@utils/toast'
 import useChonAnh from '@hooks/useChonAnh'
 import { Ionicons } from '@expo/vector-icons'
+import { useSelector } from 'react-redux'
+import { RootState } from '@redux/store'
+import RequireLogin from '@components/StatusPage/RequireLogin'
 const CreatePost = () => {
     const navigation = useNavigation()
     const [selectedTags, setSelectedTags] = useState<number[]>([])
@@ -29,6 +32,7 @@ const CreatePost = () => {
     const { pickImageAsync } = useChonAnh()
     const [loading, setLoading] = useState(false)
     const [noiDung, setNoiDung] = useState('')
+    const { isLoggedIn } = useSelector((state: RootState) => state.user)
 
     useEffect(() => {
         ;(async () => {
@@ -77,83 +81,90 @@ const CreatePost = () => {
             },
             headerRight: () => {
                 return (
-                    <TouchableOpacity onPress={handleSubmit} style={{ marginRight: 10, padding: 8 }}>
-                        <Text style={{ color: 'white', fontSize: 15 }}>Đăng</Text>
-                    </TouchableOpacity>
+                    <>
+                        {isLoggedIn && (
+                            <TouchableOpacity onPress={handleSubmit} style={{ marginRight: 10, padding: 8 }}>
+                                <Text style={{ color: 'white', fontSize: 15 }}>Đăng</Text>
+                            </TouchableOpacity>
+                        )}
+                    </>
                 )
             },
         })
-    }, [navigation, handleSubmit])
+    }, [navigation, handleSubmit, isLoggedIn])
 
     if (loading) return <Loading />
     return (
         <View style={styles.container}>
             <Image source={background} style={[styles.background, StyleSheet.absoluteFill]} />
-            <ScrollView
-                contentContainerStyle={{
-                    overflow: 'hidden',
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                }}>
-                <View style={styles.inputWrapper}>
-                    <Text style={styles.title}>Danh mục bài viết</Text>
-                    <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 6, paddingHorizontal: 2 }}
-                        data={tags}
-                        renderItem={({ item }) => (
-                            <CategoryTag
-                                selected={selectedTags.includes(item.id)}
-                                data={item}
-                                onPress={handleSelectTag}
-                            />
-                        )}
-                    />
-                </View>
-                <View style={styles.inputWrapper}>
-                    <Text style={styles.title}>Nội dung</Text>
-                    <TextInput
-                        value={noiDung}
-                        onChangeText={text => setNoiDung(text)}
-                        textAlignVertical='top'
-                        cursorColor={'black'}
-                        multiline
-                        style={styles.input}
-                    />
-                </View>
-                <View style={styles.inputWrapper}>
-                    <View style={imageStyles.selectRow}>
-                        <Text style={styles.title}>Chọn ảnh ({selectedImages.length}/6)</Text>
-                        {selectedImages.length < 6 && (
-                            <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
-                                <Ionicons name='add' size={24} color={'white'} />
-                            </Pressable>
-                        )}
-                    </View>
-
-                    <FlatList
-                        scrollEnabled={false}
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 6 }}
-                        numColumns={3}
-                        columnWrapperStyle={{ gap: 6 }}
-                        data={selectedImages}
-                        renderItem={({ item, index }) => (
-                            <Pressable
-                                onPress={() =>
-                                    setSelectedImages(selectedImages.filter((x: any) => x.name !== item.name))
-                                }
-                                style={imageStyles.container}>
-                                <Image
-                                    source={{ uri: item.uri }}
-                                    style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
+            {!isLoggedIn && <RequireLogin />}
+            {isLoggedIn && (
+                <ScrollView
+                    contentContainerStyle={{
+                        overflow: 'hidden',
+                        paddingVertical: 10,
+                        paddingHorizontal: 10,
+                    }}>
+                    <View style={styles.inputWrapper}>
+                        <Text style={styles.title}>Danh mục bài viết</Text>
+                        <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 6, paddingHorizontal: 2 }}
+                            data={tags}
+                            renderItem={({ item }) => (
+                                <CategoryTag
+                                    selected={selectedTags.includes(item.id)}
+                                    data={item}
+                                    onPress={handleSelectTag}
                                 />
-                            </Pressable>
-                        )}
-                    />
-                </View>
-            </ScrollView>
+                            )}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <Text style={styles.title}>Nội dung</Text>
+                        <TextInput
+                            value={noiDung}
+                            onChangeText={text => setNoiDung(text)}
+                            textAlignVertical='top'
+                            cursorColor={'black'}
+                            multiline
+                            style={styles.input}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <View style={imageStyles.selectRow}>
+                            <Text style={styles.title}>Chọn ảnh ({selectedImages.length}/6)</Text>
+                            {selectedImages.length < 6 && (
+                                <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
+                                    <Ionicons name='add' size={24} color={'white'} />
+                                </Pressable>
+                            )}
+                        </View>
+
+                        <FlatList
+                            scrollEnabled={false}
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 6 }}
+                            numColumns={3}
+                            columnWrapperStyle={{ gap: 6 }}
+                            data={selectedImages}
+                            renderItem={({ item, index }) => (
+                                <Pressable
+                                    onPress={() =>
+                                        setSelectedImages(selectedImages.filter((x: any) => x.name !== item.name))
+                                    }
+                                    style={imageStyles.container}>
+                                    <Image
+                                        source={{ uri: item.uri }}
+                                        style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
+                                    />
+                                </Pressable>
+                            )}
+                        />
+                    </View>
+                </ScrollView>
+            )}
         </View>
     )
 }
