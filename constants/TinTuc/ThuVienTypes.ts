@@ -6,6 +6,7 @@ export interface ThuVien {
     loai: number
     file: string
     url: string
+    hinhAnh: string
     createdAt: string
     updatedAt: string
 }

@@ -1,16 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react'
 
-import {
-    View,
-    StyleSheet,
-    Image,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    Keyboard,
-    Pressable,
-    FlatList,
-} from 'react-native'
+import { View, StyleSheet, Image, TextInput, FlatList, ScrollView } from 'react-native'
 import { useNavigation, router } from 'expo-router'
 
 import PageHeader from '@components/View/PageHeader'
@@ -20,11 +10,19 @@ import Button from '@components/View/Button'
 import Colors from '@constants/Colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { toast } from '@utils/toast'
-import useChonAnh from '@hooks/useChonAnh'
 import { createSanPham } from '@services/sanPhamServices'
 import { formatPrice } from '@utils/format'
-import { pick } from 'lodash'
-
+import useToggle from '@hooks/useToggle'
+import IconButton from '@components/View/IconButton'
+//@ts-ignore
+import no_image from '@assets/images/no_image.png'
+import PickImageModal from '@components/View/PickImageModal'
+import Loading from '@components/StatusPage/Loading'
+import ChatMoTaSanPhamModal from '@components/SanPham/ChatMoTaSanPhamModal'
+import BackgroundImage from '@components/View/BackgroundImage'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '@redux/store'
+import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
 const CreateProduct = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
@@ -32,18 +30,29 @@ const CreateProduct = () => {
         name: '',
         price: '',
         description: '',
-        image: ''
     })
+    const { isOpen, toggle } = useToggle()
+    const { isOpen: isOpenMoTa, toggle: toggleMoTa } = useToggle()
+    const [images, setImages] = useState<any[]>([])
+    const dispatch = useDispatch<AppDispatch>()
 
-    const { pickImageAsync } = useChonAnh()
-    const [pickImage, setPickImage] = useState<any>()
-
-    const handleSelectImage = async () => {
-        const data = await pickImageAsync('galery', false)
-        if (data) {
-            // setImages([...images, data])
-            setPickImage(data)
+    const handleTaoMoTa = async () => {
+        const { name } = form
+        if (!name) {
+            toast('Vui lòng nhập tên sản phẩm')
+            return
         }
+        toggleMoTa(true)
+    }
+
+    const handleSelectImage = async (image: any) => {
+        if (image) {
+            setImages([...images, image])
+        }
+    }
+
+    const handleRemoveImage = (image: any) => {
+        setImages(images?.filter(x => x?.uri !== image?.uri))
     }
 
     const handleSend = async () => {
@@ -53,9 +62,11 @@ const CreateProduct = () => {
             return
         }
         setLoading(true)
-        const result = await createSanPham(name, price, description, pickImage)
-        if (result) {
+        const products = await createSanPham(name, price, description, images)
+        console.log('🚀 ~ products: ', products)
+        if (products) {
             toast('Đăng sản phẩm thành công')
+            dispatch(doanhNghiepActions.setSanPhams(products))
             router.back()
         } else {
             toast('Đăng sản phẩm thất bại')
@@ -70,10 +81,11 @@ const CreateProduct = () => {
     }, [navigation])
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.container}>
-                <PageHeader tintColor='white' title={'Đăng sản phẩm'} style={{ marginBottom: 12 }} />
-                <Image source={background} style={[StyleSheet.absoluteFill, styles.background]} />
+        <View style={styles.container}>
+            {loading && <Loading />}
+            <PageHeader tintColor='white' title={'Đăng sản phẩm'} style={{ marginBottom: 12 }} />
+            <BackgroundImage source={background} />
+            <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
                 <View style={formStyles.container}>
                     <TextInput
                         value={form.name}
@@ -85,8 +97,10 @@ const CreateProduct = () => {
                         placeholder='Tên sản phẩm'
                     />
                     <TextInput
-                        value={formatPrice(form.price) == "NaN" ? '' : formatPrice(form.price) + ""}
-                        onChangeText={text => setForm({ ...form, price: text.replaceAll('.', '').replaceAll('NaN', '') })}
+                        value={formatPrice(form.price) == 'NaN' ? '' : formatPrice(form.price) + ''}
+                        onChangeText={text =>
+                            setForm({ ...form, price: text.replaceAll('.', '').replaceAll('NaN', '') })
+                        }
                         placeholderTextColor={'white'}
                         cursorColor={'white'}
                         autoCapitalize='none'
@@ -105,42 +119,48 @@ const CreateProduct = () => {
                         multiline
                         numberOfLines={6}
                     />
-                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                        <Text style={styles.title}>Chọn ảnh</Text>
-                        <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
-                            <Ionicons name='add' size={24} color={'white'} />
-                        </Pressable>
-                    </View>
+                    <Button text='Tạo mô tả sản phẩm bằng AI' onPress={handleTaoMoTa} />
 
-                    {pickImage?.uri && <Image source={{ uri: pickImage?.uri }} style={{ alignSelf: 'center', width: '60%', height: 120, resizeMode: 'cover' }} />}
-                    {/* <FlatList
+                    <FlatList
                         scrollEnabled={false}
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{ gap: 6 }}
-                        numColumns={3}
-                        columnWrapperStyle={{ gap: 6 }}
                         data={images}
+                        numColumns={2}
+                        contentContainerStyle={{ paddingHorizontal: 6, gap: 6, rowGap: 6 }}
+                        keyExtractor={item => item?.uri + ''}
                         renderItem={({ item, index }) => (
-                            <Pressable
-                                onPress={() => setImages(images.filter((x: any) => x.name !== item.name))}
-                                style={imageStyles.container}>
-                                <Image
-                                    source={{ uri: item.uri }}
-                                    style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
-                                />
-                            </Pressable>
+                            <View style={imageStyles.container}>
+                                <Image source={item?.uri ? { uri: item.uri } : no_image} style={imageStyles.image} />
+                                <IconButton style={imageStyles.removeBtn} onPress={() => handleRemoveImage(item)}>
+                                    <Ionicons name='close-circle' size={24} color={'grey'} />
+                                </IconButton>
+                            </View>
                         )}
-                    /> */}
-
-                    <Button
-                        text='Đăng'
-                        btnStyles={formStyles.button}
-                        onPress={handleSend}
-                        renderIcon={<FontAwesome name='send' size={24} color='white' />}
                     />
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <Button
+                            text='Thêm ảnh'
+                            btnStyles={formStyles.button}
+                            onPress={() => toggle(true)}
+                            renderIcon={<FontAwesome name='plus' size={24} color='white' />}
+                        />
+                        <Button
+                            text='Đăng'
+                            btnStyles={[formStyles.button, { backgroundColor: '#00b157' }]}
+                            onPress={handleSend}
+                            renderIcon={<FontAwesome name='send' size={24} color='white' />}
+                        />
+                    </View>
                 </View>
-            </View>
-        </TouchableWithoutFeedback>
+                <PickImageModal isOpen={isOpen} toggle={toggle} onPickAsync={handleSelectImage} />
+                <ChatMoTaSanPhamModal
+                    tenSanPham={form.name}
+                    isOpen={isOpenMoTa}
+                    toggle={toggleMoTa}
+                    onAccept={moTa => setForm({ ...form, description: moTa })}
+                />
+            </ScrollView>
+        </View>
     )
 }
 
@@ -199,30 +219,29 @@ const formStyles = StyleSheet.create({
     button: {
         backgroundColor: Colors.warning,
         marginTop: 12,
+        flex: 1,
     },
 })
-
 const imageStyles = StyleSheet.create({
     container: {
-        width: '33.33333%',
-        height: 120,
+        flex: 0.5,
         borderRadius: 10,
-        backgroundColor: '#ffffffde',
-        justifyContent: 'center',
         alignItems: 'center',
+        padding: 6,
     },
-    selectRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
+    image: {
+        backgroundColor: '#fff',
+        width: '100%',
+        aspectRatio: 1,
+        borderRadius: 8,
+        resizeMode: 'cover',
     },
-    selectButton: {
-        width: 30,
-        height: 30,
-        marginTop: 12,
-        borderRadius: 10,
-        backgroundColor: Colors.orange,
-        justifyContent: 'center',
-        alignItems: 'center',
+    removeBtn: {
+        position: 'absolute',
+        right: -12,
+        top: 0,
+        height: 50,
+        width: 50,
+        zIndex: 999,
     },
 })

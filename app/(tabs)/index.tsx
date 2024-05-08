@@ -1,7 +1,7 @@
 import { router } from 'expo-router'
 import { useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Text, Image, Pressable, StyleSheet, ScrollView, Linking } from 'react-native'
+import { View, Image, Pressable, StyleSheet, ScrollView, Linking } from 'react-native'
 
 import Colors from '@constants/Colors'
 import { RootState } from '@redux/store'
@@ -21,6 +21,8 @@ import document from '@assets/icons/home/document.png'
 import hoidap from '@assets/icons/home/hoidap.png'
 //@ts-ignore
 import documentcds from '@assets/icons/home/documentcds.png'
+//@ts-ignore
+import timkiem from '@assets/icons/home/timkiem.png'
 
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
@@ -39,13 +41,19 @@ import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 import { getChuyenGias } from '@services/chuyenGiaServices'
 import Button from '@components/View/Button'
-import Constants from '@constants/Constants'
+import Constants, { ROLES } from '@constants/Constants'
+import { Text } from '@components/View/Text'
+import { useDangNhap } from '@hooks/useDangNhap'
+import RowComponent from '@components/View/RowComponent'
+import LinkWebsite from '@components/Home/LinkWebsite'
+import { appIcons, appImages } from '@constants/Images'
 
 export default function TrangTin() {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
     const { doanhNghiep } = useSelector((state: RootState) => state.doanhNghiep)
     const { registerForPushNotificationsAsync } = usePushNotifications()
     const [chuyenGias, setChuyenGias] = useState<ChuyenGia[] | undefined>([])
+    const { isInRole } = useDangNhap()
 
     useEffect(() => {
         ;(async () => {
@@ -100,44 +108,65 @@ export default function TrangTin() {
                         <ThongBaoIcon />
                     </SafeAreaView>
                     {/* End top header */}
-                    <TopSumary />
+                    {/* <TopSumary /> */}
                 </LinearGradient>
                 <View style={styles.body}>
-                    <View style={styles.contentContainer}>
-                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
-                            <HomeButtonIcon
-                                text='Nhu cầu'
-                                imageSource={nhucau}
-                                onPress={() => router.push('/nhucau')}
-                                backgroundColor={['#2eb4fe', '#20a0f9']}
-                            />
-                            <HomeButtonIcon
-                                text='Chuyên gia'
-                                imageSource={chuyengia}
-                                onPress={() => router.push('/chuyengia')}
-                                backgroundColor={['#3078ff', '#4385f6']}
-                            />
-                            {userProfile?.vaitro?.[0]?.id === Constants.Role.ChuyenGia ? (
+                    {isInRole(ROLES.DOANH_NGHIEP) && (
+                        <View style={styles.contentContainer}>
+                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
                                 <HomeButtonIcon
-                                    text='Trả lời hỏi đáp'
-                                    imageSource={hoidap}
-                                    onPress={() => router.push('/chuyengia/inbox')}
-                                    backgroundColor={['#03bf5e', '#00b157']}
+                                    text='Nhu cầu'
+                                    imageSource={nhucau}
+                                    onPress={() => router.push('/nhucau/phanmem')}
+                                    backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
-                            ) : (
                                 <HomeButtonIcon
                                     text='Hỏi đáp'
                                     imageSource={hoidap}
-                                    onPress={() => router.push('/chuyengia/hoidap')}
+                                    onPress={() => router.push('/tuvan/chuyengia')}
                                     backgroundColor={['#03bf5e', '#00b157']}
                                 />
-                            )}
-                        </ScrollView>
-                    </View>
+                            </ScrollView>
+                        </View>
+                    )}
+                    {isInRole(ROLES.CHUYEN_GIA) && (
+                        <View style={styles.contentContainer}>
+                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dành cho chuyên gia</Text>
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
+                                <HomeButtonIcon
+                                    text='Tìm kiếm doanh nghiệp'
+                                    imageSource={timkiem}
+                                    onPress={() => router.push('/tuvan/timkiem')}
+                                    backgroundColor={['#2eb4fe', '#20a0f9']}
+                                />
+                                <HomeButtonIcon
+                                    text='Doanh nghiệp đang tư vấn'
+                                    imageSource={hoidap}
+                                    onPress={() => router.push('/tuvan')}
+                                    backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                            </ScrollView>
+                        </View>
+                    )}
+
+                    {!isLoggedIn && (
+                        <View style={styles.contentContainer}>
+                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
+                            <Button
+                                btnStyles={{ borderRadius: 30, maxWidth: '70%', alignSelf: 'center' }}
+                                text='Đăng nhập để khám phá'
+                                onPress={() => router.push('/auth/login')}
+                            />
+                        </View>
+                    )}
+
                     <View style={styles.contentContainer}>
                         <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Tin tức - Kiến thức</Text>
                         <ScrollView
@@ -180,6 +209,7 @@ export default function TrangTin() {
                             Chuyên gia tư vấn{' '}
                             {doanhNghiep?.linhVuc?.tenLinhVuc && `${doanhNghiep?.linhVuc?.tenLinhVuc}`}
                         </Text>
+
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -187,6 +217,11 @@ export default function TrangTin() {
                             {chuyenGias?.length !== 0 &&
                                 chuyenGias?.map(item => <ChuyenGiaCard key={item.id} chuyenGia={item} />)}
                         </ScrollView>
+                        <Pressable onPress={() => router.push('/chuyengia')}>
+                            <Text color={Colors.default} align='right'>
+                                Xem tất cả Chuyên gia {`>>`}
+                            </Text>
+                        </Pressable>
                     </View>
 
                     <View style={styles.contentContainer}>
@@ -218,8 +253,8 @@ export default function TrangTin() {
                                 />
                                 <ExploreCard
                                     icon={<AntDesign name='customerservice' size={24} color={Colors.default} />}
-                                    text='Trung tâm tin học DHAG'
-                                    onPress={() => router.push('/trungtam')}
+                                    text='Cổng thông tin'
+                                    onPress={() => router.push('/web/thongtin')}
                                 />
                             </View>
                         </View>
@@ -229,6 +264,25 @@ export default function TrangTin() {
                     <View style={[styles.contentContainer]}>
                         <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
                         <LienKetDoanhNghiep />
+                    </View>
+
+                    {/* LIÊN KẾT khác */}
+                    <View style={[styles.contentContainer]}>
+                        <Text style={[textStyles.title, styles.title]}>Các kênh Chuyển đổi số An Giang</Text>
+                        <RowComponent gap={12} justify='space-between'>
+                            <LinkWebsite
+                                onPress={() => Linking.openURL('fb://page/130858276774825')}
+                                image={appIcons.facebook}
+                                text='Facebook'
+                                backgroundColor='#1877f2'
+                            />
+                            <LinkWebsite
+                                image={appIcons.youtube}
+                                text='Youtube'
+                                onPress={() => Linking.openURL('https://www.youtube.com/@chuyendoisodnnvv')}
+                                backgroundColor='#ff0000'
+                            />
+                        </RowComponent>
                     </View>
                 </View>
             </ScrollView>
@@ -303,17 +357,25 @@ const ChuyenGiaCard = (props: ChuyenGiaCardProps) => {
     const { chuyenGia } = props
     return (
         <View style={chuyenGiaStyles.container}>
-            <View style={chuyenGiaStyles.top}>
+            <Pressable onPress={() => router.push(`/chuyengia/${chuyenGia.id}`)} style={chuyenGiaStyles.top}>
                 <Image
                     style={chuyenGiaStyles.image}
                     source={chuyenGia?.hinhAnh ? { uri: chuyenGia.hinhAnh } : no_avatar}
                 />
                 <View style={chuyenGiaStyles.info}>
-                    <Text style={chuyenGiaStyles.text}>Tiến sĩ</Text>
-                    <Text style={chuyenGiaStyles.name}>{chuyenGia.tenChuyenGia}</Text>
-                    <Text style={chuyenGiaStyles.text}>{chuyenGia.linhVuc.tenLinhVuc}</Text>
+                    <Text style={chuyenGiaStyles.name}>
+                        {chuyenGia.trinhDo}
+                        {chuyenGia.trinhDo && ' '}
+                        {chuyenGia.tenChuyenGia}
+                    </Text>
+                    {chuyenGia.chucVu && <Text style={chuyenGiaStyles.text}>{chuyenGia.chucVu}</Text>}
+                    <View style={{ flex: 1 }} />
+                    {chuyenGia.namKinhNghiem && (
+                        <Text style={chuyenGiaStyles.text}>Kinh nghiệm: {chuyenGia.namKinhNghiem}</Text>
+                    )}
+                    <Text style={chuyenGiaStyles.text}>Lĩnh vực tư vấn: {chuyenGia.linhVuc.tenLinhVuc}</Text>
                 </View>
-            </View>
+            </Pressable>
             <View style={chuyenGiaStyles.bottom}>
                 <Button
                     btnStyles={[chuyenGiaStyles.button, { backgroundColor: Colors.success }]}
@@ -323,7 +385,7 @@ const ChuyenGiaCard = (props: ChuyenGiaCardProps) => {
                 <Button
                     btnStyles={[chuyenGiaStyles.button, { backgroundColor: Colors.orange }]}
                     text='Nhắn tin'
-                    onPress={() => router.push(`/chuyengia/hoidap/${chuyenGia.id}`)}
+                    onPress={() => router.push(`/tuvan/${chuyenGia.user.id}`)}
                 />
             </View>
         </View>
@@ -426,6 +488,7 @@ const itemStyles = StyleSheet.create({
         flexShrink: 0,
         textAlign: 'center',
         color: '#393f46',
+        maxWidth: 100,
     },
 })
 
@@ -499,7 +562,7 @@ const chuyenGiaStyles = StyleSheet.create({
     },
     info: {
         flex: 1,
-        gap: 6,
+        gap: 2,
     },
     name: {
         fontWeight: '600',
@@ -508,15 +571,18 @@ const chuyenGiaStyles = StyleSheet.create({
     },
     text: {
         color: '#595959',
+        fontSize: 12,
     },
     bottom: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 6,
+        // padding: 6``,
         gap: 16,
+        marginTop: 8,
     },
     button: {
         flex: 1,
-        minHeight: 30,
+        height: 30,
+        borderRadius: 30,
     },
 })

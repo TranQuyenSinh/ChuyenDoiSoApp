@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 
 import { router, useNavigation } from 'expo-router'
 import { StyleSheet, ScrollView, Text, KeyboardAvoidingView, TextInput } from 'react-native'
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Colors from '@constants/Colors'
 import Loading from '@components/StatusPage/Loading'
 import TryAgain from '@components/StatusPage/TryAgain'
-import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import { doanhNghiepActions, fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import moment from 'moment'
 import { AppDispatch, RootState } from '@redux/store'
 import DatePicker from 'react-native-date-picker'
@@ -16,33 +16,42 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { getLoaiHinhDN, updateDoanhNghiep } from '@services/doanhNghiepServices'
 import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
+import { fetchTinhThanh } from '@redux/dangKySlice'
+import { layTinhThanh } from '@services/commonServices'
+import DropdownComponent from '@components/Input/Dropdown'
+import { Picker } from '@react-native-picker/picker'
 
 const DoanhNghiepInfo = () => {
     const dispatch = useDispatch<AppDispatch>()
     const navigation = useNavigation()
     const { isOpen, toggle } = useToggle()
     const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
-    const [loading, setLoading] = useState(false)
     const [loaiHinhs, setLoaiHinhs] = useState<any[]>([])
+    const [diaChis, setDiaChis] = useState<any>()
 
     const [form, setForm] = useState({
         tenTiengViet: '',
         tenTiengAnh: '',
         tenVietTat: '',
         ngayLap: new Date(),
+        tinh: -1 || undefined,
+        huyen: -1 || undefined,
+        xa: -1 || undefined,
         diaChi: '',
         website: '',
         maThue: '',
         fax: '',
         soLuongNhanSu: '',
         moTa: '',
-        loaiHinh: '',
-        sdt: ''
+        loaiHinh: -1,
+        sdt: '',
     })
 
     const fetchData = async () => {
         const loaiHinhs = await getLoaiHinhDN()
         setLoaiHinhs(loaiHinhs.map(item => ({ value: item.id, label: item.tenLoaiHinh })))
+        const diaChis = await layTinhThanh()
+        setDiaChis(diaChis)
     }
 
     useEffect(() => {
@@ -60,18 +69,21 @@ const DoanhNghiepInfo = () => {
             website: doanhNghiep?.website,
             maThue: doanhNghiep?.maThue,
             fax: doanhNghiep?.fax,
+            tinh: doanhNghiep?.thanhPho,
+            huyen: doanhNghiep?.huyen,
+            xa: doanhNghiep?.xa,
             soLuongNhanSu: doanhNghiep?.soLuongNhanSu ? doanhNghiep.soLuongNhanSu.toString() : '',
             moTa: doanhNghiep?.moTa,
-            loaiHinh: doanhNghiep?.loaiHinh?.id || '',
-            sdt: doanhNghiep?.sdt
+            loaiHinh: doanhNghiep?.loaiHinh?.id || -1,
+            sdt: doanhNghiep?.sdt,
         })
     }, [doanhNghiep])
 
     const handleSubmit = async () => {
-        const isSuccess = await updateDoanhNghiep(form)
-        if (isSuccess) {
-            toast("Cập nhật thành công")
-            dispatch(fetchDoanhNghiepInfo())
+        const dnNew = await updateDoanhNghiep(form)
+        if (dnNew) {
+            toast('Cập nhật thành công')
+            dispatch(doanhNghiepActions.setDoanhNghiep(dnNew))
             router.back()
         }
     }
@@ -95,7 +107,7 @@ const DoanhNghiepInfo = () => {
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ padding: 16, paddingBottom: 50 }}>
-                {(status === 'loading') && <Loading />}
+                {status === 'loading' && <Loading />}
                 {status === 'error' && <TryAgain onPress={() => dispatch(fetchDoanhNghiepInfo())} />}
                 {status === 'success' && (
                     <>
@@ -186,6 +198,48 @@ const DoanhNghiepInfo = () => {
                             style={[inputStyles.input, { height: 'auto' }]}
                             textAlignVertical='top'
                         />
+
+                        <Text style={inputStyles.label}>Tỉnh</Text>
+                        <Picker
+                            selectedValue={form.tinh}
+                            onValueChange={value => {
+                                const huyen = diaChis?.huyens?.filter((x: any) => x.parentId === value)?.[0].value
+                                setForm({ ...form, tinh: value, huyen })
+                            }}>
+                            {diaChis?.thanhPhos?.map((item: any) => (
+                                <Picker.Item key={item.id} label={item.label} value={item.value} />
+                            ))}
+                        </Picker>
+
+                        <Text style={inputStyles.label}>Huyện</Text>
+                        <Picker
+                            selectedValue={form.huyen}
+                            onValueChange={value => {
+                                const xa = diaChis?.xas?.filter((x: any) => x.parentId === value)?.[0]?.value
+                                setForm({ ...form, huyen: value, xa })
+                            }}>
+                            {form.tinh &&
+                                form.tinh != -1 &&
+                                diaChis?.huyens
+                                    ?.filter((x: any) => x.parentId === form.tinh)
+                                    ?.map((item: any) => (
+                                        <Picker.Item key={item.id} label={item.label} value={item.value} />
+                                    ))}
+                        </Picker>
+
+                        <Text style={inputStyles.label}>Xã</Text>
+                        <Picker
+                            itemStyle={{ fontSize: 12 }}
+                            selectedValue={form.xa}
+                            onValueChange={value => setForm({ ...form, xa: value })}>
+                            {form.huyen &&
+                                form.huyen != -1 &&
+                                diaChis?.xas
+                                    ?.filter((x: any) => x.parentId === form.huyen)
+                                    ?.map((item: any) => (
+                                        <Picker.Item key={item.id} label={item.label} value={item.value} />
+                                    ))}
+                        </Picker>
 
                         <Text style={inputStyles.label}>Địa chỉ</Text>
                         <TextInput

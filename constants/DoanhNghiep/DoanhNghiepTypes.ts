@@ -1,5 +1,6 @@
 import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
 import { User } from '@constants/CommonTypes/UserType'
+import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 
 export interface DoanhNghiep {
     id: number
@@ -7,9 +8,9 @@ export interface DoanhNghiep {
     tenTiengAnh: string
     tenVietTat: string
     ngayLap: string
-    thanhPho: string
-    huyen: string
-    xa: string
+    thanhPho: number
+    huyen: number
+    xa: number
     diaChi: string
     website: string
     maThue: string
@@ -23,6 +24,7 @@ export interface DoanhNghiep {
     sdt: string
     user?: User
     nhuCau?: NhuCau[]
+    khaoSat?: KhaoSat[]
 }
 
 export interface Sdt {
@@ -36,9 +38,9 @@ export interface DaiDienDoanhNghiep {
     tenDaiDien: string
     email: string
     sdt: string
-    thanhPho: string
-    huyen: string
-    xa: string
+    thanhPho: number
+    huyen: number
+    xa: number
     diaChi: string
     cccd: string
     imgMatTruoc: string
@@ -48,14 +50,14 @@ export interface DaiDienDoanhNghiep {
 }
 
 export interface LoaiHinh {
-    id?: string
+    id?: number
     tenLoaiHinh?: string
     hinhAnh?: string
     moTa?: string
 }
 
 export interface DienThoai {
-    id: string
+    id: number
     sdt: string
     loaisdt: string
 }

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Colors from '@constants/Colors'
 import Loading from '@components/StatusPage/Loading'
 import TryAgain from '@components/StatusPage/TryAgain'
-import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import { doanhNghiepActions, fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import { AppDispatch, RootState } from '@redux/store'
 import useToggle from '@hooks/useToggle'
 import { Dropdown } from 'react-native-element-dropdown'
@@ -16,6 +16,8 @@ import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
 import { chucVuData } from '@constants/DoanhNghiep/ChucVus'
 import PickImageModal from '@components/View/PickImageModal'
+import { layTinhThanh } from '@services/commonServices'
+import { Picker } from '@react-native-picker/picker'
 
 const DoanhNghiepInfo = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -23,7 +25,8 @@ const DoanhNghiepInfo = () => {
     const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
     const [loading, setLoading] = useState(false)
     const { isOpen, toggle } = useToggle()
-    const [imageType, setImageType] = useState<"truoc" | "sau" | "">('')
+    const [imageType, setImageType] = useState<'truoc' | 'sau' | ''>('')
+    const [diaChis, setDiaChis] = useState<any>()
 
     const [images, setImages] = useState<any>()
 
@@ -31,6 +34,9 @@ const DoanhNghiepInfo = () => {
         tenDaiDien: '',
         email: '',
         sdt: '',
+        tinh: -1 || undefined,
+        huyen: -1 || undefined,
+        xa: -1 || undefined,
         diaChi: '',
         cccd: '',
         imgMatTruoc: '',
@@ -41,18 +47,25 @@ const DoanhNghiepInfo = () => {
 
     useEffect(() => {
         if (!doanhNghiep) return
-        const { daiDien } = doanhNghiep
-        setForm({
-            tenDaiDien: daiDien?.tenDaiDien,
-            email: daiDien?.email,
-            sdt: daiDien?.sdt,
-            diaChi: daiDien?.diaChi,
-            cccd: daiDien?.cccd,
-            chucVu: daiDien?.chucVu,
-            moTa: daiDien?.moTa,
-            imgMatSau: daiDien?.imgMatSau,
-            imgMatTruoc: daiDien?.imgMatTruoc,
-        })
+        ;(async () => {
+            const { daiDien } = doanhNghiep
+            setForm({
+                tenDaiDien: daiDien?.tenDaiDien,
+                email: daiDien?.email,
+                sdt: daiDien?.sdt,
+                tinh: doanhNghiep?.thanhPho,
+                huyen: doanhNghiep?.huyen,
+                xa: doanhNghiep?.xa,
+                diaChi: daiDien?.diaChi,
+                cccd: daiDien?.cccd,
+                chucVu: daiDien?.chucVu,
+                moTa: daiDien?.moTa,
+                imgMatSau: daiDien?.imgMatSau,
+                imgMatTruoc: daiDien?.imgMatTruoc,
+            })
+            const diaChis = await layTinhThanh()
+            setDiaChis(diaChis)
+        })()
     }, [doanhNghiep])
 
     const handlePickImage = async (data: any) => {
@@ -65,10 +78,10 @@ const DoanhNghiepInfo = () => {
 
     const handleSubmit = async () => {
         setLoading(true)
-        const isSuccess = await updateDaiDien(form)
-        if (isSuccess) {
-            toast("Cập nhật thành công")
-            dispatch(fetchDoanhNghiepInfo())
+        const dnNew = await updateDaiDien(form)
+        if (dnNew) {
+            toast('Cập nhật thành công')
+            dispatch(doanhNghiepActions.setDoanhNghiep(dnNew))
             router.back()
         }
         setLoading(false)
@@ -92,7 +105,7 @@ const DoanhNghiepInfo = () => {
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ padding: 16 }}>
-                {(status === 'loading') && <Loading />}
+                {status === 'loading' && <Loading />}
                 {status === 'error' && <TryAgain onPress={() => dispatch(fetchDoanhNghiepInfo())} />}
                 {status === 'success' && (
                     <>
@@ -119,6 +132,48 @@ const DoanhNghiepInfo = () => {
                             keyboardType='number-pad'
                             style={inputStyles.input}
                         />
+
+                        <Text style={inputStyles.label}>Tỉnh</Text>
+                        <Picker
+                            selectedValue={form.tinh}
+                            onValueChange={value => {
+                                const huyen = diaChis?.huyens?.filter((x: any) => x.parentId === value)?.[0].value
+                                setForm({ ...form, tinh: value, huyen })
+                            }}>
+                            {diaChis?.thanhPhos?.map((item: any) => (
+                                <Picker.Item key={item.id} label={item.label} value={item.value} />
+                            ))}
+                        </Picker>
+
+                        <Text style={inputStyles.label}>Huyện</Text>
+                        <Picker
+                            selectedValue={form.huyen}
+                            onValueChange={value => {
+                                const xa = diaChis?.xas?.filter((x: any) => x.parentId === value)?.[0]?.value
+                                setForm({ ...form, huyen: value, xa })
+                            }}>
+                            {form.tinh &&
+                                form.tinh != -1 &&
+                                diaChis?.huyens
+                                    ?.filter((x: any) => x.parentId === form.tinh)
+                                    ?.map((item: any) => (
+                                        <Picker.Item key={item.id} label={item.label} value={item.value} />
+                                    ))}
+                        </Picker>
+
+                        <Text style={inputStyles.label}>Xã</Text>
+                        <Picker
+                            itemStyle={{ fontSize: 12 }}
+                            selectedValue={form.xa}
+                            onValueChange={value => setForm({ ...form, xa: value })}>
+                            {form.huyen &&
+                                form.huyen != -1 &&
+                                diaChis?.xas
+                                    ?.filter((x: any) => x.parentId === form.huyen)
+                                    ?.map((item: any) => (
+                                        <Picker.Item key={item.id} label={item.label} value={item.value} />
+                                    ))}
+                        </Picker>
 
                         <Text style={inputStyles.label}>Địa chỉ</Text>
                         <TextInput
@@ -161,19 +216,15 @@ const DoanhNghiepInfo = () => {
                             mode={'modal'}
                         />
 
-
                         <Button btnStyles={inputStyles.button} text='Cập nhật' onPress={handleSubmit} />
                     </>
                 )}
-
             </ScrollView>
         </KeyboardAvoidingView>
     )
 }
 
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})
 const inputStyles = StyleSheet.create({
     container: {
         flex: 1,
@@ -198,8 +249,8 @@ const inputStyles = StyleSheet.create({
     image: {
         width: '100%',
         height: 200,
-        borderRadius: 8
-    }
+        borderRadius: 8,
+    },
 })
 
 export default DoanhNghiepInfo

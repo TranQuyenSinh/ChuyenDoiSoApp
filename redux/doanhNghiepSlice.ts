@@ -1,4 +1,5 @@
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
+import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getThongTinDN } from '@services/doanhNghiepServices'
 import { toast } from '@utils/toast'
@@ -7,17 +8,25 @@ import { Axios, AxiosError } from 'axios'
 type SliceState = {
     status: 'idle' | 'loading' | 'success' | 'error'
     doanhNghiep?: DoanhNghiep
+    sanPhams?: SanPham[]
 }
 
 const initialState: SliceState = {
     status: 'idle',
     doanhNghiep: undefined,
+    sanPhams: []
 }
 
 const doanhNghiepSlice = createSlice({
     name: 'doanhNghiep',
     initialState,
     reducers: {
+        setDoanhNghiep: (state, { payload }) => {
+            state.doanhNghiep = payload
+        },
+        setSanPhams: (state, { payload }) => {
+            state.sanPhams = payload
+        },
         resetDoanhNghiep: () => {
             return initialState
         },
@@ -34,7 +43,6 @@ const doanhNghiepSlice = createSlice({
         builder.addCase(fetchDoanhNghiepInfo.rejected, (state, { payload }) => {
             state.status = 'error'
             state.doanhNghiep = undefined
-            toast(payload || 'Lỗi lấy thông tin doanh nghiệp')
         })
     },
 })
@@ -50,4 +58,5 @@ export const fetchDoanhNghiepInfo = createAsyncThunk('fetchDoanhNghiepInfo', asy
     }
 })
 
+export const { actions: doanhNghiepActions } = doanhNghiepSlice
 export default doanhNghiepSlice

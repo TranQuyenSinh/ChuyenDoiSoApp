@@ -1,5 +1,5 @@
 export interface LinhVuc {
-    id: string
+    id?: string
     tenLinhVuc: string
     hinhAnh?: string
 }

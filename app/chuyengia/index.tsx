@@ -9,9 +9,6 @@ import ExperPage from '@components/Page/expertPage'
 import AssociationPage from '@components/Page/associationPage'
 import { screenWidth } from '@utils/window'
 import { useNavigation } from 'expo-router'
-//@ts-ignore
-import background from '@assets/backgrounds/chuyengiaindex.jpg'
-import BackgroundImage from '@components/View/BackgroundImage'
 
 const Page = () => {
     const navigation = useNavigation()
@@ -26,17 +23,17 @@ const Page = () => {
     })
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Chuyên gia và hiệp hội DN',
+            headerTitle: '',
             headerStyle: {
                 backgroundColor: Colors.default,
             },
+            headerShadowVisible: false,
             headerTintColor: 'white',
         })
     }, [navigation])
 
     return (
         <View style={styles.container}>
-            <BackgroundImage blurRadius={10} source={background} />
             <TabView
                 style={styles.container}
                 navigationState={{ index, routes }}
@@ -47,7 +44,7 @@ const Page = () => {
                         {...props}
                         indicatorStyle={styles.indicatorStyle}
                         labelStyle={styles.labelStyle}
-                        activeColor={Colors.default}
+                        activeColor={'white'}
                         style={styles.tabContainerStyle}
                         contentContainerStyle={{ alignItems: 'center' }}
                     />
@@ -62,15 +59,15 @@ const Page = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'transparent',
+        backgroundColor: '#f5f8fd',
     },
     tabContainerStyle: {
-        backgroundColor: 'transparent',
+        backgroundColor: Colors.default,
         elevation: 0,
         height: 45,
     },
     indicatorStyle: {
-        backgroundColor: Colors.default,
+        backgroundColor: Colors.orange,
         height: 3,
         borderRadius: 20,
     },
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
         textTransform: 'none',
         fontSize: 16,
         textAlign: 'center',
-        color: '#000',
+        color: '#fff',
         height: '100%',
     },
     background: {

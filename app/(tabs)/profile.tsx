@@ -16,9 +16,10 @@ import UserInfo from '@components/Profile/UserInfo'
 import ProfileTopButton from '@components/Profile/ProfileTopButton'
 import SettingItem, { SettingSeperator } from '@components/Profile/SettingItem'
 import { useDangNhap } from '@hooks/useDangNhap'
+import { ROLES } from '@constants/Constants'
 const ProfileTab = () => {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
-    const { logOut } = useDangNhap()
+    const { logOut, isInRole } = useDangNhap()
 
     return (
         <View style={styles.container}>
@@ -32,7 +33,7 @@ const ProfileTab = () => {
                     <View style={{ marginVertical: 12 }}>
                         <UserInfo />
                     </View>
-                    {isLoggedIn && (
+                    {isInRole(ROLES.DOANH_NGHIEP) && (
                         <View style={floatStyles.container}>
                             <ProfileTopButton
                                 text='Thông tin doanh nghiệp'
@@ -61,20 +62,26 @@ const ProfileTab = () => {
                 </SafeAreaView>
 
                 {isLoggedIn && (
-                    <View style={styles.body}>
+                    <View style={[styles.body, isInRole(ROLES.CHUYEN_GIA) && { marginTop: 0 }]}>
                         <Text style={settingStyles.title}>Quản lý thông tin</Text>
                         <View style={settingStyles.section}>
-                            <SettingItem
-                                onPress={() => router.push('/sanpham')}
-                                text='Quản lý sản phẩm'
-                                icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
-                            />
-                            <SettingSeperator />
-                            <SettingItem
-                                onPress={() => router.push('/social/baiviet')}
-                                text='Quản lý bài viết'
-                                icon={<Feather name='edit' size={24} color='#6a6f73' />}
-                            />
+                            {isInRole(ROLES.DOANH_NGHIEP) && (
+                                <>
+                                    <SettingItem
+                                        onPress={() => router.push('/sanpham')}
+                                        text='Quản lý sản phẩm'
+                                        icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
+                                    />
+                                    <SettingSeperator />
+                                </>
+                            )}
+                            {(isInRole(ROLES.CHUYEN_GIA) || isInRole(ROLES.DOANH_NGHIEP)) && (
+                                <SettingItem
+                                    onPress={() => router.push('/social/baiviet')}
+                                    text='Quản lý bài viết'
+                                    icon={<Feather name='edit' size={24} color='#6a6f73' />}
+                                />
+                            )}
                         </View>
                         <Text style={settingStyles.title}>Khác</Text>
                         <View style={settingStyles.section}>

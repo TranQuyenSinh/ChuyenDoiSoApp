@@ -4,11 +4,12 @@ import { authAxios, axios } from '@utils/axios'
 import { getSecureItem, setSecureItem } from '@utils/secureStore'
 import { toast } from '@utils/toast'
 import { RootState } from './store'
+import { User } from '@constants/CommonTypes/UserType'
 type SliceState = {
     loading: boolean,
 
     isLoggedIn: boolean,
-    userProfile?: any,
+    userProfile?: User,
     accessToken?: string,
 
     OAuthLoading: 'idle' | 'pending',
@@ -49,7 +50,7 @@ const userSlice = createSlice({
             .addCase(loginWithPassword.rejected, state => {
                 state.loading = false
                 state.isLoggedIn = false
-                state.userProfile = null
+                state.userProfile = undefined
                 state.accessToken = undefined
             })
             // OAuth
@@ -89,7 +90,7 @@ const userSlice = createSlice({
 
 export const loginWithPassword = createAsyncThunk('user/login', async ({ email, password }: any) => {
     try {
-        let { data } = await axios.post('doanhnghiep/login', { email, password })
+        let { data } = await axios.post<{ userProfile: User, accessToken: string }>('doanhnghiep/login', { email, password })
         const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
         if (bioInfo?.email !== email) {
             await setSecureItem(Constants.SecureStore.BioAuth, { isEnabled: false })
@@ -113,7 +114,7 @@ export const loginWithOAuth = createAsyncThunk(
             if (OAuthLoading !== 'pending' || currentRequestId !== requestId) {
                 return
             }
-            let { data } = await axios.post('doanhnghiep/loginemail', userInfo)
+            let { data } = await axios.post<{ userProfile: User, accessToken: string }>('doanhnghiep/loginemail', userInfo)
 
             const bioInfo = await getSecureItem(Constants.SecureStore.BioAuth)
             if (bioInfo?.email !== userInfo?.email) {
@@ -133,7 +134,7 @@ export const loginWithOAuth = createAsyncThunk(
     }
 )
 export const renewUserProfile = createAsyncThunk('user/renewUserProfile', async () => {
-    const { data } = await authAxios.get('taikhoan/profile')
+    const { data } = await authAxios.get<User>('taikhoan/profile')
     return data
 })
 export const logOutServer = createAsyncThunk('user/logoutServer', async () => {

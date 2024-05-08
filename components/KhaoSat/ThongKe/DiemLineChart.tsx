@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import moment from 'moment'
-import { useRouter } from 'expo-router'
 import { StyleSheet, Text, View } from 'react-native'
 import { LineChart } from 'react-native-chart-kit'
 
@@ -17,7 +16,6 @@ interface DiemLineChartProps {
 
 const DiemLineChart = (props: DiemLineChartProps) => {
     const { khaoSatsInput, width } = props
-    const router = useRouter()
     const [data, setData] = useState<any>([])
     const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
 
@@ -61,10 +59,6 @@ const DiemLineChart = (props: DiemLineChartProps) => {
                     stroke: '#2db40b',
                 },
                 decimalPlaces: 0,
-            }}
-            onDataPointClick={({ index }) => {
-                const id = data[index].id
-                router.push(`/khaosat/${id}`)
             }}
             style={{
                 borderRadius: 16,

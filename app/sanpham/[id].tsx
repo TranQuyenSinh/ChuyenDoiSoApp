@@ -1,4 +1,4 @@
-import { Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Loading from '@components/StatusPage/Loading'
 import PageHeader from '@components/View/PageHeader'
@@ -6,7 +6,7 @@ import { textStyles } from '@constants/Styles'
 import { useLocalSearchParams, useNavigation } from 'expo-router'
 import moment from 'moment'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { getSanPham } from '@services/sanPhamServices'
+import { deleteAnhSanPham, getSanPham } from '@services/sanPhamServices'
 import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 //@ts-ignore
 import background from '@assets/images/test2.jpeg'
@@ -14,6 +14,8 @@ import background from '@assets/images/test2.jpeg'
 import no_image from '@assets/images/no_image.png'
 import BackgroundImage from '@components/View/BackgroundImage'
 import NotFound from '@components/StatusPage/NotFound'
+import IconButton from '@components/View/IconButton'
+import { Ionicons } from '@expo/vector-icons'
 const SanPhamDetail = () => {
     const { id } = useLocalSearchParams()
     const navigation = useNavigation()
@@ -38,6 +40,23 @@ const SanPhamDetail = () => {
             setSelectImage(sanPham.hinhAnhs[0])
         }
     }, [sanPham])
+
+    const handleRemoveImage = async (anhdId: number) => {
+        Alert.alert('Xác nhận', 'Bạn có chắc chắn muốn xóa ảnh này?', [
+            { text: 'Hủy', style: 'cancel' },
+            {
+                text: 'Xóa',
+                onPress: async () => {
+                    const result = await deleteAnhSanPham(anhdId)
+                    if (result) {
+                        const spNew = Object(sanPham)
+                        spNew.hinhAnhs = spNew.hinhAnhs.filter((p: AnhSanPham) => p.id !== anhdId)
+                        setSanPham(spNew)
+                    }
+                },
+            },
+        ])
+    }
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -75,6 +94,9 @@ const SanPhamDetail = () => {
                                     source={item.hinhAnh ? { uri: item.hinhAnh } : no_image}
                                     style={{ width: 75, height: 75, borderRadius: 8, marginHorizontal: 8 }}
                                 />
+                                <IconButton style={styles.removeBtn} onPress={() => handleRemoveImage(item.id)}>
+                                    <Ionicons name='close-circle' size={24} color={'black'} />
+                                </IconButton>
                             </Pressable>
                         ))}
                     </ScrollView>
@@ -132,5 +154,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         textAlignVertical: 'top',
         padding: 8,
+    },
+    removeBtn: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        height: 50,
+        width: 50,
+        zIndex: 999,
     },
 })

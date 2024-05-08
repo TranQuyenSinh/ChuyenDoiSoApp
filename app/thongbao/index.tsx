@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect } from 'react'
-import { useNavigation } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import Colors from '@constants/Colors'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
@@ -24,6 +24,21 @@ const ThongBaoPage = () => {
     }, [isLoggedIn])
 
     const handlePress = async (item: ThongBao) => {
+        if (item.loai && item.loaiId) {
+            switch (item.loai) {
+                case 'tinnhan':
+                    router.push({
+                        pathname: '/tuvan/0',
+                        params: { hoiThoaiId: item.loaiId },
+                    })
+                    break
+                case 'nhucau':
+                    router.push({
+                        pathname: `/doanhnghiep/${item.loaiId}`,
+                    })
+                    break
+            }
+        }
         if (!item.daXem) {
             dispatch(readThongBao(item.id))
         }
@@ -47,7 +62,7 @@ const ThongBaoPage = () => {
     if (!isLoggedIn) return <RequireLogin />
 
     return (
-        <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
             {thongBaos?.map((item: ThongBao) => (
                 <TouchableOpacity
                     onPress={() => handlePress(item)}
@@ -67,7 +82,7 @@ const ThongBaoPage = () => {
                     </IconButton>
                 </TouchableOpacity>
             ))}
-        </View>
+        </ScrollView>
     )
 }
 

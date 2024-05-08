@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { ToastAndroid } from 'react-native'
 import { Link, useRouter } from 'expo-router'
@@ -6,7 +6,7 @@ import * as WebBrowser from 'expo-web-browser'
 import * as SecureStore from 'expo-secure-store'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Constants from '@constants/Constants'
+import Constants, { ROLE, ROLES } from '@constants/Constants'
 import useWarmUpBrowser from '@hooks/useWarmUpBrowser'
 import { useAuth, useUser, useOAuth } from '@clerk/clerk-expo'
 import userSlice, {
@@ -16,24 +16,25 @@ import userSlice, {
 } from '@redux/userSlice'
 import { deleteSecureItem, getSecureItem, setSecureItem } from '@utils/secureStore'
 import { toast } from '@utils/toast'
-import doanhNghiepSlice from '@redux/doanhNghiepSlice'
+import doanhNghiepSlice, { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import khaoSatSlice from '@redux/khaoSatSlice'
+import { thongBaoActions } from '@redux/thongBaoSlice'
+import { AppDispatch, RootState } from '@redux/store'
 
 WebBrowser.maybeCompleteAuthSession()
 
 export const useDangNhap = () => {
     useWarmUpBrowser()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const { user, isSignedIn } = useUser()
+    const { userProfile, isLoggedIn } = useSelector((state: RootState) => state.user)
     const { signOut } = useAuth()
 
-    const userStore = useSelector(state => state.user)
+    const { startOAuthFlow: googleAuth } = useOAuth({ strategy: 'oauth_google' })
+    const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: 'oauth_facebook' })
 
-    const { startOAuthFlow: googleAuth } = useOAuth({ strategy: Constants.Strategy.Google })
-    const { startOAuthFlow: facebookAuth } = useOAuth({ strategy: Constants.Strategy.Facebook })
-
-    const loginOAuth = async strategy => {
+    const loginOAuth = async (strategy: any) => {
         console.log('===> Bắt đầu OAUTH')
         const selectedAuth = {
             [Constants.Strategy.Google]: googleAuth,
@@ -42,11 +43,10 @@ export const useDangNhap = () => {
 
         try {
             const { createdSessionId, setActive } = await selectedAuth()
-            if (createdSessionId) {
+            if (createdSessionId && setActive) {
                 setActive({ session: createdSessionId })
-                // setTypeAuth('google')
             }
-        } catch (e) {
+        } catch (e: any) {
             if (e.errors[0]?.code === 'session_exists') {
                 await logOut()
                 await loginOAuth(strategy)
@@ -54,7 +54,7 @@ export const useDangNhap = () => {
         }
     }
 
-    const tryLoginBySavedInfo = async secureItemName => {
+    const tryLoginBySavedInfo = async (secureItemName: 'oauth' | 'password') => {
         let savedAuth = await getSecureItem(secureItemName)
         if (savedAuth?.type === 'oauth') {
             const { providerKey, hoten, email } = savedAuth
@@ -66,7 +66,7 @@ export const useDangNhap = () => {
     }
 
     useEffect(() => {
-        ;(async () => {
+        ; (async () => {
             if (isSignedIn) {
                 const providerKey = user?.id
                 const hoten = user?.firstName + ' ' + user?.lastName
@@ -76,7 +76,13 @@ export const useDangNhap = () => {
         })()
     }, [isSignedIn])
 
-    const loginWithPassword = (email, password) => {
+    useEffect(() => {
+        if (isLoggedIn && isInRole(ROLES.DOANH_NGHIEP)) {
+            dispatch(fetchDoanhNghiepInfo())
+        }
+    }, [isLoggedIn])
+
+    const loginWithPassword = (email: string, password: string) => {
         if (!email || !password) {
             toast('Vui lòng nhập đầy đủ thông tin')
             return
@@ -89,11 +95,16 @@ export const useDangNhap = () => {
         dispatch(userSlice.actions.logout())
         dispatch(doanhNghiepSlice.actions.resetDoanhNghiep())
         dispatch(khaoSatSlice.actions.resetKhaoSat())
+        dispatch(thongBaoActions.resetThongBao())
         dispatch(logOutServer())
         await deleteSecureItem(Constants.SecureStore.SavedAuth)
         console.log('===> User logout success')
         await signOut()
     }
 
-    return { loginWithPassword, loginOAuth, logOut, tryLoginBySavedInfo }
+    const isInRole = useCallback((roleId: ROLE) => {
+        return userProfile?.vaitro?.[0]?.id === roleId
+    }, [userProfile])
+
+    return { loginWithPassword, loginOAuth, logOut, tryLoginBySavedInfo, isInRole }
 }

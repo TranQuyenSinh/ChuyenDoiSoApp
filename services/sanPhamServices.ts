@@ -1,5 +1,6 @@
-import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
+import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { authAxios, axios } from '@utils/axios'
+import { AxiosError } from 'axios'
 
 export const getSanPhamByDoanhNghiep = async (id: number) => {
     try {
@@ -21,48 +22,74 @@ export const getSanPham = async (id: number) => {
     }
 }
 
-export const createSanPham = async (name: string, price: string, description: string, hinhAnh: any) => {
+export const createSanPham = async (name: string, price: string, description: string, hinhAnhs: any) => {
     try {
         const formData = new FormData()
         formData.append(`tenSanPham`, name)
         formData.append(`gia`, price)
         formData.append(`moTa`, description)
-        formData.append(`hinhAnh`, hinhAnh)
-        await authAxios.post('sanpham/create', formData, {
+        hinhAnhs.forEach((image: any) => {
+            formData.append(`hinhAnhs[]`, image)
+        })
+        const { data } = await authAxios.post<SanPham[]>('sanpham/create', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
-        return true
+        return data
     } catch (error) {
-        console.log('===> Lỗi tạo sản phẩm: ', error.response)
-        return false
+        console.log('===> Lỗi tạo sản phẩm: ', (error as AxiosError).response)
+        return undefined
     }
 }
 
-export const editSanPham = async (id: number, name: string, price: string, description: string, hinhAnh?: any, removeImage?: boolean) => {
+export const editSanPham = async (id: number, name: string, price: string, description: string) => {
     try {
         const formData = new FormData()
         formData.append(`tenSanPham`, name)
         formData.append(`gia`, price)
         formData.append(`moTa`, description)
-        formData.append(`hinhAnh`, hinhAnh)
-        formData.append(`removeImage`, removeImage ? 'true' : 'false')
-        await authAxios.post(`sanpham/${id}/edit`, formData, {
+        const { data } = await authAxios.post<SanPham[]>(`sanpham/${id}/edit`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         })
-        return true
+        console.log('🚀 ~ data: ', data)
+        return data
     } catch (error) {
         console.log('===> Lỗi sửa sản phẩm: ', error)
-        return false
+        return undefined
     }
 }
 
 export const deleteSanPham = async (id: number) => {
     try {
-        const formData = new FormData()
-        await authAxios.delete(`sanpham/${id}`)
-        return true
+        const { data } = await authAxios.delete<SanPham[]>(`sanpham/${id}`)
+        return data
     } catch (error) {
         console.log('===> Lỗi xóa sản phẩm: ', error)
+        return undefined
+    }
+}
+
+export const addAnhSanPham = async (sanPhamId: number, hinhAnh: any) => {
+    try {
+        const formData = new FormData()
+        formData.append(`id`, sanPhamId?.toString())
+        formData.append(`hinhAnh`, hinhAnh)
+
+        const { data } = await authAxios.post<AnhSanPham>(`sanpham/hinhanh/create`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        return data
+    } catch (error) {
+        console.log('===> Lỗi tạo ảnh sản phẩm: ', (error as AxiosError).response)
+        return undefined
+    }
+}
+
+export const deleteAnhSanPham = async (id: number) => {
+    try {
+        await authAxios.delete(`sanpham/hinhanh/${id}`)
+        return true
+    } catch (error) {
+        console.log('===> Lỗi xóa ảnh sản phẩm: ', (error as AxiosError).response)
         return false
     }
 }

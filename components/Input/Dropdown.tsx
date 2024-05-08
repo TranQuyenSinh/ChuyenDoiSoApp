@@ -62,7 +62,7 @@ export const ValidateDropdownComponent = ({
 
 interface DropdownProps {
     data: any[]
-    value?: string | undefined
+    value?: any
     label?: string
     placeholder?: string
     mode?: 'auto' | 'default' | 'modal'

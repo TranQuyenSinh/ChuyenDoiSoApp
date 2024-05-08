@@ -7,11 +7,14 @@ export default {
         SavedAuth: 'saved_auth',
         BioAuth: 'bio_auth',
     },
-    Role: {
-        Admin: 'ad',
-        DoanhNghiep: 'dn',
-        ChuyenGia: 'cg',
-        CongTacVien: 'ctv',
-        HiepHoi: 'hhdn',
-    },
 }
+
+export enum ROLES {
+    ADMIN = 'ad',
+    DOANH_NGHIEP = 'dn',
+    CHUYEN_GIA = 'cg',
+    CONG_TAC_VIEN = 'ctv',
+    HIEP_HOI = 'hhdn',
+}
+
+export type ROLE = ROLES.ADMIN | ROLES.DOANH_NGHIEP | ROLES.CHUYEN_GIA | ROLES.CONG_TAC_VIEN | ROLES.HIEP_HOI

@@ -4,7 +4,7 @@ import { axios } from '@utils/axios'
 
 export const getLinhVucs = async () => {
     try {
-        let { data } = await axios.get<LinhVuc>('linhvuc')
+        let { data } = await axios.get<LinhVuc[]>('linhvuc')
         return data
     } catch (err) {
         return []

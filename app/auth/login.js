@@ -69,8 +69,8 @@ const Page = () => {
                                 paddingVertical: 50,
                             }}
                         />
-                        <Text style={{ fontSize: 24, color: '#00549c', fontWeight: 'bold' }}>
-                            Chuyển đổi số {'\n'}AN GIANG
+                        <Text style={{ fontSize: 20, color: '#00549c', fontWeight: 'bold' }}>
+                            Chuyển đổi số {'\n'}Doanh nghiệp An Giang
                         </Text>
                     </View>
                     <View>

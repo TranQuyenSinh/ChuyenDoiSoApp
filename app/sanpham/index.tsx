@@ -1,40 +1,37 @@
-import React, { useLayoutEffect, useState, useEffect, useCallback } from 'react'
+import React, { useLayoutEffect, useState, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { View, ScrollView, StyleSheet, Image, Text, Pressable, Alert } from 'react-native'
+import { View, StyleSheet, Image, Text, Pressable, Alert } from 'react-native'
 import { useNavigation, router } from 'expo-router'
-
+import Share, { ShareOptions } from 'react-native-share'
+import RNFetchBlob from 'rn-fetch-blob'
 import { AppDispatch, RootState } from '@redux/store'
 import PageHeader from '@components/View/PageHeader'
-//@ts-ignore
-import background from '@assets/images/test2.jpeg'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { deleteSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
-import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
+import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
 import Loading from '@components/StatusPage/Loading'
 import Button from '@components/View/Button'
 import Colors from '@constants/Colors'
-import { useFocusEffect } from 'expo-router'
 import { FlatList } from 'react-native-gesture-handler'
 //@ts-ignore
 import no_avatar from '@assets/images/no_image.png'
 import { formatPrice } from '@utils/format'
 import { Ionicons } from '@expo/vector-icons'
-import BackgroundImage from '@components/View/BackgroundImage'
 import IconButton from '@components/View/IconButton'
 import { toast } from '@utils/toast'
+import LinearGradient from 'react-native-linear-gradient'
 
 const index = () => {
     const navigation = useNavigation()
-    const [products, setProducts] = useState<SanPham[]>([])
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
-    const { doanhNghiep, status } = useSelector((state: RootState) => state.doanhNghiep)
+    const { doanhNghiep, sanPhams } = useSelector((state: RootState) => state.doanhNghiep)
 
     const fetchData = async (id: number) => {
         setLoading(true)
         const products = await getSanPhamByDoanhNghiep(id)
-        setProducts(products)
+        dispatch(doanhNghiepActions.setSanPhams(products))
         setLoading(false)
     }
 
@@ -45,16 +42,17 @@ const index = () => {
             [
                 {
                     text: 'Hủy bỏ',
-                    style: 'cancel'
+                    style: 'cancel',
                 },
                 {
-                    text: 'Đồng ý', onPress: async () => {
+                    text: 'Đồng ý',
+                    onPress: async () => {
                         const result = await deleteSanPham(item.id)
                         if (result) {
                             toast('Xóa sản phẩm thành công')
-                            setProducts(products.filter(p => p.id !== item.id))
+                            dispatch(doanhNghiepActions.setSanPhams(sanPhams?.filter(p => p.id !== item.id) || []))
                         }
-                    }
+                    },
                 },
             ],
             {
@@ -63,17 +61,43 @@ const index = () => {
         )
     }
 
-    useEffect(() => {
-        dispatch(fetchDoanhNghiepInfo())
-    }, [])
+    const handleShare = async (item: SanPham) => {
+        try {
+            let Pictures = item.hinhAnhs.map(item =>
+                RNFetchBlob.config({
+                    fileCache: true,
+                })
+                    .fetch('GET', item.hinhAnh)
+                    .then(resp => {
+                        let base64s = RNFetchBlob.fs
+                            .readFile(resp.data, 'base64')
+                            .then(data => 'data:image/jpeg;base64,' + data)
+                        return base64s
+                    })
+            )
+            setLoading(true)
+            Promise.all(Pictures).then(completed => {
+                setLoading(false)
+                const options: ShareOptions = {
+                    message: item.moTa,
+                    urls: completed,
+                    subject: item.moTa,
+                    title: item.moTa,
+                }
+                Share.open(options).then(res => res.success && toast('Chia sẻ thành công'))
+            })
+        } catch (error) {
+            console.log('===> error: ', error)
+            setLoading(false)
+        }
+    }
 
-    useFocusEffect(
-        useCallback(() => {
-            if (doanhNghiep?.id) {
-                fetchData(doanhNghiep?.id)
-            }
-        }, [doanhNghiep])
-    )
+    useEffect(() => {
+        if (doanhNghiep) {
+            fetchData(doanhNghiep.id)
+        }
+    }, [doanhNghiep])
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -84,11 +108,23 @@ const index = () => {
 
     return (
         <View style={styles.container}>
-            <PageHeader tintColor='white' title={'Sản phẩm nổi bật của bạn'} style={{ marginBottom: 12 }} />
-            <BackgroundImage source={background} blurRadius={10} />
+            <LinearGradient colors={['#32acff', '#94d3fe']}>
+                <PageHeader title='' tintColor='white' />
+                <View style={topStyles.titleContainer}>
+                    <Text style={topStyles.title}>Sản phẩm của bạn</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={topStyles.subTitle}>Quảng bá sản phẩm</Text>
+                        <Button
+                            text='Thêm'
+                            btnStyles={{ backgroundColor: Colors.orange, borderRadius: 30 }}
+                            onPress={() => router.push('/sanpham/create')}
+                        />
+                    </View>
+                </View>
+            </LinearGradient>
 
-            {loading || (status === 'loading' && <Loading />)}
-            {!loading && status !== 'loading' && products.length === 0 && (
+            {loading && <Loading />}
+            {/* {!loading && products.length === 0 && (
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, height: '100%' }}>
                     <Text style={styles.notfoundText}>Bạn chưa cập nhật sản phẩm nổi bật</Text>
                     <Text style={styles.notfoundSubText}>Đăng để quảng bá sản phẩm của bạn đến mọi người!</Text>
@@ -98,37 +134,29 @@ const index = () => {
                         onPress={() => router.push('/sanpham/create')}
                     />
                 </View>
-            )}
+            )} */}
 
-            {!loading && status !== 'loading' && products.length !== 0 && (
-                <View style={styles.selectRow}>
-                    <Text style={styles.title}>Đã đăng ({products.length}/10) sản phẩm</Text>
-                    {products.length < 10 && (
-                        <Pressable onPress={() => router.push('/sanpham/create')} style={styles.selectButton}>
-                            <Ionicons name='add' size={24} color={'white'} />
-                        </Pressable>
-                    )}
-                </View>
-            )}
-
-            {products.length !== 0 && (
+            {sanPhams?.length !== 0 && (
                 <FlatList
-                    keyExtractor={(item, index) => item.id + ''}
-                    data={products}
+                    keyExtractor={item => item.id + ''}
+                    data={sanPhams || []}
+                    contentContainerStyle={{ paddingHorizontal: 6 }}
                     numColumns={2}
                     renderItem={({ item }) => (
                         <Pressable
                             onPress={() => router.push({ pathname: '/sanpham/edit', params: { id: item.id } })}
                             style={productStyles.container}>
                             <IconButton style={productStyles.removeBtn} onPress={() => handleRemoveProduct(item)}>
-                                <Ionicons name='close-circle' size={24} color={"black"} />
+                                <Ionicons name='close-circle' size={24} color={'grey'} />
                             </IconButton>
                             <Image
+                                defaultSource={no_avatar}
                                 source={item.hinhAnhs?.[0]?.hinhAnh ? { uri: item.hinhAnhs[0].hinhAnh } : no_avatar}
                                 style={productStyles.image}
                             />
                             <Text style={productStyles.name}>{item.tenSanPham}</Text>
                             <Text style={productStyles.price}>{formatPrice(item.gia)} đ</Text>
+                            <Button text='Chia sẻ' onPress={() => handleShare(item)} />
                         </Pressable>
                     )}
                 />
@@ -138,6 +166,40 @@ const index = () => {
 }
 
 export default index
+
+const topStyles = StyleSheet.create({
+    titleContainer: {
+        paddingHorizontal: 16,
+        gap: 10,
+        paddingVertical: 24,
+    },
+    title: {
+        color: 'white',
+        fontWeight: '600',
+        letterSpacing: 0.5,
+        fontSize: 20,
+    },
+    subTitle: {
+        color: 'white',
+        fontSize: 16,
+    },
+    searchContainer: {
+        backgroundColor: 'white',
+        marginHorizontal: 12,
+        padding: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 12,
+        elevation: 12,
+        gap: 8,
+        marginBottom: 18,
+    },
+    input: {
+        color: Colors.bodyText,
+        fontSize: 16,
+        flex: 1,
+    },
+})
 
 const styles = StyleSheet.create({
     selectRow: {
@@ -192,10 +254,13 @@ const styles = StyleSheet.create({
 
 const productStyles = StyleSheet.create({
     container: {
-        padding: 12,
+        padding: 6,
         flex: 0.5,
         alignItems: 'center',
         gap: 6,
+        backgroundColor: 'white',
+        margin: 6,
+        borderRadius: 6,
     },
     image: {
         width: 160,
@@ -204,21 +269,22 @@ const productStyles = StyleSheet.create({
         borderRadius: 6,
     },
     name: {
-        color: 'white',
-        fontSize: 16,
+        color: '#38383a',
+        fontSize: 14,
         paddingHorizontal: 12,
         fontWeight: '500',
         textAlign: 'center',
     },
     price: {
-        color: 'white',
+        color: '#38383a',
+        fontSize: 12,
     },
     removeBtn: {
         position: 'absolute',
-        right: 0,
+        right: -12,
         top: 0,
         height: 50,
         width: 50,
-        zIndex: 999
-    }
+        zIndex: 999,
+    },
 })

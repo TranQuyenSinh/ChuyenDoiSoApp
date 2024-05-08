@@ -1,25 +1,15 @@
-import { Image, ScrollView, StyleSheet, Text, View, Pressable, ScrollViewBase } from 'react-native'
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
 //@ts-ignore
-import background from '@assets/backgrounds/doanhnghiepdetail.png'
+import background from '@assets/backgrounds/doanhnghiepdetail.jpg'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghiep } from '@services/doanhNghiepServices'
 import NotFound from '@components/StatusPage/NotFound'
-import Post from '@components/DienDan/Post'
-import { BaiViet } from '@constants/DienDan/DienDanTypes'
-import { getBaiVietsByDoanhNghiep } from '@services/dienDanServices'
-import { Ionicons } from '@expo/vector-icons'
-import Animated, {
-    interpolate,
-    useAnimatedScrollHandler,
-    useAnimatedStyle,
-    useSharedValue,
-} from 'react-native-reanimated'
 import { getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import SanPhamComponent, { ITEM_WIDTH } from '@components/SanPham/SanPham'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
@@ -30,6 +20,9 @@ import { getKhaoSatByDoanhNghiep } from '@services/khaoSatServices'
 import { KhaoSat } from '@constants/KhaoSat/KhaoSatType'
 import { windowWidth } from '@utils/window'
 import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
+import { useDangNhap } from '@hooks/useDangNhap'
+import { ROLES } from '@constants/Constants'
+import Button from '@components/View/Button'
 
 const ITEM_GAP = 12
 
@@ -40,6 +33,7 @@ const DoanhNghiepDetail = () => {
     const [products, setProducts] = useState<SanPham[]>([])
     const [loading, setLoading] = useState(false)
     const [khaoSats, setKhaoSats] = useState<KhaoSat[]>([])
+    const { isInRole } = useDangNhap()
     const nhuCauMoiNhat = useMemo(() => {
         if (data && data.nhuCau && data.nhuCau.length > 0) {
             return data.nhuCau.sort((a, b) => b.id - a.id)[0]
@@ -155,7 +149,7 @@ const DoanhNghiepDetail = () => {
                         </View>
                     </View>
                 )}
-                {nhuCauMoiNhat && (
+                {isInRole(ROLES.CHUYEN_GIA) && nhuCauMoiNhat && (
                     <View style={styles.section}>
                         <Text style={[styles.title, { marginBottom: 2 }]}>Nhu cầu Chuyển đổi số</Text>
                         {nhuCauMoiNhat.nhuCau.split('; ').map(item => (
@@ -171,6 +165,14 @@ const DoanhNghiepDetail = () => {
                             </Text>
                         ))}
                     </View>
+                )}
+
+                {isInRole(ROLES.CHUYEN_GIA) && (
+                    <Button
+                        btnStyles={styles.button}
+                        text='Tư vấn'
+                        onPress={() => router.push(`/tuvan/${data.user?.id}`)}
+                    />
                 )}
             </View>
         </ScrollView>
@@ -248,5 +250,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
         color: '#343c48',
+    },
+    button: {
+        marginHorizontal: 12,
+        marginBottom: 24,
     },
 })

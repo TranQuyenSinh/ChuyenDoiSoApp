@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: 'transparent',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: -1,

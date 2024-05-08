@@ -1,24 +1,18 @@
-import React, { useLayoutEffect, useState, useEffect, useCallback } from 'react'
+import React, { useLayoutEffect, useState, useEffect } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { View, StyleSheet, Alert, ScrollView } from 'react-native'
 import { useNavigation } from 'expo-router'
 
-import { AppDispatch, RootState } from '@redux/store'
+import { RootState } from '@redux/store'
 import PageHeader from '@components/View/PageHeader'
 //@ts-ignore
 import background from '@assets/images/test2.jpeg'
-import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
-import { deleteSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
-import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import Loading from '@components/StatusPage/Loading'
-import Colors from '@constants/Colors'
-import { useFocusEffect } from 'expo-router'
-//@ts-ignore
 import BackgroundImage from '@components/View/BackgroundImage'
 import { toast } from '@utils/toast'
 import { BaiViet } from '@constants/DienDan/DienDanTypes'
-import { deleteBaiViet, getBaiVietsByDoanhNghiep, getBaiVietsByUser } from '@services/dienDanServices'
+import { deleteBaiViet, getBaiVietsByUser } from '@services/dienDanServices'
 import Post from '@components/DienDan/Post'
 import IconButton from '@components/View/IconButton'
 import { Ionicons } from '@expo/vector-icons'
@@ -38,27 +32,28 @@ const QuanLyBaiViet = () => {
     }
 
     useEffect(() => {
-        if (userProfile?.id)
-            fetchData(userProfile?.id)
+        if (userProfile?.id) fetchData(userProfile?.id)
     }, [userProfile])
 
     const handleDelete = async (item: BaiViet) => {
         Alert.alert(
             'Lưu ý',
             'Bạn có chắc muốn xóa bài viết này?',
-            [{
-                text: 'Đồng ý', onPress: async () => {
-                    const result = await deleteBaiViet(item.id)
-                    if (result) {
-                        toast('Xóa bài viết thành công')
-                        setPosts(posts.filter(p => p.id !== item.id))
-                    }
-                }
-            },
-            {
-                text: 'Hủy bỏ',
-                style: 'cancel'
-            }
+            [
+                {
+                    text: 'Hủy bỏ',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Đồng ý',
+                    onPress: async () => {
+                        const result = await deleteBaiViet(item.id)
+                        if (result) {
+                            toast('Xóa bài viết thành công')
+                            setPosts(posts.filter(p => p.id !== item.id))
+                        }
+                    },
+                },
             ],
             {
                 cancelable: true,
@@ -80,17 +75,18 @@ const QuanLyBaiViet = () => {
             <BackgroundImage source={background} blurRadius={10} />
             {loading && <Loading />}
             {!loading && posts?.length === 0 && <NotFound message='Chưa có bài viết nào' />}
-            {posts?.length !== 0 && <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
-                {posts?.map(item =>
-                    <View key={item.id} style={styles.postContainer}>
-                        <IconButton onPress={() => handleDelete(item)} style={styles.deleteBtnContainer}>
-                            <Ionicons name='close-circle-sharp' color={'grey'} size={24} />
-                        </IconButton>
-                        <Post data={item} />
-                    </View>)}
-            </ScrollView>}
-
-
+            {posts?.length !== 0 && (
+                <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
+                    {posts?.map(item => (
+                        <View key={item.id} style={styles.postContainer}>
+                            <IconButton onPress={() => handleDelete(item)} style={styles.deleteBtnContainer}>
+                                <Ionicons name='close-circle-sharp' color={'grey'} size={24} />
+                            </IconButton>
+                            <Post data={item} />
+                        </View>
+                    ))}
+                </ScrollView>
+            )}
         </View>
     )
 }
@@ -100,11 +96,9 @@ export default QuanLyBaiViet
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
-    postContainer: {
-
-    },
+    postContainer: {},
     deleteBtnContainer: {
         position: 'absolute',
         top: 0,
@@ -113,5 +107,5 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         marginHorizontal: 10,
-    }
+    },
 })

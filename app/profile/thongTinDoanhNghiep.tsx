@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useEffect } from 'react'
 
 import { StyleSheet, View } from 'react-native'
-import { router, useFocusEffect, useNavigation } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view'
 
 import Colors from '@constants/Colors'
@@ -11,7 +11,6 @@ import NguoiDaiDienInfo from '@components/DoanhNghiepInfo/nguoiDaiDienInfo'
 import { useDispatch } from 'react-redux'
 import { fetchDoanhNghiepInfo } from '@redux/doanhNghiepSlice'
 import { AppDispatch } from '@redux/store'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import IconButton from '@components/View/IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -39,7 +38,8 @@ const ThongTinDoanhNghiep = () => {
             },
             headerRight: () => {
                 return (
-                    <IconButton onPress={() => router.push(index === 0 ? '/doanhnghiep/edit' : '/doanhnghiep/editDaiDien')}>
+                    <IconButton
+                        onPress={() => router.push(index === 0 ? '/doanhnghiep/edit' : '/doanhnghiep/editDaiDien')}>
                         <MaterialIcons name='edit' size={24} color='white' />
                     </IconButton>
                 )

@@ -115,13 +115,21 @@ const Register = () => {
                     <View>
                         <PageHeader title='Đăng ký tài khoản' />
                         <View style={styles.imageContainer}>
-                            <Image source={logo} style={{ width: 125, height: 125, resizeMode: 'cover' }} />
-                            <Text color={Colors.default} fontSize={24} fontWeight='500' align='center'>
-                                Chuyển đổi số An Giang
+                            <Image
+                                source={logo}
+                                style={{
+                                    width: 100,
+                                    height: 100,
+                                    resizeMode: 'cover',
+                                    paddingVertical: 50,
+                                }}
+                            />
+                            <Text style={{ fontSize: 20, color: '#00549c', fontWeight: 'bold' }}>
+                                Chuyển đổi số {'\n'}Doanh nghiệp An Giang
                             </Text>
                         </View>
                         <View style={inputStyles.container}>
-                            <Text style={inputStyles.label}>Tìm kiếm doanh nghiệp</Text>
+                            {/* <Text style={inputStyles.label}>Tìm kiếm doanh nghiệp</Text>
                             <AutocompleteDropdown
                                 RightIconComponent={<Ionicons name='search-outline' size={20} color={'grey'} />}
                                 dataSet={suggestData || []}
@@ -139,7 +147,7 @@ const Register = () => {
                                     inputStyles.input,
                                     { backgroundColor: 'transparent', paddingLeft: 0 },
                                 ]}
-                            />
+                            /> */}
                             <Text style={inputStyles.label}>Điện thoại</Text>
                             <TextInput
                                 value={form.phone}
@@ -155,7 +163,7 @@ const Register = () => {
                                 autoCapitalize='words'
                                 style={inputStyles.input}
                             />
-                            <Text style={inputStyles.label}>Đơn vị</Text>
+                            <Text style={inputStyles.label}>Tên doanh nghiệp</Text>
                             <TextInput
                                 value={form.dnName}
                                 onChangeText={text => setForm({ ...form, dnName: text })}
@@ -187,8 +195,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     imageContainer: {
-        justifyContent: 'center',
+        flexDirection: 'row',
+        gap: 12,
         alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 const inputStyles = StyleSheet.create({

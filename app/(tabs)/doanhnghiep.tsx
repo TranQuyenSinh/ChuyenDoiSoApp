@@ -1,34 +1,13 @@
-import {
-    FlatList,
-    Image,
-    ImageBackground,
-    Pressable,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View,
-} from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
-import moment from 'moment'
-import { defaultStyles } from '@constants/Styles'
-import Seperator from '@components/View/Seperator'
-import { interpolate } from 'react-native-reanimated'
-import Carousel from 'react-native-reanimated-carousel'
-import { windowWidth } from '@utils/window'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghieps } from '@services/doanhNghiepServices'
 //@ts-ignore
 import no_image from '@assets/images/no_image.png'
-import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
-import Button from '@components/View/Button'
-import { router, useFocusEffect } from 'expo-router'
-import BackgroundImage from '@components/View/BackgroundImage'
+import { router } from 'expo-router'
 import LinearGradient from 'react-native-linear-gradient'
 import { Keyboard } from 'react-native'
 const DoanhNghiepPage = () => {
@@ -128,10 +107,10 @@ const searchStyles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         marginHorizontal: 12,
-        padding: 12,
+        padding: 6,
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 12,
+        borderRadius: 24,
         elevation: 12,
         gap: 8,
         marginBottom: 18,

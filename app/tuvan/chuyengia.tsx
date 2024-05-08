@@ -9,14 +9,14 @@ import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 import { RootState } from '@redux/store'
 import { Conversation } from '@constants/HoiDap/HoiDapType'
-import { fetchConversations } from '@services/hoiDapServices'
+import { getHoiThoais } from '@services/hoiDapServices'
 // @ts-ignore
 import chuyengia_avatar from '@assets/icons/chuyengia.jpg'
 import RequireLogin from '@components/StatusPage/RequireLogin'
 import BackgroundImage from '@components/View/BackgroundImage'
 //@ts-ignore
 import background from '@assets/backgrounds/hoidap.jpg'
-const HoiDap = () => {
+const ChuyenGiaDangTuVan = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [conversations, setConversations] = useState<Conversation[]>([])
@@ -24,7 +24,7 @@ const HoiDap = () => {
     useEffect(() => {
         ;(async () => {
             setLoading(true)
-            const data = await fetchConversations()
+            const data = await getHoiThoais()
             setConversations(data)
             setLoading(false)
         })()
@@ -54,7 +54,7 @@ const HoiDap = () => {
                     {conversations?.map((item: Conversation) => (
                         <Pressable
                             android_ripple={{ color: 'gray' }}
-                            onPress={() => router.push(`/chuyengia/hoidap/${item.chuyenGia.id}`)}
+                            onPress={() => router.push(`/tuvan/${item.chuyenGia.user.id}`)}
                             key={item.id}
                             style={styles.itemContainer}>
                             <View style={{ flexDirection: 'row', gap: 8, borderRadius: 12 }}>
@@ -80,7 +80,7 @@ const HoiDap = () => {
     )
 }
 
-export default HoiDap
+export default ChuyenGiaDangTuVan
 
 const styles = StyleSheet.create({
     container: {

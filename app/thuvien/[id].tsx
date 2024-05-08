@@ -12,7 +12,6 @@ import IconButton from '@components/View/IconButton'
 import { getThuVien } from '@services/commonServices'
 import { ThuVien } from '@constants/TinTuc/ThuVienTypes'
 import { windowWidth, windowHeight } from '@utils/window'
-import PageHeader from '@components/View/PageHeader'
 import Colors from '@constants/Colors'
 const ChiTietThuVien = () => {
     const navigation = useNavigation()

@@ -34,6 +34,7 @@ export default function TabLayout() {
                     name='index'
                     options={{
                         headerShown: false,
+
                         tabBarLabel: 'Trang chủ',
                         tabBarIcon: ({ color, size, focused }) => {
                             return (

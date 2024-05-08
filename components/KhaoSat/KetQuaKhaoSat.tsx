@@ -28,7 +28,7 @@ const KetQuaKhaoSat = ({ mucDo, tongDiem }: KetQuaKhaoSatProps) => {
                         start={{ x: 0, y: 0.2 }}
                         colors={['#4ee9f2', '#4ba0fa']}
                         style={[khaoSatStyles.box]}>
-                        <Text style={khaoSatStyles.boxTitle}>Mức độ CDS</Text>
+                        <Text style={khaoSatStyles.boxTitle}>Mức độ CĐS</Text>
                         <Text style={khaoSatStyles.boxNumber}>{mucDo?.tenMucDo}</Text>
                         <Text style={khaoSatStyles.boxSub}>Xem chi tiết {'>'}</Text>
                     </LinearGradient>

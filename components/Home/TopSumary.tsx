@@ -1,6 +1,5 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
-import { setWith } from 'lodash'
 import Colors from '@constants/Colors'
 import DiemLineChart from '@components/KhaoSat/ThongKe/DiemLineChart'
 import { AppDispatch, RootState } from '@redux/store'
@@ -11,13 +10,17 @@ import ThongKeCDSPieChart from '@components/KhaoSat/ThongKe/ThongKeCDSPieChart'
 import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
 //@ts-ignore
 import star from '@assets/icons/home/star.png'
+import SoLuongDoanhNghiepTheoTinhChart from '@components/KhaoSat/ThongKe/SoLuongDoanhNghiepTheoTinhChart'
+import ThongKeMucDoTheoHuyen from '@components/KhaoSat/ThongKe/ThongKeMucDoTheoHuyen'
+import { screenWidth } from '@utils/window'
+import Constants, { ROLES } from '@constants/Constants'
 
 const TopSumary = () => {
     const [index, setIndex] = useState(0)
     const { khaoSats } = useSelector((state: RootState) => state.khaoSat)
     const dispatch = useDispatch<AppDispatch>()
 
-    const { isLoggedIn } = useSelector((state: RootState) => state.user)
+    const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(fetchDanhSachKhaoSat())
@@ -29,15 +32,26 @@ const TopSumary = () => {
         return khaoSats?.[0]
     }, [khaoSats])
 
+    const isDoanhNghiep = useMemo(() => {
+        let isDn = userProfile?.vaitro?.[0]?.id === ROLES.DOANH_NGHIEP
+        isDn ? setIndex(0) : setIndex(1)
+
+        return isDn
+    }, [userProfile, isLoggedIn])
+
     return (
         <View style={styles.container}>
             <View style={styles.top}>
                 <View style={switchStyles.container}>
-                    <Pressable
-                        onPress={() => setIndex(0)}
-                        style={[switchStyles.item, index === 0 && switchStyles.itemActive]}>
-                        <Text style={[switchStyles.text, index === 0 && switchStyles.textActive]}>Doanh nghiệp</Text>
-                    </Pressable>
+                    {isDoanhNghiep && (
+                        <Pressable
+                            onPress={() => setIndex(0)}
+                            style={[switchStyles.item, index === 0 && switchStyles.itemActive]}>
+                            <Text style={[switchStyles.text, index === 0 && switchStyles.textActive]}>
+                                Doanh nghiệp
+                            </Text>
+                        </Pressable>
+                    )}
                     <Pressable
                         onPress={() => setIndex(1)}
                         style={[switchStyles.item, index === 1 && switchStyles.itemActive]}>
@@ -47,14 +61,12 @@ const TopSumary = () => {
                 {lastestKhaoSat?.mucDo?.tenMucDo && (
                     <View style={switchStyles.mucDo}>
                         <Image source={star} style={switchStyles.iconStar} />
-                        <Text style={switchStyles.mucDoText}>
-                            {lastestKhaoSat?.mucDo?.tenMucDo.replace(/Mức \d - /g, '')}
-                        </Text>
+                        <Text style={switchStyles.mucDoText}>{lastestKhaoSat?.mucDo?.tenMucDo}</Text>
                     </View>
                 )}
             </View>
             <View style={chartStyles.container}>
-                {index === 0 && khaoSats && khaoSats.length !== 0 && (
+                {index === 0 && khaoSats && khaoSats.length !== 0 && isDoanhNghiep && (
                     <ScrollView
                         horizontal
                         pagingEnabled
@@ -66,7 +78,7 @@ const TopSumary = () => {
                             <DiemLineChart />
                         </View>
                         <View style={chartStyles.item}>
-                            <Text style={chartStyles.title}></Text>
+                            <Text style={chartStyles.title}>Mức độ sẵn sàng chuyển đổi số trên 6 trụ cột</Text>
                             <RadarChart data={lastestKhaoSat} />
                         </View>
                     </ScrollView>
@@ -74,13 +86,23 @@ const TopSumary = () => {
                 {index === 1 && (
                     <ScrollView
                         horizontal
-                        pagingEnabled
+                        decelerationRate={0.9}
+                        snapToInterval={screenWidth - 12 + 3}
+                        snapToAlignment={'center'}
                         showsHorizontalScrollIndicator={false}
                         style={{ marginBottom: 12 }}
-                        contentContainerStyle={{ paddingHorizontal: 12 }}>
+                        contentContainerStyle={{ alignItems: 'center', gap: 6, paddingHorizontal: 12 }}>
                         <View style={chartStyles.item}>
-                            <Text style={chartStyles.title}>Tỷ lệ mức độ sãn sàng chuyển đổi số tỉnh An Giang</Text>
+                            <Text style={chartStyles.title}>Trung bình mức độ sẵn sàng CĐS tại các huyện</Text>
+                            <ThongKeMucDoTheoHuyen />
+                        </View>
+                        <View style={chartStyles.item}>
+                            <Text style={chartStyles.title}>Phân bổ theo mức độ sẵn sàng CĐS</Text>
                             <ThongKeCDSPieChart />
+                        </View>
+                        <View style={chartStyles.item}>
+                            <Text style={chartStyles.title}>Số lượng doanh nghiệp theo từng huyện</Text>
+                            <SoLuongDoanhNghiepTheoTinhChart />
                         </View>
                     </ScrollView>
                 )}
@@ -148,13 +170,13 @@ const switchStyles = StyleSheet.create({
 const chartStyles = StyleSheet.create({
     container: {},
     item: {
-        // backgroundColor: 'white',
         borderRadius: 20,
+        alignItems: 'center',
+        width: screenWidth - 24,
     },
     title: {
         textAlign: 'center',
         color: 'white',
-        marginHorizontal: 12,
         fontSize: 14,
         fontWeight: '600',
         marginVertical: 3,

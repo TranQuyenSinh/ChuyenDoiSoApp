@@ -1,9 +1,10 @@
+import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { Conversation, Message } from '@constants/HoiDap/HoiDapType'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { authAxios } from '@utils/axios'
 import { AxiosError } from 'axios'
 
-export const fetchConversations = async () => {
+export const getHoiThoais = async () => {
     try {
         const { data } = await authAxios.get<Conversation[]>('hoidap/hoithoai')
         return data
@@ -15,57 +16,61 @@ export const fetchConversations = async () => {
     }
 }
 
-export const fetchChuyenGiaConversations = async () => {
+export const getTinNhans = async (toUserId: number) => {
     try {
-        const { data } = await authAxios.get<Conversation[]>('hoidap/chuyengiahoithoai')
-        return data
-    } catch (error) {
-        const err = error as AxiosError
-        // @ts-ignore
-        console.log('===> error: ', err?.response?.data?.error)
-        return []
-    }
-}
-
-export const fetchMessages = async (chuyenGiaId: number) => {
-    try {
-        console.log('===> chuyenGiaId: ', chuyenGiaId)
         const { data } = await authAxios.get<Conversation>('hoidap/tinnhan', {
-            params: { chuyenGiaId },
+            params: { toUserId },
         })
         return data
     } catch (error) {
-        const err = error as AxiosError
-        // @ts-ignore
-        console.log('===> error: ', err.message)
+        console.log('===> Lỗi lấy tin nhắns: ', (error as AxiosError).response)
         return undefined
     }
 }
 
-export const fetchMessagesChuyenGia = async (doanhNghiepId: number) => {
+export const getTinNhansByHoiThoaiId = async (hoiThoaiId: number) => {
     try {
-        console.log('===> doanhNghiepId: ', doanhNghiepId) // doanhnghiep_id
-        const { data } = await authAxios.get<Conversation>('hoidap/tinnhanchuyengia', {
-            params: { doanhNghiepId },
+        const { data } = await authAxios.get<Conversation>('hoidap/gettinnhanbyhoithoai', {
+            params: { hoiThoaiId },
         })
         return data
     } catch (error) {
-        const err = error as AxiosError
-        // @ts-ignore
-        console.log('===> error: ', err.message)
+        console.log('===> Lỗi lấy tin nhắns by hội thoại id: ', (error as AxiosError).response)
         return undefined
     }
 }
 
-export const sendMessage = async (message: string, hoiThoaiId: number) => {
+export const postTinNhan = async (message: string, hoiThoaiId: number) => {
     try {
-        await authAxios.post('hoidap/tinnhan', {
+        const { data } = await authAxios.post<Message>('hoidap/tinnhan', {
             message,
             hoiThoaiId,
         })
+        return data
+    } catch (error) {
+        console.log('===> Lỗi gửi tin nhắns: ', (error as AxiosError).response)
+        return undefined
+    }
+}
+
+export const deleteHoiThoai = async (hoiThoaiId: number) => {
+    try {
+        await authAxios.delete(`hoidap/hoithoai/${hoiThoaiId}`)
+        return true
     } catch (error) {
         const err = error as AxiosError
         // @ts-ignore
-        console.log('===> error: ', err.message)
+        console.log('===> error: ', err?.message)
+        return false
+    }
+}
+
+export const timKiemDNTuVan = async () => {
+    try {
+        const { data } = await authAxios.get<DoanhNghiep[]>('hoidap/timkiem')
+        return data
+    } catch (error) {
+        console.log('===> Lỗi tìm kiếm doanh nghiệp tư vấn: ', (error as AxiosError).response);
+        return []
     }
 }

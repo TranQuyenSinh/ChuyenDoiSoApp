@@ -5,7 +5,6 @@ export interface SanPham {
     tenSanPham: string
     gia: number
     moTa: string
-    doanhNghiep: DoanhNghiep
     hinhAnhs: AnhSanPham[]
     createdAt: string
     updatedAt: string

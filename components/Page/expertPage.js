@@ -42,7 +42,7 @@ const ExperPage = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 24 }} showsVerticalScrollIndicator={false}>
                 {/* Lĩnh vực */}
                 <ScrollView
                     style={{ gap: 4, paddingVertical: 12 }}
@@ -71,7 +71,6 @@ const ExperPage = () => {
                     ))}
                 </ScrollView>
 
-                {loading && <Loading />}
                 {!loading && (
                     <>
                         <View style={styles.listContainer}>
@@ -122,8 +121,7 @@ const styles = StyleSheet.create({
         gap: 10,
         backgroundColor: '#ffffff',
         padding: 12,
-        borderRadius: 12,
-        elevation: 10,
+        borderRadius: 8,
     },
     hoTen: {
         fontSize: 16,

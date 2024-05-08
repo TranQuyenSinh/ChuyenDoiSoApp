@@ -3,16 +3,17 @@ import React from 'react'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 
-const Modal = ({ isOpen, toggle, showCloseIcon = false, children, contentStyle = {} }) => {
+const Modal = ({ dismissable = false, title = "", isOpen, toggle, showCloseIcon = false, children, contentStyle = {} }) => {
     return (
         <ReactModal animationType='fade' transparent visible={isOpen}>
-            <Pressable onPress={toggle} style={styles.centerdView}>
-                <Pressable onPress={e => e.stopPropagation()} style={[styles.modalView, contentStyle]}>
+            <Pressable onPress={dismissable ? toggle(false) : () => { }} style={styles.centerdView}>
+                <Pressable onPress={e => e.stopPropagation()} style={[styles.modalView, contentStyle, title && { paddingTop: 50 }]}>
                     {showCloseIcon && (
-                        <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={toggle}>
-                            <Ionicons name='close-sharp' size={24} color={Colors.bodyText} />
+                        <TouchableOpacity style={styles.closeIcon} onPress={toggle}>
+                            <Ionicons name='close-sharp' size={24} color={title ? '#fff' : Colors.bodyText} />
                         </TouchableOpacity>
                     )}
+                    {title && <Text style={styles.title}>{title}</Text>}
                     {children}
                 </Pressable>
             </Pressable>
@@ -38,4 +39,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 5,
     },
+    closeIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        zIndex: 999
+    },
+    title: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        backgroundColor: Colors.default,
+        color: 'white',
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        left: 0,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        paddingVertical: 6,
+        textAlign: 'center'
+
+    }
 })

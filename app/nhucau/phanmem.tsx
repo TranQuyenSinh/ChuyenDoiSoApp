@@ -1,19 +1,24 @@
-import { Alert, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { router, useNavigation } from 'expo-router'
 //@ts-ignore
-import background from '@assets/backgrounds/nhucau.png'
+import background from '@assets/backgrounds/nhucau.jpg'
+//@ts-ignore
+import complete from '@assets/images/complete.jpg'
 import BackgroundImage from '@components/View/BackgroundImage'
 import CheckBox from 'react-native-check-box'
 import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
 import IconButton from '@components/View/IconButton'
-import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import { createNhuCau } from '@services/doanhNghiepServices'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import RequireLogin from '@components/StatusPage/RequireLogin'
+import { useDangNhap } from '@hooks/useDangNhap'
+import { ROLES } from '@constants/Constants'
+import NotFound from '@components/StatusPage/NotFound'
 
 const GIAI_PHAPS = [
     { id: 1, name: 'Ứng dụng quản lý kho bãi' },
@@ -47,7 +52,8 @@ const NhuCau = () => {
     const [giaiPhapText, setGiaiPhapText] = useState('')
     const [caiThienText, setCaiThienText] = useState('')
     const { isLoggedIn } = useSelector((state: RootState) => state.user)
-
+    const { isInRole } = useDangNhap()
+    const [isComplete, setIsComplete] = useState(false)
     const onClickQuestion = () => {
         Alert.alert(
             'Hướng dẫn',
@@ -100,8 +106,7 @@ const NhuCau = () => {
         }
         const result = await createNhuCau(data.giaiPhap, data.caiThien)
         if (result) {
-            toast('Gửi nhu cầu thành công')
-            router.back()
+            setIsComplete(true)
         } else {
             toast('Gửi nhu cầu thất bại')
         }
@@ -125,9 +130,10 @@ const NhuCau = () => {
     return (
         <View style={styles.container}>
             <BackgroundImage source={background} />
-            {!isLoggedIn ? (
-                <RequireLogin tintColor='white' />
-            ) : (
+            {!isLoggedIn && <RequireLogin tintColor='white' />}
+            {isLoggedIn && !isInRole(ROLES.DOANH_NGHIEP) && <NotFound message='Bạn không phải doanh nghiệp' />}
+
+            {isLoggedIn && isInRole(ROLES.DOANH_NGHIEP) && !isComplete && (
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     style={styles.form}
@@ -175,6 +181,19 @@ const NhuCau = () => {
                     <Button btnStyles={{ borderRadius: 30 }} text='Gửi nhu cầu' onPress={handleSubmit} />
                 </ScrollView>
             )}
+
+            {isComplete && (
+                <View style={[styles.form, styles.completeContainer]}>
+                    <Image source={complete} style={styles.image} />
+                    <Text style={{ textAlign: 'center', fontSize: 18, fontWeight: 'bold' }}>
+                        Gửi nhu cầu thành công
+                    </Text>
+                    <Text style={{ textAlign: 'center', fontSize: 16 }}>
+                        Chuyên gia sẽ liên hệ với bạn trong thời gian sớm nhất
+                    </Text>
+                    <Button text='Về màn hình chính' onPress={() => router.back()} btnStyles={{ borderRadius: 30 }} />
+                </View>
+            )}
         </View>
     )
 }
@@ -203,5 +222,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         paddingVertical: 2,
         paddingHorizontal: 6,
+    },
+    completeContainer: {
+        alignItems: 'center',
+        gap: 6,
+    },
+    image: {
+        width: 250,
+        height: 250,
+        resizeMode: 'contain',
     },
 })

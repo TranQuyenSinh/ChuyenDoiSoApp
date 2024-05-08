@@ -4,33 +4,26 @@ import { toast } from '@utils/toast'
 
 export const updateDoanhNghiep = async (data: any) => {
     try {
-        const { data: returnData } = await authAxios.post('doanhnghiep/edit', {
+        const { data: returnData } = await authAxios.post<DoanhNghiep>('doanhnghiep/edit', {
             ...data
         })
-        if (returnData?.success) return true
-        else {
-            toast(returnData?.message || 'Có lỗi xảy ra vui lòng thử lại')
-            return false
-        }
+        return returnData
     } catch (error) {
+        toast('Có lỗi xảy ra')
         console.log('===> error: ', error)
-        return false
+        return undefined
     }
 }
 
 export const updateDaiDien = async (data: any) => {
     try {
-        const { data: returnData } = await authAxios.post('doanhnghiep/editDaiDien', {
+        const { data: returnData } = await authAxios.post<DoanhNghiep>('doanhnghiep/editDaiDien', {
             ...data
         })
-        if (returnData?.success) return true
-        else {
-            toast(returnData?.message || 'Có lỗi xảy ra vui lòng thử lại')
-            return false
-        }
+        return returnData
     } catch (error) {
         console.log('===> error: ', error)
-        return false
+        return undefined
     }
 }
 export const createUser = async ({

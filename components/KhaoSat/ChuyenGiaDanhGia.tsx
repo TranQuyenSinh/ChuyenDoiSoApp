@@ -52,7 +52,7 @@ const ChuyenGiaDanhGia = ({ chuyenGia, danhGia, deXuat, danhGiaAt }: ChuyenGiaDa
                         </View>
                         <Button
                             text='Liên hệ ngay'
-                            onPress={() => router.push(`/chuyengia/hoidap/${chuyenGia.id}`)}
+                            onPress={() => router.push(`/tuvan/${chuyenGia.user.id}`)}
                             btnStyles={{ marginTop: 12, borderRadius: 24 }}
                         />
                     </>
