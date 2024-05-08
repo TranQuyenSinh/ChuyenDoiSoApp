@@ -3,7 +3,7 @@ import React from 'react'
 import { GenerationConfig, GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { toast } from '@utils/toast';
 
-const gemini_api_key = process.env.EXPO_PUBLIC_OPENAI_API_KEY || "";
+const gemini_api_key = process.env.EXPO_PUBLIC_GEMINI_KEY || "";
 const googleAI = new GoogleGenerativeAI(gemini_api_key);
 const geminiConfig: GenerationConfig = {
     temperature: 0.5,
