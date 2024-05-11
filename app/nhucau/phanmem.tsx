@@ -84,10 +84,7 @@ const NhuCau = () => {
             toast('Vui lòng chọn ít nhất 1 giải pháp bạn quan tâm')
             return false
         }
-        if (caiThien.length === 0) {
-            toast('Vui lòng chọn ít nhất 1 mặt bạn muốn cải thiện')
-            return false
-        }
+
         return true
     }
     const handleSubmit = async () => {
@@ -191,7 +188,11 @@ const NhuCau = () => {
                     <Text style={{ textAlign: 'center', fontSize: 16 }}>
                         Chuyên gia sẽ liên hệ với bạn trong thời gian sớm nhất
                     </Text>
-                    <Button text='Về màn hình chính' onPress={() => router.back()} btnStyles={{ borderRadius: 30 }} />
+                    <Button
+                        text='Về màn hình chính'
+                        onPress={() => router.replace('/(tabs)')}
+                        btnStyles={{ borderRadius: 30 }}
+                    />
                 </View>
             )}
         </View>

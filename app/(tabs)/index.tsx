@@ -10,8 +10,6 @@ import { textStyles } from '@constants/Styles'
 //@ts-ignore
 import nhucau from '@assets/icons/home/nhucau.png'
 //@ts-ignore
-import chuyengia from '@assets/icons/home/chuyengia.png'
-//@ts-ignore
 import tintuc from '@assets/icons/home/tintuc.png'
 //@ts-ignore
 import video from '@assets/icons/home/video.png'
@@ -36,17 +34,17 @@ import LinearGradient from 'react-native-linear-gradient'
 import { usePushNotifications } from '@hooks/usePushNotifications'
 import { saveDeviceToken } from '@services/accountServices'
 import ThongBaoIcon from '@components/Home/ThongBaoIcon'
-import TopSumary from '@components/Home/TopSumary'
 import { AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 import { getChuyenGias } from '@services/chuyenGiaServices'
 import Button from '@components/View/Button'
-import Constants, { ROLES } from '@constants/Constants'
+import { ROLES } from '@constants/Constants'
 import { Text } from '@components/View/Text'
 import { useDangNhap } from '@hooks/useDangNhap'
 import RowComponent from '@components/View/RowComponent'
 import LinkWebsite from '@components/Home/LinkWebsite'
-import { appIcons, appImages } from '@constants/Images'
+import { appIcons } from '@constants/Images'
+import PremiumLabel from '@components/View/PremiumLabel'
 
 export default function TrangTin() {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -88,14 +86,17 @@ export default function TrangTin() {
                         {isLoggedIn && userProfile && (
                             <>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-                                    <Image
-                                        style={styles.avatar}
-                                        defaultSource={no_avatar}
-                                        source={userProfile?.image ? { uri: userProfile?.image } : no_avatar}
-                                    />
+                                    <Pressable onPress={() => router.push('/(tabs)/profile')}>
+                                        <Image
+                                            style={styles.avatar}
+                                            defaultSource={no_avatar}
+                                            source={userProfile?.image ? { uri: userProfile?.image } : no_avatar}
+                                        />
+                                    </Pressable>
                                     <View>
-                                        <Text style={{ color: 'white' }}>Xin chào</Text>
+                                        {/* <Text style={{ color: 'white' }}>Xin chào</Text> */}
                                         <Text style={styles.topText}>{userProfile?.name}</Text>
+                                        {doanhNghiep?.hoiVien && <PremiumLabel style={{ marginTop: 4 }} />}
                                     </View>
                                 </View>
                             </>
@@ -119,13 +120,13 @@ export default function TrangTin() {
                                 showsHorizontalScrollIndicator={false}
                                 contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
                                 <HomeButtonIcon
-                                    text='Nhu cầu'
+                                    text='Nhu cầu phần mềm'
                                     imageSource={nhucau}
                                     onPress={() => router.push('/nhucau/phanmem')}
                                     backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
                                 <HomeButtonIcon
-                                    text='Hỏi đáp'
+                                    text='Hỏi đáp chuyên gia'
                                     imageSource={hoidap}
                                     onPress={() => router.push('/tuvan/chuyengia')}
                                     backgroundColor={['#03bf5e', '#00b157']}
@@ -422,8 +423,8 @@ const styles = StyleSheet.create({
         // backgroundColor: '#8c26f97a',
     },
     avatar: {
-        width: 45,
-        height: 45,
+        width: 50,
+        height: 50,
         borderColor: 'white',
         borderWidth: 1,
         borderRadius: 50,

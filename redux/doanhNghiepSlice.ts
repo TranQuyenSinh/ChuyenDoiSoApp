@@ -1,3 +1,5 @@
+import { User } from '@constants/CommonTypes/UserType';
+import { ThanhTich } from './../constants/DoanhNghiep/DoanhNghiepTypes';
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
@@ -26,6 +28,9 @@ const doanhNghiepSlice = createSlice({
         },
         setSanPhams: (state, { payload }) => {
             state.sanPhams = payload
+        },
+        setThanhTichs: (state, { payload }: { payload: ThanhTich[] }) => {
+            state.doanhNghiep = Object.assign({}, state.doanhNghiep, { thanhTich: payload })
         },
         resetDoanhNghiep: () => {
             return initialState

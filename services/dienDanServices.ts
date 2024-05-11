@@ -72,13 +72,10 @@ export const deleteBaiViet = async (id: number) => {
     }
 }
 
-export const createBaiViet = async (danhMucs: number[], noiDung: string, hinhAnhs: any[]) => {
+export const createBaiViet = async (noiDung: string, hinhAnhs: any[]) => {
     try {
         const formData = new FormData()
         formData.append(`noiDung`, noiDung)
-        danhMucs.forEach(item => {
-            formData.append(`danhMucs[]`, item?.toString())
-        })
         hinhAnhs.forEach(item => {
             formData.append(`hinhAnhs[]`, item)
         })
@@ -88,7 +85,7 @@ export const createBaiViet = async (danhMucs: number[], noiDung: string, hinhAnh
         return true
     } catch (error) {
         console.log('===> ', error)
-        console.log('===> Lỗi tạo bài viết: ', error)
+        console.log('===> Lỗi tạo bài viết: ', error.response)
         return false
     }
 }

@@ -17,7 +17,7 @@ export interface DoanhNghiep {
     fax?: any
     soLuongNhanSu: number
     moTa: string
-    loaiHinh: LoaiHinh
+    loaiHinh?: LoaiHinh
     linhVuc?: LinhVuc
     daiDien: DaiDienDoanhNghiep
     sdts: Sdt[]
@@ -25,6 +25,11 @@ export interface DoanhNghiep {
     user?: User
     nhuCau?: NhuCau[]
     khaoSat?: KhaoSat[]
+    thanhTich?: ThanhTich[]
+    hoiVien?: boolean
+    hoSoNangLuc?: string
+    namGiaNhap?: Date
+    nganhNghe?: NganhNghe
 }
 
 export interface Sdt {
@@ -68,4 +73,15 @@ export interface NhuCau {
     caiThien: string
     createdAt: string
     updatedAt: string
+}
+
+export interface ThanhTich {
+    id: number
+    tenThanhTich: string
+    hinhAnh: string
+}
+
+export interface NganhNghe {
+    id: number
+    tenNganhNghe: string
 }

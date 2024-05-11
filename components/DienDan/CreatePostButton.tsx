@@ -10,7 +10,7 @@ const CreatePostButton = () => {
             activeOpacity={0.7}
             style={styles.contentBlur}>
             <Ionicons name='add' size={20} color={'white'} />
-            <Text style={styles.text}>Đăng bài</Text>
+            <Text style={styles.text}>Gửi nhu cầu</Text>
         </TouchableOpacity>
     )
 }

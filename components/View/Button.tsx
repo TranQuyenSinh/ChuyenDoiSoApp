@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     },
     defaultText: {
         color: '#fff',
-        fontFamily: 'mon-sb',
+        fontWeight: '500',
+        // fontFamily: 'mon-sb',
     },
 })

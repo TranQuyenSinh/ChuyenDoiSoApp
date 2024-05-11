@@ -26,11 +26,34 @@ import { RootState } from '@redux/store'
 import RequireLogin from '@components/StatusPage/RequireLogin'
 const CreatePost = () => {
     const navigation = useNavigation()
+    const [selectedTags, setSelectedTags] = useState<number[]>([])
+    const [tags, setTags] = useState<DanhMucBaiViet[]>([])
     const [selectedImages, setSelectedImages] = useState<any[]>([])
     const { pickImageAsync } = useChonAnh()
     const [loading, setLoading] = useState(false)
     const [noiDung, setNoiDung] = useState('')
     const { isLoggedIn } = useSelector((state: RootState) => state.user)
+
+    useEffect(() => {
+        ;(async () => {
+            setLoading(true)
+            const tags = await getDanhMucs()
+            setTags(tags)
+            setLoading(false)
+        })()
+    }, [])
+
+    const handleSelectTag = (item: DanhMucBaiViet) => {
+        if (selectedTags.includes(item.id)) {
+            setSelectedTags(selectedTags.filter(id => id !== item.id))
+        } else {
+            if (selectedTags.length > 1) {
+                toast('Chỉ được chọn tối đa 2 danh mục')
+                return
+            }
+            setSelectedTags([...selectedTags, item.id])
+        }
+    }
 
     const handleSelectImage = async (image: any) => {
         const data = await pickImageAsync('galery', false)
@@ -40,17 +63,17 @@ const CreatePost = () => {
     }
 
     const handleSubmit = async () => {
-        const result = await createBaiViet(noiDung, selectedImages)
+        const result = await createBaiViet(selectedTags, noiDung, selectedImages)
         if (result) {
-            toast('Gửi nhu cầu thành công và đang chờ duyệt')
+            toast('Tạo bài viết thành công và đang chờ duyệt')
             router.back()
         } else {
-            toast('Gửi nhu cầu thất bại')
+            toast('Tạo bài viết thất bại')
         }
     }
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Gửi nhu cầu',
+            headerTitle: 'Tạo bài viết mới',
             headerTitleAlign: 'center',
             headerTintColor: 'white',
             headerStyle: {
@@ -61,7 +84,7 @@ const CreatePost = () => {
                     <>
                         {isLoggedIn && (
                             <TouchableOpacity onPress={handleSubmit} style={{ marginRight: 10, padding: 8 }}>
-                                <Text style={{ color: 'white', fontSize: 15 }}>Gửi</Text>
+                                <Text style={{ color: 'white', fontSize: 15 }}>Đăng</Text>
                             </TouchableOpacity>
                         )}
                     </>
@@ -83,7 +106,23 @@ const CreatePost = () => {
                         paddingHorizontal: 10,
                     }}>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.title}>Nội dung chi tiết nhu cầu của bạn</Text>
+                        <Text style={styles.title}>Danh mục bài viết</Text>
+                        <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 6, paddingHorizontal: 2 }}
+                            data={tags}
+                            renderItem={({ item }) => (
+                                <CategoryTag
+                                    selected={selectedTags.includes(item.id)}
+                                    data={item}
+                                    onPress={handleSelectTag}
+                                />
+                            )}
+                        />
+                    </View>
+                    <View style={styles.inputWrapper}>
+                        <Text style={styles.title}>Nội dung</Text>
                         <TextInput
                             value={noiDung}
                             onChangeText={text => setNoiDung(text)}
@@ -158,8 +197,8 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#3b3b3b',
-        fontSize: 14,
-        fontWeight: '400',
+        fontSize: 16,
+        fontWeight: '500',
     },
     input: {
         backgroundColor: '#ffffffde',
@@ -168,7 +207,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: 'white',
-        minHeight: 200,
+        minHeight: 100,
     },
 })
 

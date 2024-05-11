@@ -1,18 +1,16 @@
 import { useFonts } from 'expo-font'
-import { SplashScreen, Stack, useRouter } from 'expo-router'
+import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo'
-import { StatusBar, TouchableOpacity } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { Provider, useSelector } from 'react-redux'
+import { ClerkProvider } from '@clerk/clerk-expo'
+import { StatusBar } from 'react-native'
+import { Provider } from 'react-redux'
 import store from '@redux/store'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { useDangNhap } from '@hooks/useDangNhap'
 import Constants from '@constants/Constants'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown'
 const EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
+import 'moment/locale/vi'
 
 export {
     // Catch any errors thrown by the Layout component.

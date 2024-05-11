@@ -1,18 +1,10 @@
 import { Tabs } from 'expo-router'
-import { Image } from 'react-native'
-import { useSelector } from 'react-redux'
 
-import { Entypo, Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
+import { Entypo, Ionicons, FontAwesome5 } from '@expo/vector-icons'
 import Colors from '@constants/Colors'
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props) {
-    return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
-}
+
 
 export default function TabLayout() {
-    const { userProfile } = useSelector(state => state.user)
     return (
         <>
             <Tabs
@@ -53,7 +45,7 @@ export default function TabLayout() {
                     name='social'
                     options={{
                         headerShown: false,
-                        tabBarLabel: 'Diễn đàn',
+                        tabBarLabel: 'Nhu cầu DN',
                         tabBarIcon: ({ color, size, focused }) => {
                             return (
                                 <>

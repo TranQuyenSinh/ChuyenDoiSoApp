@@ -3,10 +3,15 @@ import React from 'react'
 import Colors from '@constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 
-const Modal = ({ dismissable = false, title = "", isOpen, toggle, showCloseIcon = false, children, contentStyle = {} }) => {
+const Modal = ({ dismissable = true, title = "", isOpen, toggle, showCloseIcon = false, children, contentStyle = {} }) => {
+    const handleClose = () => {
+        if (dismissable) {
+            toggle(false)
+        }
+    }
     return (
         <ReactModal animationType='fade' transparent visible={isOpen}>
-            <Pressable onPress={dismissable ? toggle(false) : () => { }} style={styles.centerdView}>
+            <Pressable onPress={handleClose} style={styles.centerdView}>
                 <Pressable onPress={e => e.stopPropagation()} style={[styles.modalView, contentStyle, title && { paddingTop: 50 }]}>
                     {showCloseIcon && (
                         <TouchableOpacity style={styles.closeIcon} onPress={toggle}>

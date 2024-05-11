@@ -47,14 +47,14 @@ const ProfileTab = () => {
                                 }
                             />
                             <ProfileTopButton
-                                text='Lịch sử khảo sát'
-                                onPress={() => router.push('/khaosat')}
+                                text='Thành tích, bằng khen'
+                                onPress={() => router.push('/thanhtich')}
                                 icon={
                                     <MaterialCommunityIcons name='clipboard-text-clock' size={24} color={'#307afd'} />
                                 }
                             />
                             <ProfileTopButton
-                                text='Ẩn hồ sơ doanh nghiệp'
+                                text='Hồ sơ năng lực'
                                 icon={<Ionicons name='settings' size={24} color={'#307afd'} />}
                             />
                         </View>
@@ -70,6 +70,12 @@ const ProfileTab = () => {
                                     <SettingItem
                                         onPress={() => router.push('/sanpham')}
                                         text='Quản lý sản phẩm'
+                                        icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
+                                    />
+                                    <SettingSeperator />
+                                    <SettingItem
+                                        onPress={() => router.push('/khaosat')}
+                                        text='Lịch sử khảo sát'
                                         icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
                                     />
                                     <SettingSeperator />

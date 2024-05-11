@@ -9,6 +9,7 @@ import khaoSatSlice from './khaoSatSlice'
 import trungTamSlice from './trungTamSlice'
 import thongBaoSlice from './thongBaoSlice'
 import chuyenGiaSlice from './chuyenGiaSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const store = configureStore({
     reducer: {
@@ -36,6 +37,12 @@ store.subscribe(() => {
     }
 })
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+export function useAppSelector<T>(cb: (s: RootState) => T) {
+    return useSelector(cb);
+}
 export default store

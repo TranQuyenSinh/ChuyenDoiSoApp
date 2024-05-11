@@ -104,12 +104,14 @@ const DoanhNghiepDetail = () => {
                         )}
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Lĩnh vực hoạt động:</Text>
-                        {data?.linhVuc?.tenLinhVuc && <Text style={styles.rowText}>{data.linhVuc.tenLinhVuc}</Text>}
+                        <Text style={styles.rowTitle}>Loại hình kinh doanh:</Text>
+                        {data?.linhVuc?.tenLinhVuc && <Text style={styles.rowText}>{data.loaiHinh?.tenLoaiHinh}</Text>}
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Loại hình kinh doanh:</Text>
-                        {data?.loaiHinh?.tenLoaiHinh && <Text style={styles.rowText}>{data.loaiHinh.tenLoaiHinh}</Text>}
+                        <Text style={styles.rowTitle}>Ngành nghề chính:</Text>
+                        {data?.loaiHinh?.tenLoaiHinh && (
+                            <Text style={styles.rowText}>{data.nganhNghe?.tenNganhNghe}</Text>
+                        )}
                     </View>
                     {data.moTa && <Text style={styles.description}>{data.moTa}</Text>}
                 </View>

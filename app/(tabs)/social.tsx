@@ -29,8 +29,6 @@ const SocialPage = () => {
         fetchData()
     }, [])
 
-
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -38,10 +36,14 @@ const SocialPage = () => {
     }, [navigation])
     return (
         <View style={styles.container}>
-            <TopSearch onSubmitEditing={() => {
-                router.push({ pathname: '/social/baiviet/search', params: { search } })
-            }} value={search} onChangeText={text => setSearch(text)} />
-            <ScrollView
+            <TopSearch
+                onSubmitEditing={() => {
+                    router.push({ pathname: '/social/baiviet/search', params: { search } })
+                }}
+                value={search}
+                onChangeText={text => setSearch(text)}
+            />
+            {/* <ScrollView
                 horizontal
                 style={{ flexShrink: 0 }}
                 contentContainerStyle={styles.tagsContainer}
@@ -49,7 +51,7 @@ const SocialPage = () => {
                 {tags.map(item => (
                     <CategoryTag key={item.id} data={item} onPress={item => router.push(`/social/tag/${item.id}`)} />
                 ))}
-            </ScrollView>
+            </ScrollView> */}
             <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}>
                 {posts.map(item => (
                     <Post key={item.id} data={item} />
