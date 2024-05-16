@@ -1,5 +1,4 @@
 import { ThanhTich } from '@constants/DoanhNghiep/DoanhNghiepTypes'
-import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { authAxios, axios } from '@utils/axios'
 import { AxiosError } from 'axios'
 
@@ -15,5 +14,15 @@ export const createThanhTich = async (name: string, image: any) => {
     } catch (error) {
         console.log('===> Lỗi tạo thành tích: ', (error as AxiosError).response)
         return undefined
+    }
+}
+
+export const deleteThanhTich = async (id: number) => {
+    try {
+        await authAxios.delete<ThanhTich[]>(`doanhnghiep/thanhtich/${id}`)
+        return true
+    } catch (error) {
+        console.log('===> Lỗi xóa thành tích: ', (error as AxiosError).response)
+        return false
     }
 }

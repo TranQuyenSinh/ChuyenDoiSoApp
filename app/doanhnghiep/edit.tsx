@@ -13,7 +13,7 @@ import { AppDispatch, RootState } from '@redux/store'
 import DatePicker from 'react-native-date-picker'
 import useToggle from '@hooks/useToggle'
 import { Dropdown } from 'react-native-element-dropdown'
-import { getLoaiHinhDN, updateDoanhNghiep } from '@services/doanhNghiepServices'
+import { getLoaiHinhDN, getNganhNghe, updateDoanhNghiep } from '@services/doanhNghiepServices'
 import Button from '@components/View/Button'
 import { toast } from '@utils/toast'
 import { fetchTinhThanh } from '@redux/dangKySlice'
@@ -43,13 +43,13 @@ const DoanhNghiepInfo = () => {
         fax: '',
         soLuongNhanSu: '',
         moTa: '',
-        loaiHinh: -1,
+        nganhNghe: -1,
         sdt: '',
     })
 
     const fetchData = async () => {
-        const loaiHinhs = await getLoaiHinhDN()
-        setLoaiHinhs(loaiHinhs.map(item => ({ value: item.id, label: item.tenLoaiHinh })))
+        const loaiHinhs = await getNganhNghe()
+        setLoaiHinhs(loaiHinhs.map(item => ({ value: item.id, label: item.tenNganhNghe })))
         const diaChis = await layTinhThanh()
         setDiaChis(diaChis)
     }
@@ -74,7 +74,7 @@ const DoanhNghiepInfo = () => {
             xa: doanhNghiep?.xa,
             soLuongNhanSu: doanhNghiep?.soLuongNhanSu ? doanhNghiep.soLuongNhanSu.toString() : '',
             moTa: doanhNghiep?.moTa,
-            loaiHinh: doanhNghiep?.loaiHinh?.id || -1,
+            nganhNghe: doanhNghiep?.nganhNghe?.id || -1,
             sdt: doanhNghiep?.sdt,
         })
     }, [doanhNghiep])
@@ -164,9 +164,9 @@ const DoanhNghiepInfo = () => {
                             maxHeight={300}
                             labelField={'label'}
                             valueField={'value'}
-                            value={loaiHinhs.find(item => item?.value === form?.loaiHinh)?.value}
+                            value={loaiHinhs.find(item => item?.value === form?.nganhNghe)?.value}
                             onChange={(item: any) => {
-                                setForm({ ...form, loaiHinh: item?.value })
+                                setForm({ ...form, nganhNghe: item?.value })
                             }}
                             mode={'modal'}
                         />

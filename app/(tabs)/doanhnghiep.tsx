@@ -24,8 +24,9 @@ const DoanhNghiepPage = () => {
 
     const fetchData = async () => {
         const data = await getDoanhNghieps()
-        setData(data)
-        setFilteredData(data)
+        const dnHoiViens = data.filter(item => item.hoiVien)
+        setData(dnHoiViens)
+        setFilteredData(dnHoiViens)
     }
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const DoanhNghiepPage = () => {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <SafeAreaView>
                         <View style={styles.titleContainer}>
-                            <Text style={styles.title}>Kết nối doanh nghiệp</Text>
+                            <Text style={styles.title}>Thành viên Hiệp hội Doanh nghiệp</Text>
                             <Text style={styles.subTitle}>Hợp tác - Phát triển - Bền vững</Text>
                         </View>
                         <View style={searchStyles.container}>

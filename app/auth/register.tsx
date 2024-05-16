@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 import {
     Alert,
@@ -10,8 +10,7 @@ import {
     TouchableWithoutFeedback,
     View,
 } from 'react-native'
-import { StyleSheet, Dimensions } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { StyleSheet } from 'react-native'
 import { router, useNavigation } from 'expo-router'
 
 import PageHeader from '@components/View/PageHeader'
@@ -19,11 +18,8 @@ import PageHeader from '@components/View/PageHeader'
 import background from '@assets/images/background_blur.jpg'
 // @ts-ignore
 import logo from '@assets/images/logo.jpg'
-// @ts-ignore
-import logo_ict from '@assets/images/logo_ict_full.jpg'
 
 import BackgroundImage from '@components/View/BackgroundImage'
-import { AppDispatch } from '@redux/store'
 import { Text } from '@components/View/Text'
 import Colors from '@constants/Colors'
 import Button from '@components/View/Button'
@@ -31,8 +27,6 @@ import { createUser } from '@services/doanhNghiepServices'
 import { toast } from '@utils/toast'
 import Loading from '@components/StatusPage/Loading'
 import { axios } from '@utils/axios'
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
-import { Ionicons } from '@expo/vector-icons'
 
 interface AutoFillData {
     id: number
@@ -45,25 +39,14 @@ interface AutoFillData {
 const Register = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
-    const [suggest, setSuggest] = useState<AutoFillData[]>([])
-    const [suggestData, setSuggestData] = useState<Array<{ id: string; title: string }>>([])
 
     const [form, setForm] = useState({
         name: '',
         email: '',
         phone: '',
         dnName: '',
+        password: '',
     })
-
-    useEffect(() => {
-        ;(async () => {
-            const { data } = await axios.get<AutoFillData[]>(
-                'https://raw.githubusercontent.com/TranQuyenSinh/ChuyenDoiSoApp/main/data.json'
-            )
-            setSuggest(data)
-            setSuggestData(data.map(item => ({ id: item.id.toString(), title: `${item.phone} - ${item.name}` })))
-        })()
-    }, [])
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -74,18 +57,9 @@ const Register = () => {
     }, [navigation])
 
     const validate = () => {
-        const { name, dnName, phone } = form
-        if (!name || !phone || !dnName) return false
+        const { name, dnName, phone, password } = form
+        if (!name || !phone || !dnName || !password) return false
         return true
-    }
-
-    const setSelectSuggest = (item: any) => {
-        if (item && item.id) {
-            const selected = suggest.find(i => i.id === Number(item.id))
-            if (selected) {
-                setForm({ ...form, phone: selected.phone, name: selected.name, dnName: selected.address })
-            }
-        }
     }
 
     const handleSubmit = async () => {
@@ -97,8 +71,8 @@ const Register = () => {
             return
         }
         setLoading(true)
-        const { name, email, phone, dnName } = form
-        const result = await createUser({ name, email, phone, dnName })
+        const { name, email, phone, dnName, password } = form
+        const result = await createUser({ name, email, phone, dnName, password })
         if (result) {
             toast('Đăng ký tài khoản thành công')
             router.back()
@@ -129,25 +103,6 @@ const Register = () => {
                             </Text>
                         </View>
                         <View style={inputStyles.container}>
-                            {/* <Text style={inputStyles.label}>Tìm kiếm doanh nghiệp</Text>
-                            <AutocompleteDropdown
-                                RightIconComponent={<Ionicons name='search-outline' size={20} color={'grey'} />}
-                                dataSet={suggestData || []}
-                                onSelectItem={setSelectSuggest}
-                                clearOnFocus={false}
-                                closeOnBlur={true}
-                                closeOnSubmit={false}
-                                showChevron={false}
-                                textInputProps={{
-                                    placeholder: 'Điện thoại, họ tên',
-                                    placeholderTextColor: 'grey',
-                                }}
-                                containerStyle={{ padding: 0 }}
-                                inputContainerStyle={[
-                                    inputStyles.input,
-                                    { backgroundColor: 'transparent', paddingLeft: 0 },
-                                ]}
-                            /> */}
                             <Text style={inputStyles.label}>Điện thoại</Text>
                             <TextInput
                                 value={form.phone}
@@ -176,6 +131,13 @@ const Register = () => {
                                 onChangeText={text => setForm({ ...form, email: text })}
                                 keyboardType='email-address'
                                 autoCapitalize='none'
+                                style={inputStyles.input}
+                            />
+                            <Text style={inputStyles.label}>Mật khẩu</Text>
+                            <TextInput
+                                value={form.password}
+                                onChangeText={text => setForm({ ...form, password: text })}
+                                secureTextEntry
                                 style={inputStyles.input}
                             />
                             <Button btnStyles={inputStyles.button} text='Đăng ký' onPress={handleSubmit} />

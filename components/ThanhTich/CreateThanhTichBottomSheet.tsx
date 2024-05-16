@@ -57,6 +57,7 @@ const CreateThanhTichBottomSheet = forwardRef<Ref, CreateThanhTichBottomSheetPro
 
     return (
         <BottomSheetModal
+            keyboardBehavior='fillParent'
             handleIndicatorStyle={styles.indicator}
             backgroundStyle={styles.container}
             backdropComponent={renderBackdrop}
@@ -65,7 +66,7 @@ const CreateThanhTichBottomSheet = forwardRef<Ref, CreateThanhTichBottomSheetPro
             <View style={styles.container}>
                 <ImageComponent source={appIcons.guaranteed} height={40} width={40} />
                 <Text style={styles.title}>Thêm mới thành tích</Text>
-                <TextInput ref={inputRef} onChangeText={setName} />
+                <TextInput placeholder='Tên thành tích' ref={inputRef} onChangeText={setName} style={styles.input} />
                 <Text style={styles.subTitle}>Hình ảnh (nếu có)</Text>
                 <View style={styles.imageContainer}>
                     {image?.uri ? (
@@ -106,6 +107,12 @@ const styles = StyleSheet.create({
     subTitle: {
         fontSize: 16,
         fontWeight: '600',
+    },
+    input: {
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#dadada',
+        borderRadius: 8,
+        padding: 8,
     },
     closeButton: {
         position: 'absolute',

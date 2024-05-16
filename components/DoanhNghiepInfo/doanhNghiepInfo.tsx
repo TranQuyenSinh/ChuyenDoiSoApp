@@ -42,8 +42,8 @@ const DoanhNghiepInfo = () => {
                         </Text>
                     </View>
                     <View style={[dnStyles.item, dnStyles.itemColumn]}>
-                        <Text style={dnStyles.itemTitle}>Loại hình doanh nghiệp</Text>
-                        <Text style={dnStyles.itemText}>{doanhNghiep?.loaiHinh?.tenLoaiHinh}</Text>
+                        <Text style={dnStyles.itemTitle}>Ngành nghề chính</Text>
+                        <Text style={dnStyles.itemText}>{doanhNghiep?.nganhNghe?.tenNganhNghe}</Text>
                     </View>
                     <View style={dnStyles.item}>
                         <Text style={dnStyles.itemTitle}>Mã số thuế</Text>

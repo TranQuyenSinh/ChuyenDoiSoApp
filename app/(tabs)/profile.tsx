@@ -56,6 +56,7 @@ const ProfileTab = () => {
                             <ProfileTopButton
                                 text='Hồ sơ năng lực'
                                 icon={<Ionicons name='settings' size={24} color={'#307afd'} />}
+                                onPress={() => router.push('/hosonangluc/create')}
                             />
                         </View>
                     )}

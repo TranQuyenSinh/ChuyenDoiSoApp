@@ -12,6 +12,7 @@ export const chuyenGiaStyles = StyleSheet.create({
     },
     description: {
         // marginTop: 8,
+        lineHeight: 20
     },
 
     row: {

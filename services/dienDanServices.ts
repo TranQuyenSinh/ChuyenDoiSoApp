@@ -1,5 +1,6 @@
 import { BaiViet, BinhLuanBaiViet, DanhMucBaiViet } from '@constants/DienDan/DienDanTypes'
 import { authAxios, axios, thongtinAuthAxios } from '@utils/axios'
+import { AxiosError } from 'axios'
 import { forEach } from 'lodash'
 
 export const getBaiViets = async () => {
@@ -84,8 +85,7 @@ export const createBaiViet = async (noiDung: string, hinhAnhs: any[]) => {
         })
         return true
     } catch (error) {
-        console.log('===> ', error)
-        console.log('===> Lỗi tạo bài viết: ', error.response)
+        console.log('===> Lỗi tạo bài viết: ', (error as AxiosError).response)
         return false
     }
 }

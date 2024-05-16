@@ -11,12 +11,15 @@ type SliceState = {
     status: 'idle' | 'loading' | 'success' | 'error'
     doanhNghiep?: DoanhNghiep
     sanPhams?: SanPham[]
+
+    selectedDoanhNghiep?: DoanhNghiep
 }
 
 const initialState: SliceState = {
     status: 'idle',
     doanhNghiep: undefined,
-    sanPhams: []
+    sanPhams: [],
+    selectedDoanhNghiep: undefined
 }
 
 const doanhNghiepSlice = createSlice({
@@ -26,11 +29,17 @@ const doanhNghiepSlice = createSlice({
         setDoanhNghiep: (state, { payload }) => {
             state.doanhNghiep = payload
         },
+        setSelectedDoanhNghiep: (state, { payload }) => {
+            state.selectedDoanhNghiep = payload
+        },
         setSanPhams: (state, { payload }) => {
             state.sanPhams = payload
         },
         setThanhTichs: (state, { payload }: { payload: ThanhTich[] }) => {
             state.doanhNghiep = Object.assign({}, state.doanhNghiep, { thanhTich: payload })
+        },
+        setHoSoNangLuc: (state, { payload }) => {
+            state.doanhNghiep = Object.assign({}, state.doanhNghiep, { hoSoNangLuc: payload })
         },
         resetDoanhNghiep: () => {
             return initialState

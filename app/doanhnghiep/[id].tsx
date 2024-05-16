@@ -1,6 +1,6 @@
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 //@ts-ignore
@@ -23,6 +23,11 @@ import RadarChart from '@components/KhaoSat/ThongKe/RadarChart'
 import { useDangNhap } from '@hooks/useDangNhap'
 import { ROLES } from '@constants/Constants'
 import Button from '@components/View/Button'
+import ImageComponent from '@components/View/ImageComponent'
+import SpaceComponent from '@components/View/SpaceComponent'
+import Colors from '@constants/Colors'
+import { useAppDispatch } from '@redux/store'
+import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
 
 const ITEM_GAP = 12
 
@@ -34,6 +39,7 @@ const DoanhNghiepDetail = () => {
     const [loading, setLoading] = useState(false)
     const [khaoSats, setKhaoSats] = useState<KhaoSat[]>([])
     const { isInRole } = useDangNhap()
+    const dispatch = useAppDispatch()
     const nhuCauMoiNhat = useMemo(() => {
         if (data && data.nhuCau && data.nhuCau.length > 0) {
             return data.nhuCau.sort((a, b) => b.id - a.id)[0]
@@ -77,14 +83,35 @@ const DoanhNghiepDetail = () => {
                 <PageHeader tintColor='white' title={''} style={{ marginBottom: 12 }} />
                 <BackgroundImage source={background} />
                 <View style={styles.info}>
-                    <Image source={data.user?.image ? { uri: data.user?.image } : no_avatar} style={styles.image} />
+                    <ImageComponent uri={data.user?.image} style={styles.image} />
                     <View style={{ justifyContent: 'space-between', flex: 1 }}>
                         <View style={styles.infoContainer}>
                             <Text style={styles.ten}>{data?.tenTiengViet}</Text>
-                            <Text style={styles.text}>Địa chỉ: {data.diaChi}</Text>
-                            <Text style={styles.text}>Điện thoại: {data.sdt}</Text>
+                            <Text style={styles.text}>Address: {data.diaChi}</Text>
+                            <Text style={styles.text}>Phone: {data.sdt}</Text>
                             <Text style={styles.text}>Email: {data.user?.email}</Text>
                             {data.website && <Text style={styles.text}>Website: {data.website}</Text>}
+
+                            {data.hoSoNangLuc && (
+                                <Pressable
+                                    onPress={() => {
+                                        dispatch(doanhNghiepActions.setSelectedDoanhNghiep(data))
+                                        router.push(`/hosonangluc`)
+                                    }}>
+                                    <Text
+                                        style={[
+                                            styles.text,
+                                            {
+                                                color: Colors.default,
+                                                alignSelf: 'flex-end',
+                                                marginTop: 4,
+                                                textDecorationLine: 'underline',
+                                            },
+                                        ]}>
+                                        Xem hồ sơ năng lực {'>>'}
+                                    </Text>
+                                </Pressable>
+                            )}
                         </View>
                     </View>
                 </View>
@@ -151,6 +178,30 @@ const DoanhNghiepDetail = () => {
                         </View>
                     </View>
                 )}
+
+                {data.thanhTich && data.thanhTich?.length > 0 && (
+                    <View style={[styles.section, { maxHeight: 400 }]}>
+                        <Text style={styles.title}>Thành tích nổi bật</Text>
+                        <ScrollView
+                            scrollEnabled
+                            nestedScrollEnabled
+                            contentContainerStyle={{ gap: ITEM_GAP }}
+                            showsVerticalScrollIndicator={false}>
+                            {data.thanhTich.map(item => (
+                                <View style={{ alignItems: 'center' }} key={item.id}>
+                                    <ImageComponent
+                                        width={'100%'}
+                                        height={250}
+                                        resizeMode='contain'
+                                        uri={item.hinhAnh}
+                                    />
+                                    <Text>{item.tenThanhTich}</Text>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    </View>
+                )}
+
                 {isInRole(ROLES.CHUYEN_GIA) && nhuCauMoiNhat && (
                     <View style={styles.section}>
                         <Text style={[styles.title, { marginBottom: 2 }]}>Nhu cầu Chuyển đổi số</Text>
@@ -177,6 +228,7 @@ const DoanhNghiepDetail = () => {
                     />
                 )}
             </View>
+            <SpaceComponent height={50} />
         </ScrollView>
     )
 }

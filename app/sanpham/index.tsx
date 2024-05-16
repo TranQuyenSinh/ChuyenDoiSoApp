@@ -111,11 +111,11 @@ const index = () => {
             <LinearGradient colors={['#32acff', '#94d3fe']}>
                 <PageHeader title='' tintColor='white' />
                 <View style={topStyles.titleContainer}>
-                    <Text style={topStyles.title}>Sản phẩm của bạn</Text>
+                    <Text style={topStyles.title}>Your products</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={topStyles.subTitle}>Quảng bá sản phẩm</Text>
+                        <Text style={topStyles.subTitle}>Promote your product</Text>
                         <Button
-                            text='Thêm'
+                            text='Add new'
                             btnStyles={{ backgroundColor: Colors.orange, borderRadius: 30 }}
                             onPress={() => router.push('/sanpham/create')}
                         />
@@ -156,7 +156,7 @@ const index = () => {
                             />
                             <Text style={productStyles.name}>{item.tenSanPham}</Text>
                             <Text style={productStyles.price}>{formatPrice(item.gia)} đ</Text>
-                            <Button text='Chia sẻ' onPress={() => handleShare(item)} />
+                            <Button btnStyles={{ width: '100%' }} text='Share now' onPress={() => handleShare(item)} />
                         </Pressable>
                     )}
                 />
@@ -274,6 +274,7 @@ const productStyles = StyleSheet.create({
         paddingHorizontal: 12,
         fontWeight: '500',
         textAlign: 'center',
+        flex: 1,
     },
     price: {
         color: '#38383a',

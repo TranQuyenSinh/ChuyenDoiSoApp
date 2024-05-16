@@ -4,7 +4,6 @@ import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import Loading from '@components/StatusPage/Loading'
 import { getChuyenGia } from '@services/chuyenGiaServices'
-import { ChuyenGia } from '@constants/ChuyenGia/ChuyenGiaTypes'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
 import Colors from '@constants/Colors'
@@ -12,11 +11,10 @@ import BackgroundImage from '@components/View/BackgroundImage'
 //@ts-ignore
 import background from '@assets/backgrounds/chuyengiadetail.jpg'
 import Button from '@components/View/Button'
-import { SceneMap, TabBar, TabView } from 'react-native-tab-view'
+import { SceneMap } from 'react-native-tab-view'
 import CongTacTab from '@components/ChuyenGia/CongTacTab'
 import HocTapTab from '@components/ChuyenGia/HocTapTab'
 import KinhNghiemTab from '@components/ChuyenGia/KinhNghiemTab'
-import { screenWidth } from '@utils/window'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { chuyenGiaActions } from '@redux/chuyenGiaSlice'
@@ -27,20 +25,7 @@ const ChuyenGiaDetail = () => {
     const dispatch = useDispatch<AppDispatch>()
     const { chuyenGia } = useSelector((state: RootState) => state.chuyenGia)
     const [loading, setLoading] = useState(false)
-    // tab
-    const [index, setIndex] = useState(0)
-    const [routes] = useState([
-        { key: 'gioiThieu', title: 'Giới thiệu' },
-        { key: 'kinhNghiem', title: 'Kinh nghiệm tư vấn' },
-        { key: 'congTac', title: 'Quá trình công tác' },
-        { key: 'hocTap', title: 'Quá trình học tập' },
-    ])
-    const renderScene = SceneMap({
-        gioiThieu: GioiThieuTab,
-        kinhNghiem: KinhNghiemTab,
-        hocTap: HocTapTab,
-        congTac: CongTacTab,
-    })
+
     const fetchChuyenGia = async (id: number) => {
         setLoading(true)
         const data = await getChuyenGia(id)

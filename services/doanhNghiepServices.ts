@@ -1,6 +1,9 @@
-import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
+import { loginWithPassword } from './../redux/userSlice';
+import { DoanhNghiep, LoaiHinh, NganhNghe } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { authAxios, axios } from '@utils/axios'
 import { toast } from '@utils/toast'
+import { AxiosError } from 'axios'
+import { Platform } from 'react-native'
 
 export const updateDoanhNghiep = async (data: any) => {
     try {
@@ -31,11 +34,13 @@ export const createUser = async ({
     email,
     phone,
     dnName,
+    password
 }: {
     name: string
     email: string
     phone: string
     dnName: string
+    password: string
 }) => {
     try {
         const { data } = await axios.post('doanhnghiep/register', {
@@ -43,6 +48,7 @@ export const createUser = async ({
             email,
             phone,
             tendoanhnghiep: dnName,
+            password
         })
         if (data?.success) return true
         else {
@@ -75,6 +81,17 @@ export const getDoanhNghiep = async (id: number) => {
         console.log('===> Lỗi lấy doanh nghiệp: ', error)
         return undefined
     }
+}
+
+export const getNganhNghe = async () => {
+    try {
+        const { data } = await authAxios.get<NganhNghe[]>('doanhnghiep/nganhnghe')
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy ngành nghề: ', error)
+        return []
+    }
+
 }
 
 export const getLoaiHinhDN = async () => {
@@ -114,6 +131,21 @@ export const createNhuCau = async (nhuCau: string, caiThien: string) => {
     } catch (error) {
         console.log('===> Lỗi gửi nhu cầu: ', error)
         return false
+    }
+}
+
+export const createHoSoNangLuc = async (file: any) => {
+    console.log('🚀 ~ file: ', file)
+    try {
+        const formData = new FormData()
+        formData.append('file', file)
+        const { data } = await authAxios.post('doanhnghiep/hosonangluc', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        return data
+    } catch (error) {
+        console.log('===> Lỗi gửi hồ sơ năng lực: ', (error as AxiosError).message)
+        return undefined
     }
 }
 

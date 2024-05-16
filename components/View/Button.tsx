@@ -1,8 +1,7 @@
-import { Pressable, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
-import React, { ReactComponentElement, ReactElement, ReactNode } from 'react'
+import { Easing, Pressable, StyleSheet, Text, TextStyle, ViewStyle } from 'react-native'
+import React, { ReactNode } from 'react'
 import Colors from '@constants/Colors'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Ionicons } from '@expo/vector-icons'
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 interface ButtonProps {
     onPress: () => void
@@ -14,19 +13,35 @@ interface ButtonProps {
 }
 
 const Button = ({ onPress, text, btnStyles, textStyles, renderIcon, disabled = false }: ButtonProps) => {
+    const scale = useSharedValue(1)
+    const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: interpolate(scale.value, [0, 0.5, 1], [1, 0.99, 0.98]) }],
+    }))
+
+    const onPressIn = () => {
+        scale.value = 1
+    }
+
+    const onPressOut = () => {
+        scale.value = 0
+    }
     return (
-        <Pressable
+        <AnimatedPressable
             android_ripple={{ color: 'white' }}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
             style={[
                 styles.defaultBtn,
                 { flexDirection: 'row', gap: 6 },
                 disabled && { backgroundColor: Colors.textGray },
                 btnStyles,
+                animatedStyle,
             ]}
             onPress={!disabled ? onPress : undefined}>
             {renderIcon}
             <Text style={[styles.defaultText, textStyles]}>{text}</Text>
-        </Pressable>
+        </AnimatedPressable>
     )
 }
 

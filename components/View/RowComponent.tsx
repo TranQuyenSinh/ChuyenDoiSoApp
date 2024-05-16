@@ -3,6 +3,7 @@ import React, { PropsWithChildren, ReactNode } from 'react'
 import { StyleSheet } from 'react-native'
 
 interface Props extends PropsWithChildren {
+    align?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | undefined
     justify?: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly' | undefined
     styles?: StyleProp<ViewStyle>
     onPress?: () => void
@@ -10,12 +11,13 @@ interface Props extends PropsWithChildren {
 }
 
 const RowComponent = (props: Props) => {
-    const { justify, children, styles, onPress, gap } = props
+    const { justify, align, children, styles, onPress, gap } = props
 
     const localStyle = [
         localStyles.container,
         {
-            justifyContent: justify ?? 'center',
+            align: align ?? 'flex-start',
+            justifyContent: justify ?? 'flex-start',
             gap: gap ?? 0,
         },
         styles,

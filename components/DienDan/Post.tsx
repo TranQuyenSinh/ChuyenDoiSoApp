@@ -55,7 +55,10 @@ const Post = ({ data }: PostProps) => {
             <View style={styles.postTop}>
                 <View style={styles.infoContainer}>
                     <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
-                        <Image style={styles.userAvatar} source={data.user.image ? { uri: data.user.image } : no_avatar} />
+                        <Image
+                            style={styles.userAvatar}
+                            source={data.user.image ? { uri: data.user.image } : no_avatar}
+                        />
                     </Pressable>
                     <View style={styles.info}>
                         <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
@@ -69,8 +72,12 @@ const Post = ({ data }: PostProps) => {
                     </View>
                 </View>
 
-                <Text style={styles.content} >
-                    {data.danhMucs?.map(item => <Text key={item.id} style={styles.tag}>#{item.name} </Text>)}
+                <Text style={styles.content}>
+                    {data.danhMucs?.map(item => (
+                        <Text key={item.id} style={styles.tag}>
+                            #{item.name}{' '}
+                        </Text>
+                    ))}
                     {'\n'}
                     {data.noiDung}
                 </Text>
@@ -88,8 +95,8 @@ const Post = ({ data }: PostProps) => {
                                         (data.hinhAnhs?.length || 0) > 2
                                             ? '33.33333%'
                                             : data.hinhAnhs?.length === 2
-                                                ? '50%'
-                                                : '100%',
+                                            ? '50%'
+                                            : '100%',
                                 },
                             ]}>
                             <Image style={styles.postImage} source={{ uri: image.hinhAnh }} />

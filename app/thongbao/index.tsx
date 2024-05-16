@@ -69,9 +69,9 @@ const ThongBaoPage = () => {
                     key={item.id}
                     activeOpacity={0.8}
                     style={[styles.item, !item.daXem && { backgroundColor: '#e4f2ff' }]}>
-                    <View style={styles.avatarContainer}>
+                    {/* <View style={styles.avatarContainer}>
                         <Image source={no_avatar} style={styles.avatarImage} />
-                    </View>
+                    </View> */}
                     <View style={styles.content}>
                         <Text style={styles.title}>{item.tieuDe}</Text>
                         <Text style={styles.subTitle}>{item.noiDung}</Text>
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: 1,
         borderBottomColor: '#dfe4e7',
+        paddingLeft: 24,
     },
     avatarContainer: {
         marginHorizontal: 6,

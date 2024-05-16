@@ -1,7 +1,8 @@
-import { Image, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Image, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import React from 'react'
 import RowComponent from './RowComponent'
-import { appIcons, appImages } from '@constants/Images'
+import { appIcons } from '@constants/Images'
+import { Text } from './Text'
 
 interface PremiumLabelProps {
     style?: StyleProp<ViewStyle>
