@@ -1,12 +1,9 @@
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { FontAwesome5, Ionicons } from '@expo/vector-icons'
 import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
 import { getLinhVucs } from '@services/tinTucServices'
 import { Dropdown } from 'react-native-element-dropdown'
-import { useSelector } from 'react-redux'
-import { RootState } from '@redux/store'
-import { ROLES } from '@constants/Constants'
 import IconButton from '@components/View/IconButton'
 import { LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getLoaiHinhDN } from '@services/doanhNghiepServices'
@@ -43,7 +40,7 @@ const TopFilter = (props: TopFilterProps) => {
             const data = await getLinhVucs()
             setLinhVucs([{ id: '', tenLinhVuc: 'Tất cả lĩnh vực' }, ...data])
             const loahinhdata = await getLoaiHinhDN()
-            setLoaiHinhs([{ id: 0, tenLoaiHinh: 'Tất cả ngành nghề' }, ...loahinhdata])
+            setLoaiHinhs([{ id: 0, tenLoaiHinh: 'Tất cả loại hình' }, ...loahinhdata])
         })()
     }, [])
 
@@ -99,7 +96,7 @@ const TopFilter = (props: TopFilterProps) => {
                             maxHeight={300}
                             labelField={'tenLoaiHinh'}
                             valueField={'id'}
-                            placeholder={'Ngành nghề'}
+                            placeholder={'Loại hình'}
                             renderRightIcon={() => <Ionicons name='chevron-down-sharp' size={20} color={'#626262'} />}
                             onChange={(item: LoaiHinh) => {
                                 onChangeLoaiHinh?.(item)
@@ -125,7 +122,6 @@ const TopFilter = (props: TopFilterProps) => {
                             placeholder={'Sắp xếp'}
                             renderRightIcon={() => <Ionicons name='chevron-down-sharp' size={20} color={'#626262'} />}
                             onChange={(item: any) => {
-                                console.log('🚀 ~ item: ', item)
                                 onChangeSort?.(item?.id)
                             }}
                             mode={'modal'}

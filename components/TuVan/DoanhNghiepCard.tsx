@@ -34,46 +34,50 @@ const DoanhNghiepCard = ({ data }: DoanhNghiepCardProps) => {
                     <Text style={topStyles.text}>
                         Ngày thành lập: {data.ngayLap ? moment(data.ngayLap).format('DD/MM/YYYY') : 'Chưa cập nhật'}
                     </Text>
-                    <Text style={topStyles.text}>Lĩnh vực: {data.linhVuc?.tenLinhVuc}</Text>
-                    <Text style={topStyles.text}>Ngành nghề: {data.loaiHinh?.tenLoaiHinh}</Text>
+                    <Text style={topStyles.text}>Loại hình kinh doanh: {data.loaiHinh?.tenLoaiHinh}</Text>
+                    <Text style={topStyles.text}>Ngành nghề: {data.nganhNghe?.tenNganhNghe}</Text>
                 </View>
             </View>
-            <View style={centerStyles.container}>
-                <Text style={styles.title}>Kết quả đánh giá gần đây</Text>
-                <View style={centerStyles.row}>
-                    <Text style={centerStyles.rowTitle}>Điểm đánh giá:</Text>
-                    <Text style={centerStyles.rowText}>{khaoSatMoiNhat?.tongDiem}</Text>
-                </View>
-                <View style={centerStyles.row}>
-                    <Text style={centerStyles.rowTitle}>Mức độ:</Text>
-                    <Text style={centerStyles.rowText}>{khaoSatMoiNhat?.mucDo?.tenMucDo}</Text>
-                </View>
-            </View>
-
-            <View style={truCotStyles.container}>
-                <Text style={styles.title}>Đánh giá trên từng trụ cột</Text>
-                {khaoSatMoiNhat?.ketQuaTruCots?.map(item => (
-                    <View key={item.id} style={centerStyles.row}>
-                        <React.Fragment key={item.id}>
-                            <Text style={centerStyles.rowTitle}>{item.tenTruCot}:</Text>
-                            <View style={centerStyles.starContainer}>
-                                {Array.from({ length: 5 }).map((_, index) => (
-                                    <Ionicons
-                                        key={index}
-                                        name='star'
-                                        size={12}
-                                        color={
-                                            index < mapPercentageToStars((item.phanTram / 16) * 100)
-                                                ? Colors.orange
-                                                : 'grey'
-                                        }
-                                    />
-                                ))}
-                            </View>
-                        </React.Fragment>
+            {khaoSatMoiNhat && (
+                <View style={centerStyles.container}>
+                    <Text style={styles.title}>Kết quả đánh giá gần đây</Text>
+                    <View style={centerStyles.row}>
+                        <Text style={centerStyles.rowTitle}>Điểm đánh giá:</Text>
+                        <Text style={centerStyles.rowText}>{khaoSatMoiNhat?.tongDiem}</Text>
                     </View>
-                ))}
-            </View>
+                    <View style={centerStyles.row}>
+                        <Text style={centerStyles.rowTitle}>Mức độ sẵn sàng CĐS:</Text>
+                        <Text style={centerStyles.rowText}>{khaoSatMoiNhat?.mucDo?.tenMucDo}</Text>
+                    </View>
+                </View>
+            )}
+
+            {khaoSatMoiNhat?.ketQuaTruCots && (
+                <View style={truCotStyles.container}>
+                    <Text style={styles.title}>Đánh giá trên từng trụ cột</Text>
+                    {khaoSatMoiNhat?.ketQuaTruCots?.map(item => (
+                        <View key={item.id} style={centerStyles.row}>
+                            <React.Fragment key={item.id}>
+                                <Text style={centerStyles.rowTitle}>{item.tenTruCot}:</Text>
+                                <View style={centerStyles.starContainer}>
+                                    {Array.from({ length: 5 }).map((_, index) => (
+                                        <Ionicons
+                                            key={index}
+                                            name='star'
+                                            size={12}
+                                            color={
+                                                index < mapPercentageToStars((item.phanTram / 16) * 100)
+                                                    ? Colors.orange
+                                                    : 'grey'
+                                            }
+                                        />
+                                    ))}
+                                </View>
+                            </React.Fragment>
+                        </View>
+                    ))}
+                </View>
+            )}
 
             {nhuCauMoiNhat && (
                 <View style={bottomStyles.container}>

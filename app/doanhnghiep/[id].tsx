@@ -1,15 +1,12 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router'
+import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
-import Loading from '@components/StatusPage/Loading'
 //@ts-ignore
-import no_avatar from '@assets/icons/user.jpg'
 //@ts-ignore
 import background from '@assets/backgrounds/doanhnghiepdetail.jpg'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghiep } from '@services/doanhNghiepServices'
-import NotFound from '@components/StatusPage/NotFound'
 import { getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import SanPhamComponent, { ITEM_WIDTH } from '@components/SanPham/SanPham'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
@@ -28,6 +25,7 @@ import SpaceComponent from '@components/View/SpaceComponent'
 import Colors from '@constants/Colors'
 import { useAppDispatch } from '@redux/store'
 import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
+import { Skeleton } from 'moti/skeleton'
 
 const ITEM_GAP = 12
 
@@ -41,8 +39,8 @@ const DoanhNghiepDetail = () => {
     const { isInRole } = useDangNhap()
     const dispatch = useAppDispatch()
     const nhuCauMoiNhat = useMemo(() => {
-        if (data && data.nhuCau && data.nhuCau.length > 0) {
-            return data.nhuCau.sort((a, b) => b.id - a.id)[0]
+        if (data && data?.nhuCau && data?.nhuCau.length > 0) {
+            return data?.nhuCau.sort((a, b) => b.id - a.id)[0]
         }
     }, [data])
 
@@ -69,78 +67,101 @@ const DoanhNghiepDetail = () => {
         })
     }, [navigation])
 
-    if (loading) {
-        return <Loading />
-    }
-
-    if (!data) {
-        return <NotFound message='Có lỗi xảy ra, vui lòng thử lại!' />
-    }
-
     return (
         <ScrollView style={styles.container}>
             <View style={{ height: 200 }}>
                 <PageHeader tintColor='white' title={''} style={{ marginBottom: 12 }} />
                 <BackgroundImage source={background} />
                 <View style={styles.info}>
-                    <ImageComponent uri={data.user?.image} style={styles.image} />
-                    <View style={{ justifyContent: 'space-between', flex: 1 }}>
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.ten}>{data?.tenTiengViet}</Text>
-                            <Text style={styles.text}>Address: {data.diaChi}</Text>
-                            <Text style={styles.text}>Phone: {data.sdt}</Text>
-                            <Text style={styles.text}>Email: {data.user?.email}</Text>
-                            {data.website && <Text style={styles.text}>Website: {data.website}</Text>}
+                    {!loading ? (
+                        <>
+                            <ImageComponent uri={data?.user?.image} style={styles.image} />
+                            <View style={{ justifyContent: 'space-between', flex: 1 }}>
+                                <View style={styles.infoContainer}>
+                                    <Text style={styles.ten}>{data?.tenTiengViet}</Text>
+                                    <Text style={styles.text}>Địa chỉ: {data?.diaChi}</Text>
+                                    <Text style={styles.text}>Điện thoại: {data?.sdt}</Text>
+                                    <Text style={styles.text}>Email: {data?.user?.email}</Text>
+                                    {data?.website && <Text style={styles.text}>Website: {data?.website}</Text>}
 
-                            {data.hoSoNangLuc && (
-                                <Pressable
-                                    onPress={() => {
-                                        dispatch(doanhNghiepActions.setSelectedDoanhNghiep(data))
-                                        router.push(`/hosonangluc`)
-                                    }}>
-                                    <Text
-                                        style={[
-                                            styles.text,
-                                            {
-                                                color: Colors.default,
-                                                alignSelf: 'flex-end',
-                                                marginTop: 4,
-                                                textDecorationLine: 'underline',
-                                            },
-                                        ]}>
-                                        Xem hồ sơ năng lực {'>>'}
-                                    </Text>
-                                </Pressable>
-                            )}
-                        </View>
-                    </View>
+                                    {data?.hoSoNangLuc && (
+                                        <Pressable
+                                            onPress={() => {
+                                                dispatch(doanhNghiepActions.setSelectedDoanhNghiep(data))
+                                                router.push(`/hosonangluc`)
+                                            }}>
+                                            <Text
+                                                style={[
+                                                    styles.text,
+                                                    {
+                                                        color: Colors.default,
+                                                        alignSelf: 'flex-end',
+                                                        marginTop: 4,
+                                                        textDecorationLine: 'underline',
+                                                    },
+                                                ]}>
+                                                Xem hồ sơ năng lực {'>>'}
+                                            </Text>
+                                        </Pressable>
+                                    )}
+                                </View>
+                            </View>
+                        </>
+                    ) : (
+                        <>
+                            <Skeleton colorMode='light' width={100} height={100} radius={'round'} />
+                            <View style={{ justifyContent: 'space-between', flex: 1 }}>
+                                <View style={styles.infoContainer}>
+                                    <Skeleton colorMode='light' width={'100%'} height={30} />
+                                    <Skeleton colorMode='light' width={200} height={25} />
+                                    <Skeleton colorMode='light' width={150} height={20} />
+                                    <Skeleton colorMode='light' width={150} height={20} />
+                                    <Skeleton colorMode='light' width={150} height={20} />
+                                </View>
+                            </View>
+                        </>
+                    )}
                 </View>
             </View>
 
             <View style={styles.body}>
                 <View style={styles.section}>
-                    <Text style={styles.title}>Mô tả</Text>
-                    <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Người đại diện:</Text>
-                        <Text style={styles.rowText}>{data.daiDien.tenDaiDien}</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Ngày thành lập:</Text>
-                        {data.ngayLap && (
-                            <Text style={styles.rowText}>{moment(data.ngayLap).format('DD/MM/YYYY')}</Text>
-                        )}
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Loại hình kinh doanh:</Text>
-                        {data?.linhVuc?.tenLinhVuc && <Text style={styles.rowText}>{data.loaiHinh?.tenLoaiHinh}</Text>}
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.rowTitle}>Ngành nghề chính:</Text>
-                        {data?.loaiHinh?.tenLoaiHinh && (
-                            <Text style={styles.rowText}>{data.nganhNghe?.tenNganhNghe}</Text>
-                        )}
-                    </View>
-                    {data.moTa && <Text style={styles.description}>{data.moTa}</Text>}
+                    {!loading ? (
+                        <>
+                            <Text style={styles.title}>Mô tả</Text>
+                            <View style={styles.row}>
+                                <Text style={styles.rowTitle}>Người đại diện:</Text>
+                                <Text style={styles.rowText}>{data?.daiDien.tenDaiDien}</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.rowTitle}>Ngày thành lập:</Text>
+                                {data?.ngayLap && (
+                                    <Text style={styles.rowText}>{moment(data?.ngayLap).format('DD/MM/YYYY')}</Text>
+                                )}
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.rowTitle}>Loại hình kinh doanh:</Text>
+                                {data?.linhVuc?.tenLinhVuc && (
+                                    <Text style={styles.rowText}>{data?.loaiHinh?.tenLoaiHinh}</Text>
+                                )}
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.rowTitle}>Ngành nghề chính:</Text>
+                                {data?.loaiHinh?.tenLoaiHinh && (
+                                    <Text style={styles.rowText}>{data?.nganhNghe?.tenNganhNghe}</Text>
+                                )}
+                            </View>
+                            {data?.moTa && <Text style={styles.description}>{data?.moTa}</Text>}
+                        </>
+                    ) : (
+                        <View style={{ gap: 4 }}>
+                            <Skeleton colorMode='light' width={100} height={20} />
+                            <Skeleton colorMode='light' width={'100%'} height={20} />
+                            <Skeleton colorMode='light' width={'100%'} height={20} />
+                            <Skeleton colorMode='light' width={'100%'} height={20} />
+                            <Skeleton colorMode='light' width={'100%'} height={20} />
+                        </View>
+                    )}
                 </View>
 
                 {products.length > 0 && (
@@ -179,7 +200,7 @@ const DoanhNghiepDetail = () => {
                     </View>
                 )}
 
-                {data.thanhTich && data.thanhTich?.length > 0 && (
+                {data?.thanhTich && data?.thanhTich?.length > 0 && (
                     <View style={[styles.section, { maxHeight: 400 }]}>
                         <Text style={styles.title}>Thành tích nổi bật</Text>
                         <ScrollView
@@ -187,7 +208,7 @@ const DoanhNghiepDetail = () => {
                             nestedScrollEnabled
                             contentContainerStyle={{ gap: ITEM_GAP }}
                             showsVerticalScrollIndicator={false}>
-                            {data.thanhTich.map(item => (
+                            {data?.thanhTich.map(item => (
                                 <View style={{ alignItems: 'center' }} key={item.id}>
                                     <ImageComponent
                                         width={'100%'}
@@ -224,7 +245,7 @@ const DoanhNghiepDetail = () => {
                     <Button
                         btnStyles={styles.button}
                         text='Tư vấn'
-                        onPress={() => router.push(`/tuvan/${data.user?.id}`)}
+                        onPress={() => router.push(`/tuvan/${data?.user?.id}`)}
                     />
                 )}
             </View>

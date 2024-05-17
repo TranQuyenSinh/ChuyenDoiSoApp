@@ -1,6 +1,18 @@
 import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 import { authAxios, axios } from '@utils/axios'
-import { AxiosError } from 'axios'
+import { Axios, AxiosError } from 'axios'
+
+
+
+export const getSanPhamMoiNhat = async () => {
+    try {
+        const { data } = await axios.get<SanPham[]>(`sanpham/newest`)
+        return data
+    } catch (err) {
+        console.log('===> Lỗi lấy sản phẩm mới nhất', (err as AxiosError).response)
+        return []
+    }
+}
 
 export const getSanPhamByDoanhNghiep = async (id: number) => {
     try {

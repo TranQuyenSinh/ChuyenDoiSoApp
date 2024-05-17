@@ -20,7 +20,6 @@ const ImageComponent = (props: ImageComponentProps) => {
         width: width ?? '100%',
         height: height ?? undefined,
         resizeMode: resizeMode ?? 'cover',
-        aspectRatio: 1,
     }
 
     return <RNImage {...rest} source={imageSource} defaultSource={appImages.notfound} style={[localStyles, style]} />

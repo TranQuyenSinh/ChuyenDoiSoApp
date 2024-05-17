@@ -7,6 +7,7 @@ import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
 import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { timKiemDNTuVan } from '@services/hoiDapServices'
 import Loading from '@components/StatusPage/Loading'
+import { getDoanhNghieps } from '@services/doanhNghiepServices'
 
 const TuVanDoanhNghiep = () => {
     const navigation = useNavigation()
@@ -21,7 +22,7 @@ const TuVanDoanhNghiep = () => {
     useEffect(() => {
         ;(async () => {
             setLoading(true)
-            const result = await timKiemDNTuVan()
+            const result = await getDoanhNghieps()
             setData(result)
             setLoading(false)
         })()
@@ -45,16 +46,8 @@ const TuVanDoanhNghiep = () => {
 
         if (selectedSortType === 'MUCDO') {
             filter = filter
-                .filter(x => {
-                    return x.khaoSat?.[0]?.mucDo
-                })
+                .filter(x => x.khaoSat?.[0]?.mucDo)
                 .sort((a, b) => (a?.khaoSat?.[0]?.mucDo?.id || 1) - (b?.khaoSat?.[0]?.mucDo?.id || 0))
-                .map(item => {
-                    item.khaoSat?.[0]?.mucDo &&
-                        console.log('🚀 ~ x.khaoSat?.[0]?.mucDo: ', item.khaoSat?.[0]?.mucDo.tenMucDo)
-
-                    return item
-                })
         } else if (selectedSortType === 'NHUCAU') {
             filter = filter.filter(x => x.nhuCau?.length !== 0)
         }

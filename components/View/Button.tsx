@@ -13,7 +13,7 @@ interface ButtonProps {
 }
 
 const Button = ({ onPress, text, btnStyles, textStyles, renderIcon, disabled = false }: ButtonProps) => {
-    const scale = useSharedValue(1)
+    const scale = useSharedValue(0)
     const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ scale: interpolate(scale.value, [0, 0.5, 1], [1, 0.99, 0.98]) }],

@@ -8,6 +8,7 @@ export interface SanPham {
     hinhAnhs: AnhSanPham[]
     createdAt: string
     updatedAt: string
+    doanhNghiep?: DoanhNghiep
 }
 
 export interface AnhSanPham {

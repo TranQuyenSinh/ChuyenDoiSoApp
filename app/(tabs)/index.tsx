@@ -45,6 +45,8 @@ import RowComponent from '@components/View/RowComponent'
 import LinkWebsite from '@components/Home/LinkWebsite'
 import { appIcons } from '@constants/Images'
 import PremiumLabel from '@components/View/PremiumLabel'
+import LienKetSanPham from '@components/Home/LienKetSanPham'
+import LinkComponent from '@components/View/LinkComponent'
 
 export default function TrangTin() {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
@@ -96,7 +98,7 @@ export default function TrangTin() {
                                     <View>
                                         {/* <Text style={{ color: 'white' }}>Xin chào</Text> */}
                                         <Text style={styles.topText}>{userProfile?.name}</Text>
-                                        {doanhNghiep?.hoiVien && <PremiumLabel style={{ marginTop: 4 }} />}
+                                        {!!doanhNghiep?.hoiVien && <PremiumLabel style={{ marginTop: 4 }} />}
                                     </View>
                                 </View>
                             </>
@@ -259,6 +261,15 @@ export default function TrangTin() {
                                 />
                             </View>
                         </View>
+                    </View>
+
+                    {/* Liên kết sản phẩm doanh nghiệp */}
+                    <View style={[styles.contentContainer]}>
+                        <Text style={[textStyles.title, styles.title]}>Sản phẩm doanh nghiệp</Text>
+                        <LienKetSanPham />
+                        <RowComponent justify='flex-end'>
+                            <LinkComponent text='Xem tất cả sản phẩm >>' onPress={() => {}} />
+                        </RowComponent>
                     </View>
 
                     {/* LIÊN KẾT DOANH NGHIỆP */}

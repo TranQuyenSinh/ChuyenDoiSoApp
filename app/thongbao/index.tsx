@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect } from 'react'
-import { router, useNavigation } from 'expo-router'
+import { router, Stack, useNavigation } from 'expo-router'
 import Colors from '@constants/Colors'
 //@ts-ignore
 import no_avatar from '@assets/icons/user.jpg'
@@ -12,11 +12,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@redux/store'
 import { deleteThongBao, fetchThongBao, readThongBao } from '@redux/thongBaoSlice'
 import RequireLogin from '@components/StatusPage/RequireLogin'
+import { stackOptions } from '@configs/ScreenConfig'
 const ThongBaoPage = () => {
     const dispatch = useDispatch<AppDispatch>()
     const { thongBaos } = useSelector((state: RootState) => state.thongBao)
     const { isLoggedIn } = useSelector((state: RootState) => state.user)
-    const navigation = useNavigation()
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(fetchThongBao())
@@ -48,21 +48,17 @@ const ThongBaoPage = () => {
         dispatch(deleteThongBao(item.id))
     }
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: 'Thông báo',
-            headerTitleAlign: 'center',
-            headerStyle: {
-                backgroundColor: Colors.default,
-            },
-            headerTintColor: 'white',
-        })
-    }, [navigation])
-
     if (!isLoggedIn) return <RequireLogin />
 
     return (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+            <Stack.Screen
+                options={{
+                    headerTitle: 'Thông báo',
+                    animation: 'fade_from_bottom',
+                    ...stackOptions,
+                }}
+            />
             {thongBaos?.map((item: ThongBao) => (
                 <TouchableOpacity
                     onPress={() => handlePress(item)}

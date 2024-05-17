@@ -10,15 +10,19 @@ import no_image from '@assets/images/no_image.png'
 import { router } from 'expo-router'
 import LinearGradient from 'react-native-linear-gradient'
 import { Keyboard } from 'react-native'
+import { MotiView } from 'moti'
+import { Skeleton } from 'moti/skeleton'
+import { screenWidth, windowWidth } from '@utils/window'
+import SpaceComponent from '@components/View/SpaceComponent'
 const DoanhNghiepPage = () => {
-    const [data, setData] = useState<DoanhNghiep[]>([])
+    const [data, setData] = useState<DoanhNghiep[] | undefined>()
     const [search, setSearch] = useState('')
-    const [filteredData, setFilteredData] = useState<DoanhNghiep[]>([])
+    const [filteredData, setFilteredData] = useState<DoanhNghiep[] | undefined>()
 
     useEffect(() => {
         let filteredData = data
         if (search !== '')
-            filteredData = data.filter(item => item.tenTiengViet.toLowerCase().includes(search.toLowerCase()))
+            filteredData = data?.filter(item => item.tenTiengViet.toLowerCase().includes(search.toLowerCase()))
         setFilteredData(filteredData)
     }, [search])
 
@@ -57,17 +61,29 @@ const DoanhNghiepPage = () => {
             <View style={contentStyles.container}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    data={filteredData}
+                    data={filteredData || Array.from({ length: 10 }).map(_ => null)}
                     numColumns={2}
-                    keyExtractor={(item, index) => item.id + ''}
+                    keyExtractor={(item, index) => index + ''}
                     renderItem={({ item }) => (
-                        <Pressable onPress={() => router.push(`/doanhnghiep/${item.id}`)} style={cardStyles.container}>
-                            <Image
-                                source={item.user?.image ? { uri: item.user.image } : no_image}
-                                style={cardStyles.logo}
-                            />
-                            <Text style={cardStyles.name}>{item.tenTiengViet}</Text>
-                        </Pressable>
+                        <>
+                            {item ? (
+                                <Pressable
+                                    onPress={() => router.push(`/doanhnghiep/${item.id}`)}
+                                    style={cardStyles.container}>
+                                    <Image
+                                        source={item.user?.image ? { uri: item.user.image } : no_image}
+                                        style={cardStyles.logo}
+                                    />
+                                    <Text style={cardStyles.name}>{item.tenTiengViet}</Text>
+                                </Pressable>
+                            ) : (
+                                <Pressable style={cardStyles.container}>
+                                    <Skeleton width={'100%'} height={100} colorMode='light' radius={'square'} />
+                                    <SpaceComponent height={20} />
+                                    <Skeleton width={'100%'} height={20} colorMode='light' />
+                                </Pressable>
+                            )}
+                        </>
                     )}
                 />
             </View>

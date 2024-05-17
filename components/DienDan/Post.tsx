@@ -54,16 +54,9 @@ const Post = ({ data }: PostProps) => {
         <View style={styles.container}>
             <View style={styles.postTop}>
                 <View style={styles.infoContainer}>
-                    <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
-                        <Image
-                            style={styles.userAvatar}
-                            source={data.user.image ? { uri: data.user.image } : no_avatar}
-                        />
-                    </Pressable>
+                    <Image style={styles.userAvatar} source={data.user.image ? { uri: data.user.image } : no_avatar} />
                     <View style={styles.info}>
-                        <Pressable onPress={() => router.push(`/doanhnghiep/${data.doanhNghiep?.id}`)}>
-                            <Text style={styles.userName}>{data.user.name}</Text>
-                        </Pressable>
+                        <Text style={styles.userName}>{data.user.name}</Text>
                         <View style={styles.timeContainer}>
                             <Ionicons name='time-outline' size={10} color={'orange'} />
                             <Text style={styles.time}>{moment(data.createdAt).fromNow()}</Text>

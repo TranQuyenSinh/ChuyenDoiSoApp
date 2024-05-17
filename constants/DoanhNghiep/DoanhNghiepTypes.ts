@@ -30,6 +30,7 @@ export interface DoanhNghiep {
     hoSoNangLuc?: string
     namGiaNhap?: Date
     nganhNghe?: NganhNghe
+    gianHang?: string
 }
 
 export interface Sdt {

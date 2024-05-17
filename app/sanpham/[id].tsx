@@ -1,33 +1,37 @@
-import { Alert, Image, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Loading from '@components/StatusPage/Loading'
-import PageHeader from '@components/View/PageHeader'
-import { textStyles } from '@constants/Styles'
-import { useLocalSearchParams, useNavigation } from 'expo-router'
-import moment from 'moment'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { deleteAnhSanPham, getSanPham } from '@services/sanPhamServices'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { getSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
 import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 //@ts-ignore
-import background from '@assets/images/test2.jpeg'
-//@ts-ignore
 import no_image from '@assets/images/no_image.png'
-import BackgroundImage from '@components/View/BackgroundImage'
-import NotFound from '@components/StatusPage/NotFound'
-import IconButton from '@components/View/IconButton'
-import { Ionicons } from '@expo/vector-icons'
+import SanPhamComponent from '@components/SanPham/SanPham'
+import { stackOptions } from '@configs/ScreenConfig'
+import { formatPrice } from '@utils/format'
+import Colors from '@constants/Colors'
+import Button from '@components/View/Button'
+import { useAppDispatch } from '@redux/store'
+import { trungTamActions } from '@redux/trungTamSlice'
+import ImageComponent from '@components/View/ImageComponent'
+import { Text } from '@components/View/Text'
+import RowComponent from '@components/View/RowComponent'
 const SanPhamDetail = () => {
     const { id } = useLocalSearchParams()
-    const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [sanPham, setSanPham] = useState<SanPham | undefined>()
+    const [sanPhamKhac, setSanPhamKhac] = useState<SanPham[]>([])
     const [selectImage, setSelectImage] = useState<AnhSanPham>()
+    const dispatch = useAppDispatch()
 
     const fetchData = async () => {
         setLoading(true)
         const data = await getSanPham(+id)
         setSanPham(data)
-
+        if (data?.doanhNghiep) {
+            const spKhac = await getSanPhamByDoanhNghiep(data.doanhNghiep.id || 0)
+            setSanPhamKhac(spKhac?.filter(item => item.id !== data.id) || [])
+        }
         setLoading(false)
     }
 
@@ -41,66 +45,106 @@ const SanPhamDetail = () => {
         }
     }, [sanPham])
 
-    const handleRemoveImage = async (anhdId: number) => {
-        Alert.alert('Xác nhận', 'Bạn có chắc chắn muốn xóa ảnh này?', [
-            { text: 'Hủy', style: 'cancel' },
-            {
-                text: 'Xóa',
-                onPress: async () => {
-                    const result = await deleteAnhSanPham(anhdId)
-                    if (result) {
-                        const spNew = Object(sanPham)
-                        spNew.hinhAnhs = spNew.hinhAnhs.filter((p: AnhSanPham) => p.id !== anhdId)
-                        setSanPham(spNew)
-                    }
-                },
-            },
-        ])
+    const handleShowWebview = () => {
+        dispatch(
+            trungTamActions.selectChuongTrinh({
+                name: 'Đặc sản An Giang',
+                link: sanPham?.doanhNghiep?.gianHang || 'https://dacsan.cdsdnag.com',
+            })
+        )
+        router.push('/web')
     }
-
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-        })
-    }, [navigation])
-
-    if (loading) {
-        return <Loading />
-    }
-
-    if (!sanPham) return
 
     return (
         <View style={styles.container}>
-            <PageHeader tintColor='white' title={'Chi tiết sản phẩm'} style={{ marginBottom: 12 }} />
-            <BackgroundImage source={background} />
+            <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+                <Stack.Screen
+                    options={{
+                        title: 'Chi tiết sản phẩm',
+                        ...stackOptions,
+                    }}
+                />
+                {loading && <Loading />}
 
-            {loading && <Loading />}
-            {!sanPham && <NotFound message='Không tìm thấy sản phẩm' />}
+                {!loading && sanPham && (
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.imageContainer}>
+                            <Image
+                                source={selectImage?.hinhAnh ? { uri: selectImage.hinhAnh } : no_image}
+                                style={styles.itemImg}
+                            />
+                        </View>
+                        {sanPham.hinhAnhs?.length > 1 && (
+                            <View style={{ alignItems: 'center' }}>
+                                <ScrollView
+                                    style={{ flexGrow: 0 }}
+                                    contentContainerStyle={{ paddingHorizontal: 6 }}
+                                    horizontal>
+                                    {sanPham.hinhAnhs.map((item, index) => (
+                                        <Pressable key={item.id} onPress={() => setSelectImage(item)}>
+                                            <Image
+                                                key={index}
+                                                source={item.hinhAnh ? { uri: item.hinhAnh } : no_image}
+                                                style={[
+                                                    styles.smallImage,
+                                                    selectImage?.id === item.id && {
+                                                        borderWidth: 2,
+                                                        borderColor: Colors.orange,
+                                                    },
+                                                ]}
+                                            />
+                                        </Pressable>
+                                    ))}
+                                </ScrollView>
+                            </View>
+                        )}
+                        <View style={styles.infoContainer}>
+                            <Text style={styles.title}>{sanPham.tenSanPham}</Text>
+                            <Text style={styles.price}>{formatPrice(sanPham.gia)}đ</Text>
 
-            {!loading && sanPham && (
-                <>
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={selectImage?.hinhAnh ? { uri: selectImage.hinhAnh } : no_image}
-                            style={styles.itemImg}
-                        />
-                    </View>
-                    <ScrollView contentContainerStyle={{ paddingHorizontal: 6 }} horizontal>
-                        {sanPham.hinhAnhs.map((item, index) => (
-                            <Pressable key={item.id} onPress={() => setSelectImage(item)}>
-                                <Image
-                                    key={index}
-                                    source={item.hinhAnh ? { uri: item.hinhAnh } : no_image}
-                                    style={{ width: 75, height: 75, borderRadius: 8, marginHorizontal: 8 }}
-                                />
-                                <IconButton style={styles.removeBtn} onPress={() => handleRemoveImage(item.id)}>
-                                    <Ionicons name='close-circle' size={24} color={'black'} />
-                                </IconButton>
+                            <Pressable
+                                onPress={() => router.push(`/doanhnghiep/${sanPham.doanhNghiep?.id}`)}
+                                style={styles.section}>
+                                <RowComponent gap={12}>
+                                    <ImageComponent uri={sanPham.doanhNghiep?.user?.image} style={styles.avatar} />
+                                    <View style={styles.sectionInfo}>
+                                        <Text fontSize={16} fontWeight='600' style={styles.text}>
+                                            {sanPham.doanhNghiep?.tenTiengViet}
+                                        </Text>
+                                        <Text style={styles.text}>Địa chỉ: {sanPham.doanhNghiep?.diaChi}</Text>
+                                        <Text style={styles.text}>Điện thoại: {sanPham.doanhNghiep?.sdt}</Text>
+                                        <Text style={styles.text}>Email: {sanPham.doanhNghiep?.user?.email}</Text>
+                                    </View>
+                                </RowComponent>
                             </Pressable>
-                        ))}
-                    </ScrollView>
-                </>
+                            <Text style={styles.description}>{sanPham.moTa}</Text>
+
+                            {sanPhamKhac.length > 0 && (
+                                <View style={[styles.section, { elevation: 10 }]}>
+                                    <Text style={styles.sectionTitle}>Sản phẩm khác</Text>
+                                    <ScrollView
+                                        horizontal
+                                        disableIntervalMomentum={true}
+                                        snapToInterval={100 + 12}
+                                        contentContainerStyle={{ gap: 12 }}
+                                        showsHorizontalScrollIndicator={false}>
+                                        {sanPhamKhac.map(item => (
+                                            <SanPhamComponent data={item} key={item.id} />
+                                        ))}
+                                    </ScrollView>
+                                </View>
+                            )}
+                        </View>
+                    </View>
+                )}
+            </ScrollView>
+            {sanPham?.doanhNghiep?.gianHang && (
+                <Button
+                    btnStyles={styles.button}
+                    textStyles={styles.buttonText}
+                    text='Xem gian hàng'
+                    onPress={handleShowWebview}
+                />
             )}
         </View>
     )
@@ -111,56 +155,83 @@ export default SanPhamDetail
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e2f4ff',
-    },
-    background: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        zIndex: -1,
     },
     imageContainer: {
         backgroundColor: Colors.white,
-        borderRadius: 8,
         marginBottom: 18,
-        marginHorizontal: 16,
-        padding: 6,
         gap: 8,
     },
     itemImg: {
         width: '100%',
-        height: 180,
-        borderRadius: 12,
-        resizeMode: 'cover',
+        height: 250,
+        resizeMode: 'contain',
     },
-    itemName: {
-        fontWeight: '500',
+    smallImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+        marginHorizontal: 8,
+    },
+    infoContainer: {
+        flex: 1,
+        marginTop: 12,
+        paddingHorizontal: 24,
+        gap: 12,
+    },
+    title: {
+        fontWeight: '600',
+        fontSize: 20,
+        fontFamily: 'mon-b',
+    },
+    price: {
+        fontSize: 16,
+        color: Colors.error.default,
+    },
+    description: {
+        lineHeight: 20,
+        color: Colors.bodyText,
+    },
+
+    button: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        left: 20,
+        height: 50,
+        elevation: 10,
+        borderRadius: 20,
+        backgroundColor: Colors.orange,
+    },
+    buttonText: {
+        fontFamily: 'mon-sb',
+        fontSize: 15,
+    },
+    sectionTitle: {
+        fontWeight: '600',
+        textAlign: 'center',
         fontSize: 16,
     },
-    itemDate: {
-        color: Colors.textGray,
-        fontWeight: '400',
-        fontSize: 12,
+    section: {
+        backgroundColor: 'white',
+        borderRadius: 4,
+        gap: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 12,
     },
-    modalTitle: {
-        fontSize: 18,
-        textAlign: 'center',
-        fontWeight: '600',
-        marginBottom: 12,
+    sectionInfo: {
+        gap: 2,
+        flex: 1,
     },
-    modalInput: {
+    avatar: {
+        width: 80,
+        height: 80,
         borderWidth: StyleSheet.hairlineWidth,
-        width: '100%',
-        borderRadius: 8,
-        textAlignVertical: 'top',
-        padding: 8,
+        borderColor: 'grey',
+        borderRadius: 50,
+        resizeMode: 'contain',
     },
-    removeBtn: {
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        height: 50,
-        width: 50,
-        zIndex: 999,
+    text: {
+        fontSize: 12,
+        flexShrink: 0,
     },
 })

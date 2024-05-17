@@ -21,6 +21,9 @@ import { Ionicons } from '@expo/vector-icons'
 import IconButton from '@components/View/IconButton'
 import { toast } from '@utils/toast'
 import LinearGradient from 'react-native-linear-gradient'
+import { Skeleton } from 'moti/skeleton'
+import { windowWidth } from '@utils/window'
+import RowComponent from '@components/View/RowComponent'
 
 const index = () => {
     const navigation = useNavigation()
@@ -111,11 +114,11 @@ const index = () => {
             <LinearGradient colors={['#32acff', '#94d3fe']}>
                 <PageHeader title='' tintColor='white' />
                 <View style={topStyles.titleContainer}>
-                    <Text style={topStyles.title}>Your products</Text>
+                    <Text style={topStyles.title}>Sản phẩm của bạn</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={topStyles.subTitle}>Promote your product</Text>
+                        <Text style={topStyles.subTitle}>Quản lý sản phẩm</Text>
                         <Button
-                            text='Add new'
+                            text='Thêm mới'
                             btnStyles={{ backgroundColor: Colors.orange, borderRadius: 30 }}
                             onPress={() => router.push('/sanpham/create')}
                         />
@@ -123,25 +126,12 @@ const index = () => {
                 </View>
             </LinearGradient>
 
-            {loading && <Loading />}
-            {/* {!loading && products.length === 0 && (
-                <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, height: '100%' }}>
-                    <Text style={styles.notfoundText}>Bạn chưa cập nhật sản phẩm nổi bật</Text>
-                    <Text style={styles.notfoundSubText}>Đăng để quảng bá sản phẩm của bạn đến mọi người!</Text>
-                    <Button
-                        btnStyles={styles.notfoundButton}
-                        text='Đăng ngay'
-                        onPress={() => router.push('/sanpham/create')}
-                    />
-                </View>
-            )} */}
-
-            {sanPhams?.length !== 0 && (
+            {!loading ? (
                 <FlatList
-                    keyExtractor={item => item.id + ''}
-                    data={sanPhams || []}
+                    data={sanPhams}
                     contentContainerStyle={{ paddingHorizontal: 6 }}
                     numColumns={2}
+                    keyExtractor={item => item.id + ''}
                     renderItem={({ item }) => (
                         <Pressable
                             onPress={() => router.push({ pathname: '/sanpham/edit', params: { id: item.id } })}
@@ -156,8 +146,26 @@ const index = () => {
                             />
                             <Text style={productStyles.name}>{item.tenSanPham}</Text>
                             <Text style={productStyles.price}>{formatPrice(item.gia)} đ</Text>
-                            <Button btnStyles={{ width: '100%' }} text='Share now' onPress={() => handleShare(item)} />
+                            <Button
+                                btnStyles={{ width: '100%' }}
+                                text='Chia sẻ ngay'
+                                onPress={() => handleShare(item)}
+                            />
                         </Pressable>
+                    )}
+                />
+            ) : (
+                <FlatList
+                    data={Array.from({ length: 4 }).map((_, index) => index)}
+                    numColumns={2}
+                    contentContainerStyle={{ columnGap: 6, paddingHorizontal: 6 }}
+                    renderItem={({ item }) => (
+                        <View style={productStyles.container}>
+                            <Skeleton colorMode='light' width={160} height={160} />
+                            <Skeleton colorMode='light' width={100} height={20} />
+                            <Skeleton colorMode='light' width={60} height={20} />
+                            <Skeleton colorMode='light' width={'100%'} height={30} />
+                        </View>
                     )}
                 />
             )}
