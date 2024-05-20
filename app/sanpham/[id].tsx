@@ -2,7 +2,7 @@ import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Loading from '@components/StatusPage/Loading'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
-import { getSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
+import { getSanPham, getSanPhamByDoanhNghiep, getSanPhamRandom } from '@services/sanPhamServices'
 import { AnhSanPham, SanPham } from '@constants/DoanhNghiep/SanPhamType'
 //@ts-ignore
 import no_image from '@assets/images/no_image.png'
@@ -16,12 +16,17 @@ import { trungTamActions } from '@redux/trungTamSlice'
 import ImageComponent from '@components/View/ImageComponent'
 import { Text } from '@components/View/Text'
 import RowComponent from '@components/View/RowComponent'
+import SpaceComponent from '@components/View/SpaceComponent'
+import { Ionicons } from '@expo/vector-icons'
+import { Skeleton } from 'moti/skeleton'
+import Animated, { FadeIn, FadeInDown, Layout, ZoomIn, ZoomOut } from 'react-native-reanimated'
 const SanPhamDetail = () => {
     const { id } = useLocalSearchParams()
     const [loading, setLoading] = useState(false)
     const [sanPham, setSanPham] = useState<SanPham | undefined>()
-    const [sanPhamKhac, setSanPhamKhac] = useState<SanPham[]>([])
+    const [spCungDN, setSpCungDN] = useState<SanPham[] | undefined>()
     const [selectImage, setSelectImage] = useState<AnhSanPham>()
+    const [spKhac, setSpKhac] = useState<SanPham[] | undefined>()
     const dispatch = useAppDispatch()
 
     const fetchData = async () => {
@@ -29,9 +34,11 @@ const SanPhamDetail = () => {
         const data = await getSanPham(+id)
         setSanPham(data)
         if (data?.doanhNghiep) {
-            const spKhac = await getSanPhamByDoanhNghiep(data.doanhNghiep.id || 0)
-            setSanPhamKhac(spKhac?.filter(item => item.id !== data.id) || [])
+            const spCungDn = await getSanPhamByDoanhNghiep(data.doanhNghiep.id || 0)
+            setSpCungDN(spCungDn?.filter(item => item.id !== data.id) || [])
         }
+        const spKhac = await getSanPhamRandom()
+        setSpKhac(spKhac.filter(item => item.id !== data?.id) || [])
         setLoading(false)
     }
 
@@ -61,20 +68,20 @@ const SanPhamDetail = () => {
                 <Stack.Screen
                     options={{
                         title: 'Chi tiết sản phẩm',
+                        animation: 'slide_from_right',
                         ...stackOptions,
                     }}
                 />
-                {loading && <Loading />}
 
-                {!loading && sanPham && (
-                    <View style={{ flex: 1 }}>
+                {!loading ? (
+                    <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={{ flex: 1 }}>
                         <View style={styles.imageContainer}>
                             <Image
                                 source={selectImage?.hinhAnh ? { uri: selectImage.hinhAnh } : no_image}
                                 style={styles.itemImg}
                             />
                         </View>
-                        {sanPham.hinhAnhs?.length > 1 && (
+                        {sanPham && sanPham.hinhAnhs?.length > 1 && (
                             <View style={{ alignItems: 'center' }}>
                                 <ScrollView
                                     style={{ flexGrow: 0 }}
@@ -99,50 +106,84 @@ const SanPhamDetail = () => {
                             </View>
                         )}
                         <View style={styles.infoContainer}>
-                            <Text style={styles.title}>{sanPham.tenSanPham}</Text>
-                            <Text style={styles.price}>{formatPrice(sanPham.gia)}đ</Text>
+                            <Text style={styles.title}>{sanPham?.tenSanPham}</Text>
+                            <Text style={styles.price}>{formatPrice(sanPham?.gia)}đ</Text>
+                            <Text style={styles.description}>{sanPham?.moTa}</Text>
 
+                            {/* Đơn vị bán */}
                             <Pressable
-                                onPress={() => router.push(`/doanhnghiep/${sanPham.doanhNghiep?.id}`)}
+                                onPress={() => router.push(`/doanhnghiep/${sanPham?.doanhNghiep?.id}`)}
                                 style={styles.section}>
                                 <RowComponent gap={12}>
-                                    <ImageComponent uri={sanPham.doanhNghiep?.user?.image} style={styles.avatar} />
+                                    <ImageComponent uri={sanPham?.doanhNghiep?.user?.image} style={styles.avatar} />
                                     <View style={styles.sectionInfo}>
                                         <Text fontSize={16} fontWeight='600' style={styles.text}>
-                                            {sanPham.doanhNghiep?.tenTiengViet}
+                                            {sanPham?.doanhNghiep?.tenTiengViet}
                                         </Text>
-                                        <Text style={styles.text}>Địa chỉ: {sanPham.doanhNghiep?.diaChi}</Text>
-                                        <Text style={styles.text}>Điện thoại: {sanPham.doanhNghiep?.sdt}</Text>
-                                        <Text style={styles.text}>Email: {sanPham.doanhNghiep?.user?.email}</Text>
+                                        <Text style={styles.text}>Địa chỉ: {sanPham?.doanhNghiep?.diaChi}</Text>
+                                        <Text style={styles.text}>Điện thoại: {sanPham?.doanhNghiep?.sdt}</Text>
+                                        <Text style={styles.text}>Email: {sanPham?.doanhNghiep?.user?.email}</Text>
                                     </View>
                                 </RowComponent>
                             </Pressable>
-                            <Text style={styles.description}>{sanPham.moTa}</Text>
 
-                            {sanPhamKhac.length > 0 && (
-                                <View style={[styles.section, { elevation: 10 }]}>
+                            {spCungDN && spCungDN.length > 0 && (
+                                <>
+                                    <Text style={styles.sectionTitle}>Sản phẩm cùng gian hàng</Text>
+                                    <ScrollView
+                                        horizontal
+                                        disableIntervalMomentum={true}
+                                        snapToInterval={140 + 12}
+                                        contentContainerStyle={{ gap: 12 }}
+                                        showsHorizontalScrollIndicator={false}>
+                                        {spCungDN.map(item => (
+                                            <SanPhamComponent data={item} key={item.id} />
+                                        ))}
+                                    </ScrollView>
+                                </>
+                            )}
+
+                            {spKhac && spKhac.length > 0 && (
+                                <>
+                                    <SpaceComponent height={10} />
                                     <Text style={styles.sectionTitle}>Sản phẩm khác</Text>
                                     <ScrollView
                                         horizontal
                                         disableIntervalMomentum={true}
-                                        snapToInterval={100 + 12}
+                                        snapToInterval={140 + 12}
                                         contentContainerStyle={{ gap: 12 }}
                                         showsHorizontalScrollIndicator={false}>
-                                        {sanPhamKhac.map(item => (
+                                        {spKhac.map(item => (
                                             <SanPhamComponent data={item} key={item.id} />
                                         ))}
                                     </ScrollView>
-                                </View>
+                                </>
                             )}
+                        </View>
+                    </Animated.View>
+                ) : (
+                    <View style={{ flex: 1 }}>
+                        <View style={styles.imageContainer}>
+                            <Skeleton colorMode='light' height={250} width={'100%'} />
+                        </View>
+
+                        <View style={styles.infoContainer}>
+                            <Skeleton colorMode='light' height={25} width={'100%'} />
+                            <Skeleton colorMode='light' height={20} width={'20%'} />
+                            <Skeleton colorMode='light' height={20} width={'50%'} />
+                            <Skeleton colorMode='light' height={20} width={'60%'} />
+                            <Skeleton colorMode='light' height={20} width={'70%'} />
+                            <Skeleton colorMode='light' height={80} width={'100%'} />
                         </View>
                     </View>
                 )}
             </ScrollView>
-            {sanPham?.doanhNghiep?.gianHang && (
+            {!loading && sanPham?.doanhNghiep?.gianHang && (
                 <Button
                     btnStyles={styles.button}
                     textStyles={styles.buttonText}
-                    text='Xem gian hàng'
+                    text='Mua hàng'
+                    renderIcon={<Ionicons name='cart-sharp' size={24} color={'white'} />}
                     onPress={handleShowWebview}
                 />
             )}
@@ -155,6 +196,7 @@ export default SanPhamDetail
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#f5f8fd',
     },
     imageContainer: {
         backgroundColor: Colors.white,

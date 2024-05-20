@@ -16,12 +16,21 @@ export default function TabLayout() {
                         fontSize: 12,
                     },
                     tabBarStyle: {
-                        height: 55,
+                        height: 60,
                         backgroundColor: 'white',
                         elevation: 0,
+                        position: 'absolute',
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                        borderRadius: 30,
+                        elevation: 20,
+                        padding: 10,
+                        paddingBottom: 6
                     },
                     headerTitleAlign: 'center',
                 }}>
+
                 <Tabs.Screen
                     name='index'
                     options={{
@@ -32,27 +41,29 @@ export default function TabLayout() {
                             return (
                                 <>
                                     {focused ? (
-                                        <Ionicons name='home-sharp' color={color} size={size} />
+                                        <Ionicons name='home-sharp' color={color} size={20} />
                                     ) : (
-                                        <Ionicons name='home-outline' color={color} size={size} />
+                                        <Ionicons name='home-outline' color={color} size={20} />
                                     )}
                                 </>
                             )
                         },
                     }}
                 />
+
+
                 <Tabs.Screen
-                    name='social'
+                    name='doanhnghiep'
                     options={{
                         headerShown: false,
-                        tabBarLabel: 'Nhu cầu DN',
+                        tabBarLabel: 'Thành viên',
                         tabBarIcon: ({ color, size, focused }) => {
                             return (
                                 <>
                                     {focused ? (
-                                        <Entypo name='network' color={color} size={size} />
+                                        <Ionicons name='grid-sharp' size={20} color={color} />
                                     ) : (
-                                        <Entypo name='network' color={color} size={size} />
+                                        <Ionicons name='grid-outline' size={20} color={color} />
                                     )}
                                 </>
                             )
@@ -61,17 +72,17 @@ export default function TabLayout() {
                 />
 
                 <Tabs.Screen
-                    name='doanhnghiep'
+                    name='social'
                     options={{
                         headerShown: false,
-                        tabBarLabel: 'Doanh nghiệp',
+                        tabBarLabel: 'Diễn đàn',
                         tabBarIcon: ({ color, size, focused }) => {
                             return (
                                 <>
                                     {focused ? (
-                                        <Ionicons name='grid-sharp' size={size} color={color} />
+                                        <Entypo name='network' color={color} size={20} />
                                     ) : (
-                                        <Ionicons name='grid-outline' size={size} color={color} />
+                                        <Entypo name='network' color={color} size={20} />
                                     )}
                                 </>
                             )
@@ -87,9 +98,9 @@ export default function TabLayout() {
                             return (
                                 <>
                                     {focused ? (
-                                        <FontAwesome5 name='user-alt' size={size} color={color} />
+                                        <FontAwesome5 name='user-alt' size={20} color={color} />
                                     ) : (
-                                        <FontAwesome5 name='user' size={size} color={color} />
+                                        <FontAwesome5 name='user' size={20} color={color} />
                                     )}
                                 </>
                             )

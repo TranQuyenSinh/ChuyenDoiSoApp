@@ -30,3 +30,13 @@ export const deleteThongBao = async (id: number) => {
         return []
     }
 }
+
+export const createThongBao = async (tieuDe: string, noiDung: string, guiDen: 'all' | 'hoivien') => {
+    try {
+        await authAxios.post('/thongbao', { tieuDe, noiDung, guiDen })
+        return true
+    } catch (error) {
+        console.log('===> Lỗi tạo thông báo: ', error);
+        return false
+    }
+}

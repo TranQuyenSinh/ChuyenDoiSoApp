@@ -1,0 +1,1 @@
+export const nullArray = (length: number) => Array.from({ length }, () => null)

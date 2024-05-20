@@ -1,179 +1,127 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react'
-
-import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet, Image, Text, Pressable, Alert } from 'react-native'
-import { useNavigation, router } from 'expo-router'
-import Share, { ShareOptions } from 'react-native-share'
-import RNFetchBlob from 'rn-fetch-blob'
-import { AppDispatch, RootState } from '@redux/store'
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { router, Stack } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
+import BackgroundImage from '@components/View/BackgroundImage'
+import { appImages } from '@constants/Images'
+import { StatusBar } from 'expo-status-bar'
 import { SanPham } from '@constants/DoanhNghiep/SanPhamType'
-import { deleteSanPham, getSanPhamByDoanhNghiep } from '@services/sanPhamServices'
-import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
-import Loading from '@components/StatusPage/Loading'
-import Button from '@components/View/Button'
-import Colors from '@constants/Colors'
-import { FlatList } from 'react-native-gesture-handler'
-//@ts-ignore
-import no_avatar from '@assets/images/no_image.png'
-import { formatPrice } from '@utils/format'
-import { Ionicons } from '@expo/vector-icons'
-import IconButton from '@components/View/IconButton'
-import { toast } from '@utils/toast'
-import LinearGradient from 'react-native-linear-gradient'
+import { getAllSanPham } from '@services/sanPhamServices'
+import { nullArray } from '@utils/common'
 import { Skeleton } from 'moti/skeleton'
-import { windowWidth } from '@utils/window'
-import RowComponent from '@components/View/RowComponent'
+import ImageComponent from '@components/View/ImageComponent'
+import Colors from '@constants/Colors'
+import Animated, { FadeIn, Layout } from 'react-native-reanimated'
+import { formatPrice } from '@utils/format'
+import Button from '@components/View/Button'
+import { Ionicons } from '@expo/vector-icons'
 
-const index = () => {
-    const navigation = useNavigation()
-    const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch<AppDispatch>()
-    const { doanhNghiep, sanPhams } = useSelector((state: RootState) => state.doanhNghiep)
-
-    const fetchData = async (id: number) => {
-        setLoading(true)
-        const products = await getSanPhamByDoanhNghiep(id)
-        dispatch(doanhNghiepActions.setSanPhams(products))
-        setLoading(false)
-    }
-
-    const handleRemoveProduct = async (item: SanPham) => {
-        Alert.alert(
-            'Lưu ý',
-            'Bạn có chắc muốn xóa sản phẩm này?',
-            [
-                {
-                    text: 'Hủy bỏ',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Đồng ý',
-                    onPress: async () => {
-                        const result = await deleteSanPham(item.id)
-                        if (result) {
-                            toast('Xóa sản phẩm thành công')
-                            dispatch(doanhNghiepActions.setSanPhams(sanPhams?.filter(p => p.id !== item.id) || []))
-                        }
-                    },
-                },
-            ],
-            {
-                cancelable: true,
-            }
-        )
-    }
-
-    const handleShare = async (item: SanPham) => {
-        try {
-            let Pictures = item.hinhAnhs.map(item =>
-                RNFetchBlob.config({
-                    fileCache: true,
-                })
-                    .fetch('GET', item.hinhAnh)
-                    .then(resp => {
-                        let base64s = RNFetchBlob.fs
-                            .readFile(resp.data, 'base64')
-                            .then(data => 'data:image/jpeg;base64,' + data)
-                        return base64s
-                    })
-            )
-            setLoading(true)
-            Promise.all(Pictures).then(completed => {
-                setLoading(false)
-                const options: ShareOptions = {
-                    message: item.moTa,
-                    urls: completed,
-                    subject: item.moTa,
-                    title: item.moTa,
-                }
-                Share.open(options).then(res => res.success && toast('Chia sẻ thành công'))
-            })
-        } catch (error) {
-            console.log('===> error: ', error)
-            setLoading(false)
-        }
-    }
-
+const ListSanPham = () => {
+    const [sanPhams, setSanPhams] = useState<SanPham[] | undefined>()
+    const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
     useEffect(() => {
-        if (doanhNghiep) {
-            fetchData(doanhNghiep.id)
-        }
-    }, [doanhNghiep])
+        ;(async () => {
+            const data = await getAllSanPham()
+            setSanPhams(data)
+        })()
+    }, [])
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-            presentation: 'modal',
-            animation: 'fade',
-        })
-    }, [navigation])
+    const renderProduct = useCallback(({ item }: { item: SanPham | null }) => {
+        return (
+            <>
+                {item ? (
+                    <AnimatedPressable
+                        onPress={() => router.push(`/sanpham/${item.id}`)}
+                        layout={Layout}
+                        entering={FadeIn.duration(800)}
+                        style={productStyle.container}>
+                        <ImageComponent uri={item.hinhAnhs?.[0]?.hinhAnh} style={productStyle.image} />
+                        <View style={productStyle.infoContainer}>
+                            <Text numberOfLines={2} style={productStyle.title}>
+                                {item?.tenSanPham}
+                            </Text>
+                            <Text style={productStyle.price}>{formatPrice(item.gia)}đ</Text>
+                        </View>
+                        <Button
+                            renderIcon={<Ionicons name='cart-sharp' size={16} color={'white'} />}
+                            onPress={() => router.push(`/sanpham/${item.id}`)}
+                            text='Xem hàng'
+                            btnStyles={productStyle.button}
+                        />
+                    </AnimatedPressable>
+                ) : (
+                    <View style={{ flex: 0.5, margin: 2 }}>
+                        <Skeleton colorMode='light' height={200} width={'100%'} />
+                    </View>
+                )}
+            </>
+        )
+    }, [])
 
     return (
-        <View style={styles.container}>
-            <LinearGradient colors={['#32acff', '#94d3fe']}>
+        <ScrollView style={styles.container}>
+            {/* Config screen */}
+            <Stack.Screen options={{ headerShown: false }} />
+            <StatusBar backgroundColor='transparent' />
+
+            {/* Top */}
+            <View>
+                <BackgroundImage blurRadius={7} source={appImages.sanpham_bg} />
                 <PageHeader title='' tintColor='white' />
                 <View style={topStyles.titleContainer}>
-                    <Text style={topStyles.title}>Sản phẩm của bạn</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={topStyles.subTitle}>Quản lý sản phẩm</Text>
-                        <Button
-                            text='Thêm mới'
-                            btnStyles={{ backgroundColor: Colors.orange, borderRadius: 30 }}
-                            onPress={() => router.push('/sanpham/create')}
-                        />
-                    </View>
+                    <Text style={topStyles.title}>Danh sách sản phẩm</Text>
                 </View>
-            </LinearGradient>
+            </View>
 
-            {!loading ? (
-                <FlatList
-                    data={sanPhams}
-                    contentContainerStyle={{ paddingHorizontal: 6 }}
-                    numColumns={2}
-                    keyExtractor={item => item.id + ''}
-                    renderItem={({ item }) => (
-                        <Pressable
-                            onPress={() => router.push({ pathname: '/sanpham/edit', params: { id: item.id } })}
-                            style={productStyles.container}>
-                            <IconButton style={productStyles.removeBtn} onPress={() => handleRemoveProduct(item)}>
-                                <Ionicons name='close-circle' size={24} color={'grey'} />
-                            </IconButton>
-                            <Image
-                                defaultSource={no_avatar}
-                                source={item.hinhAnhs?.[0]?.hinhAnh ? { uri: item.hinhAnhs[0].hinhAnh } : no_avatar}
-                                style={productStyles.image}
-                            />
-                            <Text style={productStyles.name}>{item.tenSanPham}</Text>
-                            <Text style={productStyles.price}>{formatPrice(item.gia)} đ</Text>
-                            <Button
-                                btnStyles={{ width: '100%' }}
-                                text='Chia sẻ ngay'
-                                onPress={() => handleShare(item)}
-                            />
-                        </Pressable>
-                    )}
-                />
-            ) : (
-                <FlatList
-                    data={Array.from({ length: 4 }).map((_, index) => index)}
-                    numColumns={2}
-                    contentContainerStyle={{ columnGap: 6, paddingHorizontal: 6 }}
-                    renderItem={({ item }) => (
-                        <View style={productStyles.container}>
-                            <Skeleton colorMode='light' width={160} height={160} />
-                            <Skeleton colorMode='light' width={100} height={20} />
-                            <Skeleton colorMode='light' width={60} height={20} />
-                            <Skeleton colorMode='light' width={'100%'} height={30} />
-                        </View>
-                    )}
-                />
-            )}
-        </View>
+            {/* Content */}
+            <FlatList
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                data={sanPhams || nullArray(6)}
+                keyExtractor={(item, index) => item?.id.toString() || index.toString()}
+                numColumns={2}
+                contentContainerStyle={{ padding: 6, paddingBottom: 50 }}
+                renderItem={renderProduct}
+            />
+        </ScrollView>
     )
 }
 
-export default index
+const productStyle = StyleSheet.create({
+    container: {
+        backgroundColor: 'white',
+        flex: 0.5,
+        margin: 4,
+        borderRadius: 4,
+        overflow: 'hidden',
+        elevation: 20,
+    },
+    image: {
+        width: '100%',
+        height: 150,
+    },
+    infoContainer: {
+        flex: 1,
+        padding: 8,
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 12,
+    },
+    title: {
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+    price: {
+        fontSize: 14,
+    },
+    button: {
+        width: '100%',
+        borderRadius: 0,
+        height: 30,
+    },
+})
 
 const topStyles = StyleSheet.create({
     titleContainer: {
@@ -185,115 +133,18 @@ const topStyles = StyleSheet.create({
         color: 'white',
         fontWeight: '600',
         letterSpacing: 0.5,
-        fontSize: 20,
-    },
-    subTitle: {
-        color: 'white',
-        fontSize: 16,
-    },
-    searchContainer: {
-        backgroundColor: 'white',
-        marginHorizontal: 12,
-        padding: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 12,
-        elevation: 12,
-        gap: 8,
-        marginBottom: 18,
-    },
-    input: {
-        color: Colors.bodyText,
-        fontSize: 16,
-        flex: 1,
+        fontSize: 24,
+        textAlign: 'center',
+        textShadowColor: 'rgba(0, 0, 0, 0.5)',
+        textShadowRadius: 10,
+        textShadowOffset: { width: 0, height: 4 },
     },
 })
-
 const styles = StyleSheet.create({
-    selectRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 12,
-        // marginBottom: 6,
-    },
-    selectButton: {
-        width: 30,
-        height: 30,
-        borderRadius: 10,
-        backgroundColor: Colors.default,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        color: '#ffffffcd',
-        fontSize: 16,
-        fontWeight: '500',
-        textAlign: 'center',
-    },
     container: {
         flex: 1,
-    },
-    background: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        zIndex: -1,
-    },
-    notfoundText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: '500',
-        paddingHorizontal: 16,
-    },
-    notfoundSubText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 14,
-        paddingHorizontal: 16,
-        marginTop: 12,
-    },
-    notfoundButton: {
-        backgroundColor: Colors.orange,
-        marginTop: 12,
+        backgroundColor: Colors.background.default,
     },
 })
 
-const productStyles = StyleSheet.create({
-    container: {
-        padding: 6,
-        flex: 0.5,
-        alignItems: 'center',
-        gap: 6,
-        backgroundColor: 'white',
-        margin: 6,
-        borderRadius: 6,
-    },
-    image: {
-        width: 160,
-        height: 160,
-        resizeMode: 'cover',
-        borderRadius: 6,
-    },
-    name: {
-        color: '#38383a',
-        fontSize: 14,
-        paddingHorizontal: 12,
-        fontWeight: '500',
-        textAlign: 'center',
-        flex: 1,
-    },
-    price: {
-        color: '#38383a',
-        fontSize: 12,
-    },
-    removeBtn: {
-        position: 'absolute',
-        right: -12,
-        top: 0,
-        height: 50,
-        width: 50,
-        zIndex: 999,
-    },
-})
+export default ListSanPham

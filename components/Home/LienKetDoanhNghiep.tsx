@@ -1,5 +1,5 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { screenWidth } from '@utils/window'
 import { router, useFocusEffect } from 'expo-router'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
@@ -9,6 +9,7 @@ import no_image from '@assets/images/no_image.png'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
 import { trungTamActions } from '@redux/trungTamSlice'
+import { appIcons, appImages } from '@constants/Images'
 const LienKetDoanhNghiep = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
     const dispatch = useDispatch<AppDispatch>()
@@ -17,11 +18,9 @@ const LienKetDoanhNghiep = () => {
         const data = await getDoanhNghiepWebsite()
         setData(data)
     }
-    useFocusEffect(
-        useCallback(() => {
-            fetchData()
-        }, [])
-    )
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     const handlePress = (doanhNghiep: DoanhNghiep) => {
         dispatch(trungTamActions.selectChuongTrinh({ name: doanhNghiep.tenTiengViet, link: doanhNghiep.website }))
@@ -33,7 +32,10 @@ const LienKetDoanhNghiep = () => {
             {data?.map(item => (
                 <View key={item.id} style={styles.container}>
                     <Pressable onPress={() => handlePress(item)} style={styles.iconContainer}>
-                        <Image source={item.user?.image ? { uri: item.user.image } : no_image} style={styles.icon} />
+                        <Image
+                            source={item.user?.image ? { uri: item.user.image } : appIcons.appLogo}
+                            style={styles.icon}
+                        />
                     </Pressable>
                     <Text numberOfLines={3} style={styles.text}>
                         {item.tenTiengViet}

@@ -16,6 +16,7 @@ import RequireLogin from '@components/StatusPage/RequireLogin'
 import BackgroundImage from '@components/View/BackgroundImage'
 //@ts-ignore
 import background from '@assets/backgrounds/hoidap.jpg'
+import { StatusBar } from 'expo-status-bar'
 const ChuyenGiaDangTuVan = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
@@ -46,9 +47,9 @@ const ChuyenGiaDangTuVan = () => {
 
     return (
         <View style={styles.container}>
-            <BackgroundImage source={background} />
+            <BackgroundImage blurRadius={10} source={background} />
             <PageHeader tintColor='white' title={'Hỏi đáp chuyên gia'} style={{ marginBottom: 24 }} />
-
+            <StatusBar backgroundColor='transparent' />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.listContainer}>
                     {conversations?.map((item: Conversation) => (

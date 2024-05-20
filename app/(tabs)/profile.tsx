@@ -63,34 +63,44 @@ const ProfileTab = () => {
                 </SafeAreaView>
 
                 {isLoggedIn && (
-                    <View style={[styles.body, isInRole(ROLES.CHUYEN_GIA) && { marginTop: 0 }]}>
-                        <Text style={settingStyles.title}>Quản lý thông tin</Text>
-                        <View style={settingStyles.section}>
-                            {isInRole(ROLES.DOANH_NGHIEP) && (
-                                <>
-                                    <SettingItem
-                                        onPress={() => router.push('/sanpham')}
-                                        text='Quản lý sản phẩm'
-                                        icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
-                                    />
-                                    <SettingSeperator />
-                                    <SettingItem
-                                        onPress={() => router.push('/khaosat')}
-                                        text='Lịch sử khảo sát'
-                                        icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
-                                    />
-                                    <SettingSeperator />
-                                </>
-                            )}
-                            {(isInRole(ROLES.CHUYEN_GIA) || isInRole(ROLES.DOANH_NGHIEP)) && (
-                                <SettingItem
-                                    onPress={() => router.push('/social/baiviet')}
-                                    text='Quản lý bài viết'
-                                    icon={<Feather name='edit' size={24} color='#6a6f73' />}
-                                />
-                            )}
-                        </View>
-                        <Text style={settingStyles.title}>Khác</Text>
+                    <View style={[styles.body, !isInRole(ROLES.DOANH_NGHIEP) && { marginTop: 0 }]}>
+                        {(isInRole(ROLES.CHUYEN_GIA) || isInRole(ROLES.DOANH_NGHIEP)) && (
+                            <>
+                                <Text style={settingStyles.title}>Quản lý thông tin</Text>
+                                <View style={settingStyles.section}>
+                                    {isInRole(ROLES.DOANH_NGHIEP) && (
+                                        <>
+                                            <SettingItem
+                                                onPress={() => router.push('/sanpham/manage')}
+                                                text='Quản lý sản phẩm'
+                                                icon={<AntDesign name='staro' size={24} color={'#6a6f73'} />}
+                                            />
+                                            <SettingSeperator />
+                                            <SettingItem
+                                                onPress={() => router.push('/khaosat')}
+                                                text='Lịch sử khảo sát'
+                                                icon={
+                                                    <Ionicons
+                                                        name='document-text-outline'
+                                                        size={24}
+                                                        color={'#6a6f73'}
+                                                    />
+                                                }
+                                            />
+                                            <SettingSeperator />
+                                        </>
+                                    )}
+                                    {(isInRole(ROLES.CHUYEN_GIA) || isInRole(ROLES.DOANH_NGHIEP)) && (
+                                        <SettingItem
+                                            onPress={() => router.push('/social/baiviet')}
+                                            text='Quản lý bài viết'
+                                            icon={<Feather name='edit' size={24} color='#6a6f73' />}
+                                        />
+                                    )}
+                                </View>
+                            </>
+                        )}
+                        <Text style={settingStyles.title}>Tài khoản</Text>
                         <View style={settingStyles.section}>
                             <SettingItem
                                 onPress={() => router.push('/profile/doiMatKhau')}

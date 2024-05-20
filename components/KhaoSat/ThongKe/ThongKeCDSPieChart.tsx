@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react'
 
-import { StyleSheet } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import { PieChart } from 'react-native-chart-kit'
 
 import { axios } from '@utils/axios'
@@ -33,7 +33,7 @@ const ThongKeCDSPieChart = ({ backgroundColor = 'white' }: { backgroundColor?: s
         fetchData()
     }, [])
 
-    if (data.length === 0) return
+    if (data.length === 0) return <ActivityIndicator size={'large'} />
 
     return (
         <PieChart

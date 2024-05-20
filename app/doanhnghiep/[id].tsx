@@ -26,6 +26,7 @@ import Colors from '@constants/Colors'
 import { useAppDispatch } from '@redux/store'
 import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
 import { Skeleton } from 'moti/skeleton'
+import Animated, { FadeIn, FadeInDown, Layout } from 'react-native-reanimated'
 
 const ITEM_GAP = 12
 
@@ -35,7 +36,6 @@ const DoanhNghiepDetail = () => {
     const [data, setData] = useState<DoanhNghiep | undefined>()
     const [products, setProducts] = useState<SanPham[]>([])
     const [loading, setLoading] = useState(false)
-    const [khaoSats, setKhaoSats] = useState<KhaoSat[]>([])
     const { isInRole } = useDangNhap()
     const dispatch = useAppDispatch()
     const nhuCauMoiNhat = useMemo(() => {
@@ -50,8 +50,6 @@ const DoanhNghiepDetail = () => {
         setData(data)
         const products = await getSanPhamByDoanhNghiep(id)
         setProducts(products)
-        const khaoSats = await getKhaoSatByDoanhNghiep(id)
-        setKhaoSats(khaoSats)
         setLoading(false)
     }
 
@@ -76,7 +74,10 @@ const DoanhNghiepDetail = () => {
                     {!loading ? (
                         <>
                             <ImageComponent uri={data?.user?.image} style={styles.image} />
-                            <View style={{ justifyContent: 'space-between', flex: 1 }}>
+                            <Animated.View
+                                layout={Layout}
+                                entering={FadeIn.duration(800)}
+                                style={{ justifyContent: 'space-between', flex: 1 }}>
                                 <View style={styles.infoContainer}>
                                     <Text style={styles.ten}>{data?.tenTiengViet}</Text>
                                     <Text style={styles.text}>Địa chỉ: {data?.diaChi}</Text>
@@ -105,7 +106,7 @@ const DoanhNghiepDetail = () => {
                                         </Pressable>
                                     )}
                                 </View>
-                            </View>
+                            </Animated.View>
                         </>
                     ) : (
                         <>
@@ -127,7 +128,7 @@ const DoanhNghiepDetail = () => {
             <View style={styles.body}>
                 <View style={styles.section}>
                     {!loading ? (
-                        <>
+                        <Animated.View layout={Layout} entering={FadeIn.duration(800)}>
                             <Text style={styles.title}>Mô tả</Text>
                             <View style={styles.row}>
                                 <Text style={styles.rowTitle}>Người đại diện:</Text>
@@ -152,7 +153,7 @@ const DoanhNghiepDetail = () => {
                                 )}
                             </View>
                             {data?.moTa && <Text style={styles.description}>{data?.moTa}</Text>}
-                        </>
+                        </Animated.View>
                     ) : (
                         <View style={{ gap: 4 }}>
                             <Skeleton colorMode='light' width={100} height={20} />
@@ -164,8 +165,8 @@ const DoanhNghiepDetail = () => {
                     )}
                 </View>
 
-                {products.length > 0 && (
-                    <View style={styles.section}>
+                {!loading && products.length > 0 && (
+                    <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={styles.section}>
                         <Text style={styles.title}>Sản phẩm nổi bật</Text>
                         <ScrollView
                             horizontal
@@ -177,42 +178,45 @@ const DoanhNghiepDetail = () => {
                                 <SanPhamComponent data={item} key={item.id} />
                             ))}
                         </ScrollView>
-                    </View>
+                    </Animated.View>
                 )}
-                {khaoSats && khaoSats.length !== 0 && (
-                    <View style={styles.section}>
+                {!loading && data && data.khaoSat && data.khaoSat.length !== 0 && (
+                    <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={styles.section}>
                         <Text style={styles.title}>Hiện trạng Chuyển đổi số</Text>
                         <View style={{ alignSelf: 'center' }}>
                             <View style={{ marginBottom: 8, gap: 2 }}>
                                 <View style={styles.row}>
                                     <Text style={styles.rowTitle}>Điểm đánh giá:</Text>
-                                    <Text style={styles.rowText}>{khaoSats[0].tongDiem}</Text>
+                                    <Text style={styles.rowText}>{data.khaoSat[0].tongDiem}</Text>
                                 </View>
                                 <View style={styles.row}>
                                     <Text style={styles.rowTitle}>Mức độ:</Text>
-                                    <Text style={styles.rowText}>{khaoSats[0]?.mucDo?.tenMucDo}</Text>
+                                    <Text style={styles.rowText}>{data.khaoSat[0]?.mucDo?.tenMucDo}</Text>
                                 </View>
                             </View>
-                            <DiemLineChart khaoSatsInput={khaoSats} width={windowWidth - 60} />
+                            <DiemLineChart khaoSatsInput={data.khaoSat} width={windowWidth - 60} />
                             <View style={{ marginVertical: 4 }} />
-                            <RadarChart data={khaoSats[0]} width={windowWidth - 60} />
+                            <RadarChart data={data.khaoSat[0]} width={windowWidth - 60} />
                         </View>
-                    </View>
+                    </Animated.View>
                 )}
 
-                {data?.thanhTich && data?.thanhTich?.length > 0 && (
-                    <View style={[styles.section, { maxHeight: 400 }]}>
-                        <Text style={styles.title}>Thành tích nổi bật</Text>
+                {!loading && data?.thanhTich && data?.thanhTich?.length > 0 && (
+                    <Animated.View
+                        layout={Layout}
+                        entering={FadeInDown.duration(800)}
+                        style={[styles.section, { maxHeight: 400 }]}>
+                        <Text style={styles.title}>Thành tích, chứng nhận</Text>
                         <ScrollView
-                            scrollEnabled
-                            nestedScrollEnabled
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
                             contentContainerStyle={{ gap: ITEM_GAP }}
                             showsVerticalScrollIndicator={false}>
                             {data?.thanhTich.map(item => (
-                                <View style={{ alignItems: 'center' }} key={item.id}>
+                                <View style={{ alignItems: 'center', minWidth: 200 }} key={item.id}>
                                     <ImageComponent
                                         width={'100%'}
-                                        height={250}
+                                        height={180}
                                         resizeMode='contain'
                                         uri={item.hinhAnh}
                                     />
@@ -220,7 +224,7 @@ const DoanhNghiepDetail = () => {
                                 </View>
                             ))}
                         </ScrollView>
-                    </View>
+                    </Animated.View>
                 )}
 
                 {isInRole(ROLES.CHUYEN_GIA) && nhuCauMoiNhat && (

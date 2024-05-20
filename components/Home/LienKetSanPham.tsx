@@ -15,7 +15,7 @@ const LienKetSanPham = () => {
     const [sanPhams, setSanPhams] = useState<SanPham[]>([])
     const fetchSanPhams = async () => {
         const data = await getSanPhamMoiNhat()
-        setSanPhams([...data, ...data, ...data, ...data, ...data, ...data])
+        setSanPhams(data)
     }
     useEffect(() => {
         fetchSanPhams()
@@ -33,15 +33,15 @@ const LienKetSanPham = () => {
                         <Text numberOfLines={1} style={[styles.text, { flex: 1 }]}>
                             {item.tenSanPham}
                         </Text>
-                        <RowComponent styles={{ width: '100%' }} justify='space-between'>
+                        <RowComponent styles={{ width: '100%', marginTop: 4 }} justify='space-between'>
                             <Text color={Colors.default} style={styles.text}>
                                 {formatPrice(item.gia)}đ
                             </Text>
                             <Button
+                                onPress={() => router.push(`/sanpham/${item.id}`)}
                                 textStyles={{ fontSize: 12 }}
                                 btnStyles={{ borderRadius: 30, height: 25 }}
                                 text='Xem ngay'
-                                onPress={() => {}}
                             />
                         </RowComponent>
                     </View>
@@ -55,18 +55,18 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         elevation: 8,
-        width: 220,
+        width: 180,
         borderRadius: 16,
         overflow: 'hidden',
         shadowColor: Colors.blueGray,
     },
     image: {
         width: '100%',
-        height: 150,
+        height: 160,
         resizeMode: 'cover',
     },
     infoContainer: {
-        paddingHorizontal: 6,
+        paddingHorizontal: 12,
         paddingVertical: 12,
         gap: 4,
         alignItems: 'flex-start',

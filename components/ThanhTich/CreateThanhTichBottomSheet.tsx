@@ -66,18 +66,23 @@ const CreateThanhTichBottomSheet = forwardRef<Ref, CreateThanhTichBottomSheetPro
             <View style={styles.container}>
                 <ImageComponent source={appIcons.guaranteed} height={40} width={40} />
                 <Text style={styles.title}>Thêm mới thành tích</Text>
-                <TextInput placeholder='Tên thành tích' ref={inputRef} onChangeText={setName} style={styles.input} />
+                <TextInput
+                    placeholder='Tên thành tích, chứng nhận'
+                    ref={inputRef}
+                    onChangeText={setName}
+                    style={styles.input}
+                />
                 <Text style={styles.subTitle}>Hình ảnh (nếu có)</Text>
                 <View style={styles.imageContainer}>
                     {image?.uri ? (
-                        <View>
+                        <View style={{ width: '100%' }}>
                             <IconButton onPress={() => setImage(undefined)} style={styles.closeButton}>
                                 <Ionicons name='close-circle-outline' size={20} color={Colors.textGray} />
                             </IconButton>
                             <ImageComponent uri={image.uri} width={'100%'} height={300} resizeMode='contain' />
                         </View>
                     ) : (
-                        <Pressable onPress={() => toggle(true)}>
+                        <Pressable style={{ width: '100%' }} onPress={() => toggle(true)}>
                             <ImageComponent width={'100%'} height={100} resizeMode='contain' />
                         </Pressable>
                     )}

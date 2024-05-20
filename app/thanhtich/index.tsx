@@ -48,7 +48,7 @@ const ThanhTichDoanhNghiep = () => {
         <View style={styles.container}>
             <Stack.Screen
                 options={{
-                    headerTitle: 'Thành tích doanh nghiệp',
+                    headerTitle: 'Thành tích, chứng nhận',
                     ...stackOptions,
                 }}
             />
@@ -58,7 +58,9 @@ const ThanhTichDoanhNghiep = () => {
                 data={doanhNghiep?.thanhTich || []}
                 renderItem={({ item, index }) => (
                     <View style={thanhTichStyles.container}>
-                        <ImageComponent uri={item.hinhAnh} width={'100%'} height={250} resizeMode='contain' />
+                        {item.hinhAnh && (
+                            <ImageComponent uri={item.hinhAnh} width={'100%'} height={250} resizeMode='contain' />
+                        )}
                         <Text>{item.tenThanhTich}</Text>
                         <RowComponent gap={12} styles={{ marginTop: 12 }}>
                             {/* <Button

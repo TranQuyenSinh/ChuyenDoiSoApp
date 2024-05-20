@@ -17,7 +17,7 @@ export default {
     blue: '#0000cd',
 
     background: {
-        default: '#F0F0F0',
+        default: '#f5f8fd',
     },
 
     error: {

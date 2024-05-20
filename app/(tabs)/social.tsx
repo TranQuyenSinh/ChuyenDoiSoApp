@@ -52,7 +52,9 @@ const SocialPage = () => {
                     <CategoryTag key={item.id} data={item} onPress={item => router.push(`/social/tag/${item.id}`)} />
                 ))}
             </ScrollView> */}
-            <ScrollView refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}>
+            <ScrollView
+                contentContainerStyle={{ paddingBottom: 100 }}
+                refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}>
                 {posts.map(item => (
                     <Post key={item.id} data={item} />
                 ))}

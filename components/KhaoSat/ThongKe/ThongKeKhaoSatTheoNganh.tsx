@@ -1,9 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { BarChart } from 'react-native-charts-wrapper'
 import { processColor } from 'react-native-reanimated'
+import { screenWidth } from '@utils/window'
+import { getThongKeDNTheoLoaiHinh } from '@services/thongKeServices'
+import Colors from '@constants/Colors'
 
-const ThongKeKhaoSatTheoNganh = () => {
+const ThongKeDNTheoLoaiHinh = () => {
+    const [data, setData] = useState<any>()
+    useEffect(() => {
+        ;(async () => {
+            const data = await getThongKeDNTheoLoaiHinh()
+            setData({
+                labels: data.map((item: any) => item.tenLoaiHinh),
+                dataSets: data.map((item: any) => ({ y: item.soLuong })),
+            })
+        })()
+    }, [])
+
+    if (!data || !data?.dataSets || !data?.labels) return <ActivityIndicator size={'large'} />
+
     return (
         <View style={styles.container}>
             <BarChart
@@ -11,73 +27,12 @@ const ThongKeKhaoSatTheoNganh = () => {
                 data={{
                     dataSets: [
                         {
-                            values: [
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                                { y: 100 },
-                                { y: 105 },
-                                { y: 102 },
-                                { y: 110 },
-                                { y: 114 },
-                                { y: 109 },
-                                { y: 105 },
-                                { y: 99 },
-                                { y: 95 },
-                                { y: 95 },
-                            ],
+                            values: data.dataSets,
                             label: '',
                             config: {
-                                color: processColor('teal'),
+                                color: processColor(Colors.default),
                                 barShadowColor: processColor('lightgrey'),
-                                valueTextSize: 12,
+                                valueTextSize: 8,
                             },
                         },
                     ],
@@ -86,83 +41,21 @@ const ThongKeKhaoSatTheoNganh = () => {
                     },
                 }}
                 xAxis={{
-                    valueFormatter: [
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                        'Jan AJN JAN JAN JNA JAN ',
-                    ],
-                    textSize: 8,
+                    valueFormatter: data.labels,
+                    valueFormatterPattern: '',
+                    textSize: 10,
                     granularityEnabled: true,
                     granularity: 1,
-                    labelRotationAngle: 50,
+                    labelRotationAngle: -90,
                     position: 'BOTTOM',
                     labelCount: 200,
                     axisLineWidth: StyleSheet.hairlineWidth,
                 }}
-                animation={{ durationX: 2000 }}
                 legend={{
                     enabled: false,
                 }}
                 chartDescription={{ text: '' }}
                 gridBackgroundColor={processColor('#ffffff')}
-                visibleRange={{ x: { min: 5, max: 5 } }}
                 drawBarShadow={false}
                 drawValueAboveBar={true}
                 onChange={event => console.log(event.nativeEvent)}
@@ -172,7 +65,7 @@ const ThongKeKhaoSatTheoNganh = () => {
     )
 }
 
-export default ThongKeKhaoSatTheoNganh
+export default ThongKeDNTheoLoaiHinh
 
 const styles = StyleSheet.create({
     container: {
@@ -182,8 +75,8 @@ const styles = StyleSheet.create({
     },
     chart: {
         flex: 1,
-        width: 300,
-        height: 250,
+        width: screenWidth - 24,
+        height: 400,
         backgroundColor: 'white',
     },
 })

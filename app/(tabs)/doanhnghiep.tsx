@@ -1,25 +1,23 @@
 import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Colors from '@constants/Colors'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghieps } from '@services/doanhNghiepServices'
-//@ts-ignore
-import no_image from '@assets/images/no_image.png'
 import { router } from 'expo-router'
 import LinearGradient from 'react-native-linear-gradient'
 import { Keyboard } from 'react-native'
-import { MotiView } from 'moti'
 import { Skeleton } from 'moti/skeleton'
-import { screenWidth, windowWidth } from '@utils/window'
 import SpaceComponent from '@components/View/SpaceComponent'
+import Animated, { FadeIn, Layout } from 'react-native-reanimated'
+import { appIcons } from '@constants/Images'
 const DoanhNghiepPage = () => {
     const [data, setData] = useState<DoanhNghiep[] | undefined>()
     const [search, setSearch] = useState('')
     const [filteredData, setFilteredData] = useState<DoanhNghiep[] | undefined>()
-
-    useEffect(() => {
+    const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+    useLayoutEffect(() => {
         let filteredData = data
         if (search !== '')
             filteredData = data?.filter(item => item.tenTiengViet.toLowerCase().includes(search.toLowerCase()))
@@ -37,7 +35,6 @@ const DoanhNghiepPage = () => {
         fetchData()
     }, [])
     return (
-        // <StatusBar barStyle='light-content' />
         <View style={styles.container}>
             <LinearGradient colors={['#32acff', '#94d3fe']}>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -63,19 +60,21 @@ const DoanhNghiepPage = () => {
                     showsVerticalScrollIndicator={false}
                     data={filteredData || Array.from({ length: 10 }).map(_ => null)}
                     numColumns={2}
-                    keyExtractor={(item, index) => index + ''}
+                    keyExtractor={(item, index) => (item ? item.id + '' : index + '')}
                     renderItem={({ item }) => (
                         <>
                             {item ? (
-                                <Pressable
+                                <AnimatedPressable
+                                    layout={Layout}
+                                    entering={FadeIn.duration(800)}
                                     onPress={() => router.push(`/doanhnghiep/${item.id}`)}
                                     style={cardStyles.container}>
                                     <Image
-                                        source={item.user?.image ? { uri: item.user.image } : no_image}
+                                        source={item.user?.image ? { uri: item.user.image } : appIcons.appLogo}
                                         style={cardStyles.logo}
                                     />
                                     <Text style={cardStyles.name}>{item.tenTiengViet}</Text>
-                                </Pressable>
+                                </AnimatedPressable>
                             ) : (
                                 <Pressable style={cardStyles.container}>
                                     <Skeleton width={'100%'} height={100} colorMode='light' radius={'square'} />
@@ -101,8 +100,11 @@ const cardStyles = StyleSheet.create({
         margin: 6,
     },
     logo: {
-        width: '100%',
-        height: 100,
+        alignSelf: 'center',
+        width: 120,
+        height: 120,
+        resizeMode: 'contain',
+        borderRadius: 100,
     },
     name: {
         fontSize: 12,

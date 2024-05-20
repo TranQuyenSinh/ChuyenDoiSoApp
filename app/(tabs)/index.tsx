@@ -66,7 +66,7 @@ export default function TrangTin() {
                 setChuyenGias(data)
             }
         })()
-    }, [doanhNghiep])
+    }, [doanhNghiep?.linhVuc?.id])
 
     useEffect(() => {
         ;(async () => {
@@ -121,14 +121,14 @@ export default function TrangTin() {
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
-                                <HomeButtonIcon
+                                {/* <HomeButtonIcon
                                     text='Nhu cầu phần mềm'
                                     imageSource={nhucau}
                                     onPress={() => router.push('/nhucau/phanmem')}
                                     backgroundColor={['#2eb4fe', '#20a0f9']}
-                                />
+                                /> */}
                                 <HomeButtonIcon
-                                    text='Hỏi đáp chuyên gia'
+                                    text='Chuyên gia đang tư vấn'
                                     imageSource={hoidap}
                                     onPress={() => router.push('/tuvan/chuyengia')}
                                     backgroundColor={['#03bf5e', '#00b157']}
@@ -159,6 +159,31 @@ export default function TrangTin() {
                         </View>
                     )}
 
+                    {isInRole(ROLES.ADMIN) && (
+                        <View style={styles.contentContainer}>
+                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>
+                                Dành cho Quản trị viên
+                            </Text>
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
+                                <HomeButtonIcon
+                                    text='Tạo thông báo'
+                                    imageSource={appIcons.notification}
+                                    onPress={() => router.push('/thongbao/create')}
+                                    backgroundColor={['#2eb4fe', '#20a0f9']}
+                                />
+                                <HomeButtonIcon
+                                    text='Thống kê doanh nghiệp'
+                                    imageSource={appIcons.thongKe}
+                                    onPress={() => router.push('/thongke')}
+                                    backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                            </ScrollView>
+                        </View>
+                    )}
+
                     {!isLoggedIn && (
                         <View style={styles.contentContainer}>
                             <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
@@ -171,7 +196,7 @@ export default function TrangTin() {
                     )}
 
                     <View style={styles.contentContainer}>
-                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Tin tức - Kiến thức</Text>
+                        <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Thông tin chuyển đổi số</Text>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -227,6 +252,21 @@ export default function TrangTin() {
                         </Pressable>
                     </View>
 
+                    {/* Liên kết sản phẩm doanh nghiệp */}
+                    <View style={[styles.contentContainer]}>
+                        <Text style={[textStyles.title, styles.title]}>Sản phẩm doanh nghiệp</Text>
+                        <LienKetSanPham />
+                        <RowComponent justify='flex-end'>
+                            <LinkComponent text='Xem tất cả sản phẩm >>' onPress={() => router.push('/sanpham')} />
+                        </RowComponent>
+                    </View>
+
+                    {/* LIÊN KẾT DOANH NGHIỆP */}
+                    <View style={[styles.contentContainer]}>
+                        <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
+                        <LienKetDoanhNghiep />
+                    </View>
+
                     <View style={styles.contentContainer}>
                         <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Khám phá</Text>
                         <View style={{ gap: 16, paddingVertical: 12 }}>
@@ -261,21 +301,6 @@ export default function TrangTin() {
                                 />
                             </View>
                         </View>
-                    </View>
-
-                    {/* Liên kết sản phẩm doanh nghiệp */}
-                    <View style={[styles.contentContainer]}>
-                        <Text style={[textStyles.title, styles.title]}>Sản phẩm doanh nghiệp</Text>
-                        <LienKetSanPham />
-                        <RowComponent justify='flex-end'>
-                            <LinkComponent text='Xem tất cả sản phẩm >>' onPress={() => {}} />
-                        </RowComponent>
-                    </View>
-
-                    {/* LIÊN KẾT DOANH NGHIỆP */}
-                    <View style={[styles.contentContainer]}>
-                        <Text style={[textStyles.title, styles.title]}>Liên kết doanh nghiệp</Text>
-                        <LienKetDoanhNghiep />
                     </View>
 
                     {/* LIÊN KẾT khác */}

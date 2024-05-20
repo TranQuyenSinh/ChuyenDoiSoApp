@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { BarChart, BarData, xAxis } from 'react-native-charts-wrapper'
 import { processColor } from 'react-native-reanimated'
@@ -52,7 +52,7 @@ const ThongKeMucDoTheoHuyen = () => {
         }
     }, [data])
 
-    if (!chartData || !xAxis) return <View />
+    if (!chartData || !xAxis) return <ActivityIndicator size={'large'} />
 
     return (
         <View style={styles.container}>

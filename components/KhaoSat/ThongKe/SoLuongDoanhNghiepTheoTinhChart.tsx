@@ -1,4 +1,4 @@
-import { processColor, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, processColor, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { BarChart, BarData, xAxis } from 'react-native-charts-wrapper'
 import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
@@ -60,7 +60,7 @@ const SoLuongDoanhNghiepTheoTinhChart = () => {
         }
     }, [data])
 
-    if (!chartData || !xAxis) return <View />
+    if (!chartData || !xAxis) return <ActivityIndicator size={'large'} />
     return (
         <View style={styles.container}>
             <BarChart
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     chart: {
         flex: 1,
         width: screenWidth - 24,
-        height: 250,
+        height: 400,
         backgroundColor: 'white',
     },
 })
