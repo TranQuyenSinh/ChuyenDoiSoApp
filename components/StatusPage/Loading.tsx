@@ -1,4 +1,4 @@
-import { Image } from 'react-native'
+import { ActivityIndicator, Image } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 //@ts-ignore
 import loading from '@assets/icons/loading.gif'
@@ -17,7 +17,7 @@ const Loading = (props: LoadingProps) => {
             visible={visible}
             textContent={text}
             textStyle={{ color }}
-            customIndicator={<Image source={loading} style={{ width: 64, height: 64, resizeMode: 'contain' }} />}
+            customIndicator={<ActivityIndicator size={'large'} />}
         />
     )
 }

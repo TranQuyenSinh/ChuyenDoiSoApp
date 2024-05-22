@@ -24,6 +24,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
 import { RootState } from '@redux/store'
 import RequireLogin from '@components/StatusPage/RequireLogin'
+import Button from '@components/View/Button'
+import { stackOptions } from '@configs/ScreenConfig'
 const CreatePost = () => {
     const navigation = useNavigation()
     const [selectedImages, setSelectedImages] = useState<any[]>([])
@@ -50,25 +52,10 @@ const CreatePost = () => {
     }
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle: 'Gửi nhu cầu',
-            headerTitleAlign: 'center',
-            headerTintColor: 'white',
-            headerStyle: {
-                backgroundColor: Colors.default,
-            },
-            headerRight: () => {
-                return (
-                    <>
-                        {isLoggedIn && (
-                            <TouchableOpacity onPress={handleSubmit} style={{ marginRight: 10, padding: 8 }}>
-                                <Text style={{ color: 'white', fontSize: 15 }}>Gửi</Text>
-                            </TouchableOpacity>
-                        )}
-                    </>
-                )
-            },
+            headerTitle: 'Đăng bài',
+            ...stackOptions,
         })
-    }, [navigation, handleSubmit, isLoggedIn])
+    }, [navigation])
 
     if (loading) return <Loading />
     return (
@@ -80,22 +67,12 @@ const CreatePost = () => {
                     contentContainerStyle={{
                         overflow: 'hidden',
                         paddingVertical: 10,
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 12,
+                        flex: 1,
                     }}>
                     <View style={styles.inputWrapper}>
-                        <Text style={styles.title}>Nội dung chi tiết nhu cầu của bạn</Text>
-                        <TextInput
-                            value={noiDung}
-                            onChangeText={text => setNoiDung(text)}
-                            textAlignVertical='top'
-                            cursorColor={'black'}
-                            multiline
-                            style={styles.input}
-                        />
-                    </View>
-                    <View style={styles.inputWrapper}>
                         <View style={imageStyles.selectRow}>
-                            <Text style={styles.title}>Chọn ảnh ({selectedImages.length}/6)</Text>
+                            <Text style={styles.title}>Hình ảnh ({selectedImages.length}/6)</Text>
                             {selectedImages.length < 6 && (
                                 <Pressable onPress={handleSelectImage} style={imageStyles.selectButton}>
                                     <Ionicons name='add' size={24} color={'white'} />
@@ -124,6 +101,20 @@ const CreatePost = () => {
                             )}
                         />
                     </View>
+
+                    <View style={styles.inputWrapper}>
+                        <Text style={styles.title}>Nội dung bài viết</Text>
+                        <TextInput
+                            value={noiDung}
+                            onChangeText={text => setNoiDung(text)}
+                            textAlignVertical='top'
+                            cursorColor={'black'}
+                            multiline
+                            style={styles.input}
+                        />
+                    </View>
+
+                    <Button text='Hoàn thành' btnStyles={styles.button} onPress={handleSubmit} />
                 </ScrollView>
             )}
         </View>
@@ -135,6 +126,7 @@ export default CreatePost
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 12,
     },
     background: {
         width: '100%',
@@ -169,6 +161,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         minHeight: 200,
+    },
+    button: {
+        elevation: 20,
     },
 })
 

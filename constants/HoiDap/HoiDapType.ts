@@ -11,7 +11,5 @@ export interface Message {
 
 export interface Conversation {
     id: number
-    doanhNghiep: DoanhNghiep
-    chuyenGia: ChuyenGia
-    tinNhans: Message[]
+    user: User
 }

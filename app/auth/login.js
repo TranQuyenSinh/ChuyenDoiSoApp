@@ -17,6 +17,7 @@ import authStyles from './authStyles'
 import login from '@assets/images/logo.jpg'
 import Loading from '@components/StatusPage/Loading'
 import background from '@assets/images/background_blur.jpg'
+import RowComponent from '@components/View/RowComponent'
 const Page = () => {
     const router = useRouter()
     const navigation = useNavigation()
@@ -110,6 +111,18 @@ const Page = () => {
                     <TouchableOpacity onPress={() => loginWithPassword(email, password)} style={[defaultStyles.btn]}>
                         <Text style={defaultStyles.btnText}>Đăng nhập</Text>
                     </TouchableOpacity>
+
+                    <RowComponent gap={4}>
+                        <TouchableOpacity onPress={() => loginWithPassword('antesco@antesco.com', '12345678')} style={[defaultStyles.btn, { flex: 1 }]}>
+                            <Text style={[defaultStyles.btnText, { fontSize: 14 }]}>Doanh nghiệp</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => loginWithPassword('chuyengia@gmail.com', '1')} style={[defaultStyles.btn, { flex: 1 }]}>
+                            <Text style={[defaultStyles.btnText, { fontSize: 14 }]}>Chuyên gia</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => loginWithPassword('admin@gmail.com', '12345678')} style={[defaultStyles.btn, { flex: 1 }]}>
+                            <Text style={[defaultStyles.btnText, { fontSize: 14 }]}>Hiệp hội</Text>
+                        </TouchableOpacity>
+                    </RowComponent>
 
                     <View style={authStyles.separatorView}>
                         <View style={authStyles.seperatorLine} />

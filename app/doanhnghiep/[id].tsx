@@ -249,7 +249,7 @@ const DoanhNghiepDetail = () => {
                     <Button
                         btnStyles={styles.button}
                         text='Tư vấn'
-                        onPress={() => router.push(`/tuvan/${data?.user?.id}`)}
+                        onPress={() => router.push(`/chat/${data?.user?.id}`)}
                     />
                 )}
             </View>

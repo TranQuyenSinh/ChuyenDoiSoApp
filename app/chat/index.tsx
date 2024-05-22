@@ -1,15 +1,11 @@
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import Loading from '@components/StatusPage/Loading'
 import { Conversation } from '@constants/HoiDap/HoiDapType'
-import { deleteHoiThoai, getHoiThoais } from '@services/hoiDapServices'
 import { router, useNavigation } from 'expo-router'
 import Colors from '@constants/Colors'
-//@ts-ignore
-import avatar_default from '@assets/icons/chuyengia.jpg'
 import NotFound from '@components/StatusPage/NotFound'
 import { Ionicons } from '@expo/vector-icons'
-import Button from '@components/View/Button'
 import IconButton from '@components/View/IconButton'
 import { deleteConversation, getAllConversations } from '@services/chatServices'
 import { deleteDoc, getDocs, query, where } from 'firebase/firestore'
@@ -17,7 +13,7 @@ import { messageRef } from '@configs/firebaseConfig'
 import ImageComponent from '@components/View/ImageComponent'
 import { stackOptions } from '@configs/ScreenConfig'
 
-const Inbox = () => {
+const ConversationList = () => {
     const navigation = useNavigation()
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
@@ -113,7 +109,7 @@ const Inbox = () => {
     )
 }
 
-export default Inbox
+export default ConversationList
 
 const styles = StyleSheet.create({
     container: {

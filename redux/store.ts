@@ -10,6 +10,7 @@ import trungTamSlice from './trungTamSlice'
 import thongBaoSlice from './thongBaoSlice'
 import chuyenGiaSlice from './chuyenGiaSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import chatSlice from '@components/Chat/chat.slice'
 
 const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
         trungTam: trungTamSlice.reducer,
         thongBao: thongBaoSlice.reducer,
         chuyenGia: chuyenGiaSlice.reducer,
+        chat: chatSlice.reducer
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

@@ -65,7 +65,7 @@ const ThongKePage = () => {
             </Animated.View>
 
             <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={{ alignItems: 'center' }}>
-                <Text style={styles.title}>Phân bổ doanh nghiệp theo lĩnh vực</Text>
+                <Text style={styles.title}>Phân bố doanh nghiệp theo lĩnh vực</Text>
                 <ThongKeTheoLinhVuc />
             </Animated.View>
         </ScrollView>

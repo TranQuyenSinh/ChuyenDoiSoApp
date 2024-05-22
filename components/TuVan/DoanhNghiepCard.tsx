@@ -106,7 +106,7 @@ const DoanhNghiepCard = ({ data }: DoanhNghiepCardProps) => {
                 <Button
                     btnStyles={[buttonStyles.button, { backgroundColor: Colors.orange }]}
                     text='Tư vấn'
-                    onPress={() => router.push(`/tuvan/${data.user?.id}`)}
+                    onPress={() => router.push(`/chat/${data.user?.id}`)}
                 />
             </View>
         </View>

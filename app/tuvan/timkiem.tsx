@@ -1,11 +1,10 @@
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import { FlatList, StyleSheet, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigation } from 'expo-router'
 import DoanhNghiepCard from '@components/TuVan/DoanhNghiepCard'
 import TopFilter, { TopFilterSortType } from '@components/TuVan/TopFilter'
 import { LinhVuc } from '@constants/CommonTypes/LinhVucType'
 import { DoanhNghiep, LoaiHinh } from '@constants/DoanhNghiep/DoanhNghiepTypes'
-import { timKiemDNTuVan } from '@services/hoiDapServices'
 import Loading from '@components/StatusPage/Loading'
 import { getDoanhNghieps } from '@services/doanhNghiepServices'
 

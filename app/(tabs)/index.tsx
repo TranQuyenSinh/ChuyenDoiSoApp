@@ -4,11 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Image, Pressable, StyleSheet, ScrollView, Linking } from 'react-native'
 
 import Colors from '@constants/Colors'
-import { RootState } from '@redux/store'
+import { RootState, useAppDispatch } from '@redux/store'
 import { textStyles } from '@constants/Styles'
 
-//@ts-ignore
-import nhucau from '@assets/icons/home/nhucau.png'
 //@ts-ignore
 import tintuc from '@assets/icons/home/tintuc.png'
 //@ts-ignore
@@ -58,15 +56,10 @@ export default function TrangTin() {
     useEffect(() => {
         ;(async () => {
             var linhVucId = doanhNghiep?.linhVuc?.id
-            if (linhVucId) {
-                const data = await getChuyenGias(linhVucId)
-                setChuyenGias(data)
-            } else {
-                const data = await getChuyenGias()
-                setChuyenGias(data)
-            }
+            const data = await getChuyenGias(linhVucId)
+            setChuyenGias(data?.filter(x => x.user?.id !== userProfile?.id))
         })()
-    }, [doanhNghiep?.linhVuc?.id])
+    }, [doanhNghiep?.linhVuc?.id, userProfile?.id])
 
     useEffect(() => {
         ;(async () => {
@@ -130,7 +123,7 @@ export default function TrangTin() {
                                 <HomeButtonIcon
                                     text='Chuyên gia đang tư vấn'
                                     imageSource={hoidap}
-                                    onPress={() => router.push('/tuvan/chuyengia')}
+                                    onPress={() => router.push('/chat')}
                                     backgroundColor={['#03bf5e', '#00b157']}
                                 />
                             </ScrollView>
@@ -152,7 +145,7 @@ export default function TrangTin() {
                                 <HomeButtonIcon
                                     text='Doanh nghiệp đang tư vấn'
                                     imageSource={hoidap}
-                                    onPress={() => router.push('/tuvan')}
+                                    onPress={() => router.push('/chat')}
                                     backgroundColor={['#03bf5e', '#00b157']}
                                 />
                             </ScrollView>
@@ -392,6 +385,7 @@ const ExploreCard = (props: ExploreCardProps) => {
 
 const ChuyenGiaCard = (props: ChuyenGiaCardProps) => {
     const { chuyenGia } = props
+    const dispatch = useAppDispatch()
     return (
         <View style={chuyenGiaStyles.container}>
             <Pressable onPress={() => router.push(`/chuyengia/${chuyenGia.id}`)} style={chuyenGiaStyles.top}>
@@ -421,8 +415,12 @@ const ChuyenGiaCard = (props: ChuyenGiaCardProps) => {
                 />
                 <Button
                     btnStyles={[chuyenGiaStyles.button, { backgroundColor: Colors.orange }]}
-                    text='Nhắn tin'
-                    onPress={() => router.push(`/tuvan/${chuyenGia.user.id}`)}
+                    text='Trao đổi'
+                    // onPress={() => router.push(`/tuvan/${chuyenGia.user.id}`)}
+                    onPress={() => {
+                        // dispatch(chatActions.setUser(chuyenGia.user))
+                        router.push(`/chat/${chuyenGia.user.id}`)
+                    }}
                 />
             </View>
         </View>

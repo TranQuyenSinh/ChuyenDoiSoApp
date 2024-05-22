@@ -11,12 +11,8 @@ import BackgroundImage from '@components/View/BackgroundImage'
 //@ts-ignore
 import background from '@assets/backgrounds/chuyengiadetail.jpg'
 import Button from '@components/View/Button'
-import { SceneMap } from 'react-native-tab-view'
-import CongTacTab from '@components/ChuyenGia/CongTacTab'
-import HocTapTab from '@components/ChuyenGia/HocTapTab'
-import KinhNghiemTab from '@components/ChuyenGia/KinhNghiemTab'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@redux/store'
+import { AppDispatch, RootState, useAppSelector } from '@redux/store'
 import { chuyenGiaActions } from '@redux/chuyenGiaSlice'
 import GioiThieuTab from '@components/ChuyenGia/GioiThieuTab'
 const ChuyenGiaDetail = () => {
@@ -25,6 +21,7 @@ const ChuyenGiaDetail = () => {
     const dispatch = useDispatch<AppDispatch>()
     const { chuyenGia } = useSelector((state: RootState) => state.chuyenGia)
     const [loading, setLoading] = useState(false)
+    const { userProfile } = useAppSelector(state => state.user)
 
     const fetchChuyenGia = async (id: number) => {
         setLoading(true)
@@ -67,20 +64,22 @@ const ChuyenGiaDetail = () => {
                             <Text style={styles.text}>Kinh nghiệm tư vấn: {chuyenGia.namKinhNghiem}</Text>
                             <Text style={styles.text}>Lĩnh vực tư vấn: {chuyenGia.linhVuc?.tenLinhVuc}</Text>
                         </View>
-                        <View style={{ justifyContent: 'space-between', flex: 1 }}>
-                            <View style={styles.buttonContainer}>
-                                <Button
-                                    btnStyles={[styles.button, { backgroundColor: Colors.success }]}
-                                    text='Gọi điện'
-                                    onPress={() => Linking.openURL(`tel:${chuyenGia.sdt}`)}
-                                />
-                                <Button
-                                    btnStyles={[styles.button, { backgroundColor: Colors.orange }]}
-                                    text='Nhắn tin'
-                                    onPress={() => router.push(`/tuvan/${chuyenGia.user.id}`)}
-                                />
+                        {chuyenGia?.user?.id !== userProfile?.id && (
+                            <View style={{ justifyContent: 'space-between', flex: 1 }}>
+                                <View style={styles.buttonContainer}>
+                                    <Button
+                                        btnStyles={[styles.button, { backgroundColor: Colors.success }]}
+                                        text='Gọi điện'
+                                        onPress={() => Linking.openURL(`tel:${chuyenGia.sdt}`)}
+                                    />
+                                    <Button
+                                        btnStyles={[styles.button, { backgroundColor: Colors.orange }]}
+                                        text='Nhắn tin'
+                                        onPress={() => router.push(`/chat/${chuyenGia.user.id}`)}
+                                    />
+                                </View>
                             </View>
-                        </View>
+                        )}
                     </View>
                 </View>
             </View>
