@@ -213,7 +213,7 @@ const DoanhNghiepDetail = () => {
                             contentContainerStyle={{ gap: ITEM_GAP }}
                             showsVerticalScrollIndicator={false}>
                             {data?.thanhTich.map(item => (
-                                <View style={{ alignItems: 'center', minWidth: 200 }} key={item.id}>
+                                <View style={{ alignItems: 'center', width: 200 }} key={item.id}>
                                     <ImageComponent
                                         width={'100%'}
                                         height={180}

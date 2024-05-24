@@ -1,15 +1,13 @@
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { screenWidth } from '@utils/window'
-import { router, useFocusEffect } from 'expo-router'
+import { router } from 'expo-router'
 import { DoanhNghiep } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { getDoanhNghiepWebsite } from '@services/doanhNghiepServices'
-//@ts-ignore
-import no_image from '@assets/images/no_image.png'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@redux/store'
 import { trungTamActions } from '@redux/trungTamSlice'
-import { appIcons, appImages } from '@constants/Images'
+import { appIcons } from '@constants/Images'
 const LienKetDoanhNghiep = () => {
     const [data, setData] = useState<DoanhNghiep[]>([])
     const dispatch = useDispatch<AppDispatch>()

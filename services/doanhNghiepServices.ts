@@ -144,7 +144,7 @@ export const createHoSoNangLuc = async (file: any) => {
         })
         return data
     } catch (error) {
-        console.log('===> Lỗi gửi hồ sơ năng lực: ', (error as AxiosError).message)
+        console.log('===> Lỗi gửi hồ sơ năng lực: ', (error as AxiosError).response)
         return undefined
     }
 }

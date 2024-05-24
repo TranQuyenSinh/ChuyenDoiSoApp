@@ -2,6 +2,7 @@ export const appImages = {
     notfound: require('../assets/images/defaultimage.jpg'),
     sanpham_bg: require('../assets/images/strawberry.jpg'),
     thongke_bg: require('../assets/images/statistic.jpg'),
+    thacmac_bg: require('../assets/images/thacmac.jpg'),
 }
 
 export const appIcons = {

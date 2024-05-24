@@ -10,12 +10,11 @@ import IconButton from '@components/View/IconButton'
 import { Ionicons } from '@expo/vector-icons'
 import PickImageModal from '@components/View/PickImageModal'
 import useToggle from '@hooks/useToggle'
-import { appIcons, appImages } from '@constants/Images'
+import { appIcons } from '@constants/Images'
 import { toast } from '@utils/toast'
 import { createThanhTich } from '@services/thanhTichServices'
 import { useAppDispatch } from '@redux/store'
 import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
-import { BottomSheetModalRef } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModalProvider/types'
 
 export type Ref = BottomSheetModal
 interface CreateThanhTichBottomSheetProps {

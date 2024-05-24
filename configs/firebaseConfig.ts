@@ -17,5 +17,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
 
-export const messageRef = collection(db, 'message_sinh')
+export const messageRef = collection(db, process.env.EXPO_PUBLIC_FIREBASE_MESSAGE_TABLE || "message_sinh")
 

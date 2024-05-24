@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 import Colors from '@constants/Colors'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
-interface ButtonProps {
+export interface ButtonProps {
     onPress: () => void
     text: string
     btnStyles?: ViewStyle | ViewStyle[]

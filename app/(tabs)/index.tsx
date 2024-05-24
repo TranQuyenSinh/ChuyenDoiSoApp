@@ -8,6 +8,9 @@ import { RootState, useAppDispatch } from '@redux/store'
 import { textStyles } from '@constants/Styles'
 
 //@ts-ignore
+import thacmac from '@assets/icons/home/thacmac.png'
+
+//@ts-ignore
 import tintuc from '@assets/icons/home/tintuc.png'
 //@ts-ignore
 import video from '@assets/icons/home/video.png'
@@ -114,17 +117,17 @@ export default function TrangTin() {
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 contentContainerStyle={{ gap: 25, paddingVertical: 12, flex: 1 }}>
-                                {/* <HomeButtonIcon
-                                    text='Nhu cầu phần mềm'
-                                    imageSource={nhucau}
-                                    onPress={() => router.push('/nhucau/phanmem')}
-                                    backgroundColor={['#2eb4fe', '#20a0f9']}
-                                /> */}
                                 <HomeButtonIcon
-                                    text='Chuyên gia đang tư vấn'
+                                    text='Gửi thắc mắc'
+                                    imageSource={thacmac}
+                                    onPress={() => router.push('/thacmac')}
+                                    backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                                <HomeButtonIcon
+                                    text='Tin nhắn'
                                     imageSource={hoidap}
                                     onPress={() => router.push('/chat')}
-                                    backgroundColor={['#03bf5e', '#00b157']}
+                                    backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
                             </ScrollView>
                         </View>

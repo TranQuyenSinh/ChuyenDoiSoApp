@@ -45,7 +45,7 @@ const ListSanPham = () => {
                         <Button
                             renderIcon={<Ionicons name='cart-sharp' size={16} color={'white'} />}
                             onPress={() => router.push(`/sanpham/${item.id}`)}
-                            text='Xem hàng'
+                            text='Xem chi tiết'
                             btnStyles={productStyle.button}
                         />
                     </AnimatedPressable>
