@@ -10,7 +10,7 @@ export enum FilterTypes {
 }
 
 const FilterData = [FilterTypes.ALL, FilterTypes.WAITING, FilterTypes.ANSWERED]
-interface FilterProps {
+export interface FilterProps {
     onChangeValue: (value: FilterTypes) => void
 }
 
@@ -18,7 +18,7 @@ const Filter = (props: FilterProps) => {
     const { onChangeValue } = props
     const [index, setIndex] = useState(FilterTypes.ALL)
     useEffect(() => {
-        onChangeValue(index)
+        onChangeValue?.(index)
     }, [index])
     return (
         <RowComponent styles={styles.container}>

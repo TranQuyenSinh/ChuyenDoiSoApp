@@ -27,6 +27,7 @@ import { useAppDispatch } from '@redux/store'
 import { doanhNghiepActions } from '@redux/doanhNghiepSlice'
 import { Skeleton } from 'moti/skeleton'
 import Animated, { FadeIn, FadeInDown, Layout } from 'react-native-reanimated'
+import useRole from '@hooks/useRole'
 
 const ITEM_GAP = 12
 
@@ -36,7 +37,7 @@ const DoanhNghiepDetail = () => {
     const [data, setData] = useState<DoanhNghiep | undefined>()
     const [products, setProducts] = useState<SanPham[]>([])
     const [loading, setLoading] = useState(false)
-    const { isInRole } = useDangNhap()
+    const { isInRole } = useRole()
     const dispatch = useAppDispatch()
     const nhuCauMoiNhat = useMemo(() => {
         if (data && data?.nhuCau && data?.nhuCau.length > 0) {

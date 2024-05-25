@@ -17,9 +17,11 @@ import ProfileTopButton from '@components/Profile/ProfileTopButton'
 import SettingItem, { SettingSeperator } from '@components/Profile/SettingItem'
 import { useDangNhap } from '@hooks/useDangNhap'
 import { ROLES } from '@constants/Constants'
+import useRole from '@hooks/useRole'
 const ProfileTab = () => {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
-    const { logOut, isInRole } = useDangNhap()
+    const { logOut } = useDangNhap()
+    const { isInRole } = useRole()
 
     return (
         <View style={styles.container}>

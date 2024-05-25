@@ -37,6 +37,9 @@ const ThongBaoPage = () => {
                         pathname: `/doanhnghiep/${item.loaiId}`,
                     })
                     break
+                case 'thacmac':
+                    router.push(`/thacmac/${item.loaiId}`)
+                    break
             }
         }
         if (!item.daXem) {

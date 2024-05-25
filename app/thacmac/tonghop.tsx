@@ -1,70 +1,61 @@
-import { Alert, FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { router, Stack } from 'expo-router'
-import { stackOptions } from '@configs/ScreenConfig'
-import Button from '@components/View/Button'
-import Colors from '@constants/Colors'
+import { FlatList, Pressable, StyleSheet, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { ThacMac } from '@constants/CommonTypes/ThacMacType'
-import { deleteThacMac, getThacMacOfUser } from '@services/thacMacServices'
-import moment from 'moment'
+import { getAllThacMac } from '@services/thacMacServices'
+import { stackOptions } from '@configs/ScreenConfig'
+import { router, Stack } from 'expo-router'
 import RowComponent from '@components/View/RowComponent'
-import { Text } from '@components/View/Text'
-import Filter, { FilterTypes } from '@components/ThacMac/Filter'
-import CreateThacMacSheet from '@components/ThacMac/CreateThacMacSheet'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useAppDispatch, useAppSelector } from '@redux/store'
 import { thacMacActions } from '@redux/thacMac.slice'
+import moment from 'moment'
+import { useAppDispatch, useAppSelector } from '@redux/store'
+import { Text } from '@components/View/Text'
+import Colors from '@constants/Colors'
+import ImageComponent from '@components/View/ImageComponent'
+import Filter, { FilterTypes } from '@components/ThacMac/Filter'
+import AdminFilter from '@components/ThacMac/AdminFilter'
 
-const ThacMacIndex = () => {
+const TongHopThacMac = () => {
     const dispatch = useAppDispatch()
     const [thacMacsFiltered, setThacMacsFiltered] = useState<ThacMac[]>([])
     const [filter, setFilter] = useState<FilterTypes>()
-    const createSheetRef = useRef<BottomSheetModal>(null)
+    const [filterDate, setFilterDate] = useState({
+        from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        to: new Date(),
+    })
     const { thacMacs } = useAppSelector(state => state.thacMac)
+
     const fetchData = async () => {
-        const data = await getThacMacOfUser()
+        const data = await getAllThacMac()
         dispatch(thacMacActions.setThacMacs(data))
     }
     useEffect(() => {
         fetchData()
     }, [])
     useLayoutEffect(() => {
+        let filteredData = thacMacs
         if (filter) {
-            const filteredData = thacMacs
+            filteredData = filteredData
                 .filter(item => {
                     if (filter === FilterTypes.ALL) return true
                     return filter === FilterTypes.WAITING ? !item.ngayTraLoi : item.ngayTraLoi
                 })
                 .sort((a, b) => b.id - a.id)
-            setThacMacsFiltered(filteredData)
         }
-    }, [filter, thacMacs])
-
-    const handleDelete = async (item: ThacMac) => {
-        Alert.alert('Xác nhận', 'Bạn có chắc chắn muốn xóa câu hỏi này?', [
-            {
-                text: 'Hủy',
-                style: 'cancel',
-            },
-            {
-                text: 'Xóa',
-                onPress: async () => {
-                    const result = await deleteThacMac(item.id)
-                    if (result) dispatch(thacMacActions.setThacMacs(thacMacs.filter(i => i.id !== item.id)))
-                },
-            },
-        ])
-    }
+        filteredData = filteredData.filter(
+            item => new Date(item.createdAt) >= filterDate.from && new Date(item.createdAt) <= filterDate.to
+        )
+        setThacMacsFiltered(filteredData)
+    }, [filter, thacMacs, filterDate])
 
     return (
         <View style={styles.container}>
             <Stack.Screen
                 options={{
-                    title: 'Thắc mắc',
+                    title: 'Tổng hợp thắc mắc',
                     ...stackOptions,
                 }}
             />
-            <Filter onChangeValue={setFilter} />
+            <AdminFilter onChangeValue={setFilter} onChangeDate={(from, to) => setFilterDate({ from, to })} />
             <FlatList
                 data={thacMacsFiltered}
                 contentContainerStyle={{ paddingBottom: 100 }}
@@ -78,11 +69,17 @@ const ThacMacIndex = () => {
                             dispatch(thacMacActions.setThacMac(item))
                             router.push(`/thacmac/${item.id}`)
                         }}
-                        onLongPress={() => handleDelete(item)}
+                        // onLongPress={() => handleDelete(item)}
                         style={[
                             itemStyles.container,
                             { backgroundColor: item.ngayTraLoi ? '#5cb85c31' : '#e3e3e330' },
                         ]}>
+                        <RowComponent gap={10} align='center'>
+                            <ImageComponent uri={item.user.image} size={40} radius={50} border />
+                            <Text numberOfLines={2} style={itemStyles.state}>
+                                {item.doanhNghiep?.tenTiengViet}
+                            </Text>
+                        </RowComponent>
                         <Text style={itemStyles.title}>
                             {item.noiDung.slice(0, 50)}
                             {item.noiDung?.length > 50 && '...'}
@@ -98,23 +95,6 @@ const ThacMacIndex = () => {
                     </Pressable>
                 )}
             />
-            <Button
-                textStyles={styles.buttonText}
-                btnStyles={styles.button}
-                text='Gửi thắc mắc'
-                onPress={() => createSheetRef.current?.present()}
-            />
-            <CreateThacMacSheet
-                ref={createSheetRef}
-                onFinished={newItem => {
-                    Alert.alert(
-                        'Cảm ơn bạn đã đặt câu hỏi!',
-                        `Câu hỏi của bạn đã được gửi thành công \nBạn sẽ nhận được thông báo khi có trả lời.`
-                    )
-                    dispatch(thacMacActions.setThacMacs([...thacMacs, newItem]))
-                    createSheetRef.current?.dismiss()
-                }}
-            />
         </View>
     )
 }
@@ -124,20 +104,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    button: {
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
-        left: 20,
-        height: 50,
-        elevation: 10,
-        borderRadius: 20,
-        backgroundColor: Colors.orange,
-    },
-    buttonText: {
-        fontFamily: 'mon-sb',
-        fontSize: 15,
-    },
 })
 
 const itemStyles = StyleSheet.create({
@@ -146,6 +112,7 @@ const itemStyles = StyleSheet.create({
         backgroundColor: 'white',
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: Colors.textGray,
+        gap: 6,
     },
     title: {
         fontSize: 16,
@@ -160,4 +127,4 @@ const itemStyles = StyleSheet.create({
     },
 })
 
-export default ThacMacIndex
+export default TongHopThacMac

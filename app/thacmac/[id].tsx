@@ -1,13 +1,39 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
+import { ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { router, Stack } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import { appImages } from '@constants/Images'
 import BackgroundImage from '@components/View/BackgroundImage'
-import { useAppSelector } from '@redux/store'
+import { useAppDispatch, useAppSelector } from '@redux/store'
+import { useAuth } from '@clerk/clerk-expo'
+import { useDangNhap } from '@hooks/useDangNhap'
+import { ROLES } from '@constants/Constants'
+import Button from '@components/View/Button'
+import { postTraLoi } from '@services/thacMacServices'
+import { thacMacActions } from '@redux/thacMac.slice'
+import useRole from '@hooks/useRole'
 
 const ChiTietThacMac = () => {
     const { thacMac } = useAppSelector(state => state.thacMac)
+    const { isInRole } = useRole()
+    const [noiDung, setNoiDung] = useState('')
+    const dispatch = useAppDispatch()
+    const { thacMacs } = useAppSelector(state => state.thacMac)
+
+    useEffect(() => {
+        setNoiDung(thacMac?.traLoi || '')
+    }, [thacMac])
+
+    const handleGuiTraLoi = async () => {
+        if (thacMac?.id && noiDung) {
+            const newItem = await postTraLoi(thacMac.id, noiDung)
+            if (newItem) {
+                dispatch(thacMacActions.setThacMacs([...thacMacs.filter(i => i.id !== thacMac.id), newItem]))
+                router.back()
+            }
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
@@ -26,10 +52,25 @@ const ChiTietThacMac = () => {
                 <Text style={styles.description}>{thacMac?.noiDung}</Text>
 
                 <Text style={styles.title}>Trả lời:</Text>
-                {thacMac?.ngayTraLoi ? (
-                    <Text style={styles.description}>{thacMac?.traLoi}</Text>
+                {isInRole(ROLES.ADMIN) ? (
+                    <View style={{ marginHorizontal: 10, gap: 10 }}>
+                        <TextInput
+                            multiline
+                            style={styles.input}
+                            placeholder='Nhập câu trả lời'
+                            value={noiDung}
+                            onChangeText={setNoiDung}
+                        />
+                        <Button text='Gửi trả lời' onPress={handleGuiTraLoi} />
+                    </View>
                 ) : (
-                    <Text style={styles.description}>Đang chờ trả lời</Text>
+                    <>
+                        {thacMac?.ngayTraLoi ? (
+                            <Text style={styles.description}>{thacMac?.traLoi}</Text>
+                        ) : (
+                            <Text style={styles.description}>Đang chờ trả lời</Text>
+                        )}
+                    </>
                 )}
             </ScrollView>
         </View>
@@ -39,7 +80,7 @@ const ChiTietThacMac = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#f3f3f3',
     },
     title: {
         fontSize: 18,
@@ -50,6 +91,12 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
         marginBottom: 16,
         lineHeight: 20,
+    },
+    input: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        backgroundColor: 'white',
     },
 })
 

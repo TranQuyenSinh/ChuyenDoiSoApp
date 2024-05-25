@@ -38,6 +38,7 @@ export const DateSelect = ({ value, label, error, onSelectedChange, otherProps }
 }
 
 interface DatePickerProps {
+    initialDate?: string
     isOpen: boolean
     toggle: () => void
     onSelectedChange: (e: any) => void

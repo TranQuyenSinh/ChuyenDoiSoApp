@@ -48,13 +48,14 @@ import { appIcons } from '@constants/Images'
 import PremiumLabel from '@components/View/PremiumLabel'
 import LienKetSanPham from '@components/Home/LienKetSanPham'
 import LinkComponent from '@components/View/LinkComponent'
+import useRole from '@hooks/useRole'
 
 export default function TrangTin() {
     const { isLoggedIn, userProfile } = useSelector((state: RootState) => state.user)
     const { doanhNghiep } = useSelector((state: RootState) => state.doanhNghiep)
     const { registerForPushNotificationsAsync } = usePushNotifications()
     const [chuyenGias, setChuyenGias] = useState<ChuyenGia[] | undefined>([])
-    const { isInRole } = useDangNhap()
+    const { isInRole } = useRole()
 
     useEffect(() => {
         ;(async () => {
@@ -112,7 +113,7 @@ export default function TrangTin() {
                 <View style={styles.body}>
                     {isInRole(ROLES.DOANH_NGHIEP) && (
                         <View style={styles.contentContainer}>
-                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ tư vấn</Text>
+                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ</Text>
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -175,6 +176,12 @@ export default function TrangTin() {
                                     imageSource={appIcons.thongKe}
                                     onPress={() => router.push('/thongke')}
                                     backgroundColor={['#03bf5e', '#00b157']}
+                                />
+                                <HomeButtonIcon
+                                    text='Tổng hợp thắc mắc'
+                                    imageSource={thacmac}
+                                    onPress={() => router.push('/thacmac/tonghop')}
+                                    backgroundColor={['#cf72f4', '#8437f1']}
                                 />
                             </ScrollView>
                         </View>

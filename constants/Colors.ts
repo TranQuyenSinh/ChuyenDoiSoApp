@@ -15,6 +15,7 @@ export default {
     secondaryButton: '#EEF1F4',
     buttonText: '#667080',
     blue: '#0000cd',
+    border: '#E5E5E5',
 
     background: {
         default: '#f5f8fd',
