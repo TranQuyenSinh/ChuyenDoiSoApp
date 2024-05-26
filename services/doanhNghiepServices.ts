@@ -1,4 +1,4 @@
-import { loginWithPassword } from './../redux/userSlice';
+import { loginWithPassword } from './../redux/userSlice'
 import { DoanhNghiep, LoaiHinh, NganhNghe } from '@constants/DoanhNghiep/DoanhNghiepTypes'
 import { authAxios, axios } from '@utils/axios'
 import { toast } from '@utils/toast'
@@ -8,7 +8,7 @@ import { Platform } from 'react-native'
 export const updateDoanhNghiep = async (data: any) => {
     try {
         const { data: returnData } = await authAxios.post<DoanhNghiep>('doanhnghiep/edit', {
-            ...data
+            ...data,
         })
         return returnData
     } catch (error) {
@@ -21,7 +21,7 @@ export const updateDoanhNghiep = async (data: any) => {
 export const updateDaiDien = async (data: any) => {
     try {
         const { data: returnData } = await authAxios.post<DoanhNghiep>('doanhnghiep/editDaiDien', {
-            ...data
+            ...data,
         })
         return returnData
     } catch (error) {
@@ -34,7 +34,7 @@ export const createUser = async ({
     email,
     phone,
     dnName,
-    password
+    password,
 }: {
     name: string
     email: string
@@ -48,7 +48,7 @@ export const createUser = async ({
             email,
             phone,
             tendoanhnghiep: dnName,
-            password
+            password,
         })
         if (data?.success) return true
         else {
@@ -61,7 +61,22 @@ export const createUser = async ({
     }
 }
 
-
+export const getDoanhNghiepPage = async (
+    skip: number,
+    limit = 50,
+    loaiHinhId?: number,
+    huyen?: number
+) => {
+    try {
+        const { data } = await axios.get<{ total: number, member: number, data: DoanhNghiep[] }>(`doanhnghiep/page`, {
+            params: { skip, limit, loaiHinhId, huyen, },
+        })
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy danh sách doanh nghiệp: ', (error as AxiosError).response)
+        return undefined
+    }
+}
 
 export const getDoanhNghieps = async () => {
     try {
@@ -91,7 +106,6 @@ export const getNganhNghe = async () => {
         console.log('===> Lỗi lấy ngành nghề: ', error)
         return []
     }
-
 }
 
 export const getLoaiHinhDN = async () => {
@@ -148,4 +162,3 @@ export const createHoSoNangLuc = async (file: any) => {
         return undefined
     }
 }
-

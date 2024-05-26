@@ -5,6 +5,7 @@ import { processColor } from 'react-native-reanimated'
 import { screenWidth } from '@utils/window'
 import { getThongKeDNTheoLoaiHinh } from '@services/thongKeServices'
 import Colors from '@constants/Colors'
+import { Skeleton } from 'moti/skeleton'
 
 const ThongKeDNTheoLoaiHinh = () => {
     const [data, setData] = useState<any>()
@@ -18,7 +19,8 @@ const ThongKeDNTheoLoaiHinh = () => {
         })()
     }, [])
 
-    if (!data || !data?.dataSets || !data?.labels) return <ActivityIndicator size={'large'} />
+    if (!data || !data?.dataSets || !data?.labels)
+        return <Skeleton width={screenWidth - 24} height={300} colorMode='light' />
 
     return (
         <View style={styles.container}>

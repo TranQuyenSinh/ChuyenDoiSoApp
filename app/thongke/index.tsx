@@ -1,27 +1,19 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import BackgroundImage from '@components/View/BackgroundImage'
 import PageHeader from '@components/View/PageHeader'
 import { appImages } from '@constants/Images'
 import { Stack } from 'expo-router'
 import Colors from '@constants/Colors'
-import RowComponent from '@components/View/RowComponent'
-import SoLuongDoanhNghiepTheoTinhChart from '@components/KhaoSat/ThongKe/SoLuongDoanhNghiepTheoTinhChart'
-import ThongKeDNTheoLoaiHinh from '@components/KhaoSat/ThongKe/ThongKeKhaoSatTheoNganh'
-import Animated, { FadeIn, FadeInDown, Layout } from 'react-native-reanimated'
-import ThongKeTheoLinhVuc from '@components/KhaoSat/ThongKe/ThongKeTheoLinhVuc'
-import { getThongKeTaiKhoanCount } from '@services/thongKeServices'
+import BieuDos from '@components/ThongKe/Tabs/BieuDos'
+import ChiTiet from '@components/ThongKe/Tabs/ChiTiet'
+import TopTabs, { FilterTypes } from '@components/ThongKe/TopTabs'
 
 const ThongKePage = () => {
-    const [countData, setCountData] = useState<any>()
-    useEffect(() => {
-        ;(async () => {
-            const data = await getThongKeTaiKhoanCount()
-            setCountData(data)
-        })()
-    }, [])
+    const [filter, setFilter] = useState(FilterTypes.BIEUDO)
+
     return (
-        <ScrollView contentContainerStyle={{ paddingBottom: 100 }} style={styles.container}>
+        <View style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
             <StatusBar backgroundColor='transparent' />
 
@@ -34,41 +26,12 @@ const ThongKePage = () => {
                 </View>
             </View>
 
-            {countData && (
-                <Animated.View layout={Layout} entering={FadeIn.duration(800)}>
-                    <Text style={styles.title}>Tài khoản</Text>
-                    <RowComponent styles={styles.countRow} justify='space-between'>
-                        <View style={styles.countItem}>
-                            <Text style={styles.countNumber}>{countData.doanhNghiep}</Text>
-                            <Text style={styles.countText}>Doanh nghiệp</Text>
-                        </View>
-                        <View style={styles.countItem}>
-                            <Text style={styles.countNumber}>{countData.hoiVien}</Text>
-                            <Text style={styles.countText}>Hội viên</Text>
-                        </View>
-                        <View style={styles.countItem}>
-                            <Text style={styles.countNumber}>{countData.chuyenGia}</Text>
-                            <Text style={styles.countText}>Chuyên gia</Text>
-                        </View>
-                    </RowComponent>
-                </Animated.View>
-            )}
+            {/* Filter */}
+            <TopTabs onChangeValue={setFilter} />
 
-            <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={{ alignItems: 'center' }}>
-                <Text style={styles.title}>Phân bố doanh nghiệp theo huyện</Text>
-                <SoLuongDoanhNghiepTheoTinhChart />
-            </Animated.View>
-
-            <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={{ alignItems: 'center' }}>
-                <Text style={styles.title}>Phân bố doanh nghiệp theo loại hình kinh doanh</Text>
-                <ThongKeDNTheoLoaiHinh />
-            </Animated.View>
-
-            <Animated.View layout={Layout} entering={FadeInDown.duration(800)} style={{ alignItems: 'center' }}>
-                <Text style={styles.title}>Phân bố doanh nghiệp theo lĩnh vực</Text>
-                <ThongKeTheoLinhVuc />
-            </Animated.View>
-        </ScrollView>
+            {filter === FilterTypes.BIEUDO && <BieuDos />}
+            {filter === FilterTypes.CHITIET && <ChiTiet />}
+        </View>
     )
 }
 

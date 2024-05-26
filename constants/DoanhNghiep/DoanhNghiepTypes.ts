@@ -28,7 +28,7 @@ export interface DoanhNghiep {
     thanhTich?: ThanhTich[]
     hoiVien?: boolean
     hoSoNangLuc?: string
-    namGiaNhap?: Date
+    namGiaNhap?: string
     nganhNghe?: NganhNghe
     gianHang?: string
 }

@@ -7,6 +7,7 @@ import { screenWidth } from '@utils/window'
 import { getThongKeTheoLinhVuc } from '@services/thongKeServices'
 import { PieChart, PieData } from 'react-native-charts-wrapper'
 import Colors from '@constants/Colors'
+import { Skeleton } from 'moti/skeleton'
 
 const ThongKeTheoLinhVuc = () => {
     const [data, setData] = useState<any[]>([])
@@ -47,7 +48,7 @@ const ThongKeTheoLinhVuc = () => {
         }
     }, [data])
 
-    if (data.length === 0) return <ActivityIndicator size={'large'} />
+    if (data.length === 0) return <Skeleton width={screenWidth - 24} height={300} colorMode='light' />
 
     return (
         <View style={styles.container}>

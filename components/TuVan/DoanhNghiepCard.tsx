@@ -79,7 +79,7 @@ const DoanhNghiepCard = ({ data }: DoanhNghiepCardProps) => {
                 </View>
             )}
 
-            {nhuCauMoiNhat && (
+            {/* {nhuCauMoiNhat && (
                 <View style={bottomStyles.container}>
                     <Text style={styles.title}>Nhu cầu hiện nay</Text>
                     <Text style={bottomStyles.title}>Phần mềm</Text>
@@ -95,7 +95,7 @@ const DoanhNghiepCard = ({ data }: DoanhNghiepCardProps) => {
                         </Text>
                     ))}
                 </View>
-            )}
+            )} */}
 
             <View style={buttonStyles.container}>
                 <Button

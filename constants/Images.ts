@@ -13,4 +13,5 @@ export const appIcons = {
     notification: require('../assets/icons/notification.png'),
     thongKe: require('../assets/icons/thongke.png'),
     appLogo: require('../assets/images/logo.jpg'),
+    premiumBorder: require('../assets/icons/premiumBorder.png'),
 }
