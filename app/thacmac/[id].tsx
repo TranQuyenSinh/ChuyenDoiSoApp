@@ -1,6 +1,6 @@
 import { ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { router, Stack } from 'expo-router'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
 import PageHeader from '@components/View/PageHeader'
 import { appImages } from '@constants/Images'
 import BackgroundImage from '@components/View/BackgroundImage'
@@ -14,6 +14,7 @@ import { thacMacActions } from '@redux/thacMac.slice'
 import useRole from '@hooks/useRole'
 
 const ChiTietThacMac = () => {
+    const { id } = useLocalSearchParams()
     const { thacMac } = useAppSelector(state => state.thacMac)
     const { isInRole } = useRole()
     const [noiDung, setNoiDung] = useState('')

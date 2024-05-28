@@ -63,7 +63,7 @@ export const createUser = async ({
 
 export const getDoanhNghiepPage = async (
     skip: number,
-    limit = 50,
+    limit = 20,
     loaiHinhId?: number,
     huyen?: number
 ) => {

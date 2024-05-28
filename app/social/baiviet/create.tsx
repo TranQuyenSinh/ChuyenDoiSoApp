@@ -1,23 +1,11 @@
-import {
-    FlatList,
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { FlatList, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useLayoutEffect, useState } from 'react'
 import { router, useNavigation } from 'expo-router'
 import Colors from '@constants/Colors'
 // @ts-ignore
 import background from '@assets/images/background_blur.jpg'
-import { DanhMucBaiViet } from '@constants/DienDan/DienDanTypes'
-import { createBaiViet, getDanhMucs } from '@services/dienDanServices'
+import { createBaiViet } from '@services/dienDanServices'
 import Loading from '@components/StatusPage/Loading'
-import CategoryTag from '@components/DienDan/CategoryTag'
 import { toast } from '@utils/toast'
 import useChonAnh from '@hooks/useChonAnh'
 import { Ionicons } from '@expo/vector-icons'
@@ -34,7 +22,7 @@ const CreatePost = () => {
     const [noiDung, setNoiDung] = useState('')
     const { isLoggedIn } = useSelector((state: RootState) => state.user)
 
-    const handleSelectImage = async (image: any) => {
+    const handleSelectImage = async () => {
         const data = await pickImageAsync('galery', false)
         if (data) {
             setSelectedImages([...selectedImages, data])
@@ -42,6 +30,7 @@ const CreatePost = () => {
     }
 
     const handleSubmit = async () => {
+        setLoading(true)
         const result = await createBaiViet(noiDung, selectedImages)
         if (result) {
             toast('Gửi nhu cầu thành công và đang chờ duyệt')
@@ -49,6 +38,7 @@ const CreatePost = () => {
         } else {
             toast('Gửi nhu cầu thất bại')
         }
+        setLoading(false)
     }
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -57,9 +47,9 @@ const CreatePost = () => {
         })
     }, [navigation])
 
-    if (loading) return <Loading />
     return (
         <View style={styles.container}>
+            {loading && <Loading />}
             <Image source={background} style={[styles.background, StyleSheet.absoluteFill]} />
             {!isLoggedIn && <RequireLogin />}
             {isLoggedIn && (

@@ -19,7 +19,11 @@ const DoanhNghiepItem = (props: DoanhNghiepItemProps) => {
         <Pressable android_ripple={{ color: 'gray' }} onPress={() => router.push(`/doanhnghiep/${doanhNghiep.id}`)}>
             <RowComponent gap={12} styles={styles.container}>
                 <View style={styles.imageContainer}>
-                    <ImageComponent uri={doanhNghiep.user?.image} style={styles.image} />
+                    <ImageComponent
+                        uri={doanhNghiep.user?.image}
+                        defaultSource={appIcons.appLogo}
+                        style={styles.image}
+                    />
                     {doanhNghiep.hoiVien && (
                         <ImageComponent source={appIcons.premiumBorder} style={styles.imageBorder} />
                     )}

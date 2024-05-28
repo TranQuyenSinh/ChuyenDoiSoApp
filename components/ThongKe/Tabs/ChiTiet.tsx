@@ -27,7 +27,7 @@ const ChiTiet = () => {
 
     const fetchData = async () => {
         const { loaiHinhId, huyen } = filter
-        const data = await getDoanhNghiepPage(doanhNghieps.length, 50, loaiHinhId, huyen)
+        const data = await getDoanhNghiepPage(doanhNghieps.length, 20, loaiHinhId, huyen)
         if (!data || data.data.length === 0) {
             setIsEnd(true)
             return
@@ -39,7 +39,7 @@ const ChiTiet = () => {
     const fetchMoreData = async () => {
         if (isEnd) return
         const { loaiHinhId, huyen } = filter
-        const data = await getDoanhNghiepPage(doanhNghieps.length, 50, loaiHinhId, huyen)
+        const data = await getDoanhNghiepPage(doanhNghieps.length, 20, loaiHinhId, huyen)
         setCount({ count: data?.total || 0, member: data?.member || 0 })
         if (!data || data.data.length === 0) {
             setIsEnd(true)
@@ -62,6 +62,8 @@ const ChiTiet = () => {
         let filteredData = doanhNghieps
         setFilteredDoanhNghieps(filteredData)
     }, [doanhNghieps])
+
+    console.log('===> count: ', doanhNghieps.length)
 
     return (
         <View style={styles.container}>

@@ -1,12 +1,10 @@
 import React, { useMemo, useState, useEffect } from 'react'
 
-import { ActivityIndicator, processColor, StyleSheet, View } from 'react-native'
+import { processColor, StyleSheet, View } from 'react-native'
 
-import { axios } from '@utils/axios'
 import { screenWidth } from '@utils/window'
 import { getThongKeTheoLinhVuc } from '@services/thongKeServices'
 import { PieChart, PieData } from 'react-native-charts-wrapper'
-import Colors from '@constants/Colors'
 import { Skeleton } from 'moti/skeleton'
 
 const ThongKeTheoLinhVuc = () => {

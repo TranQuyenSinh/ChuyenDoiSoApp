@@ -63,7 +63,6 @@ const CreateProduct = () => {
         }
         setLoading(true)
         const products = await createSanPham(name, price, description, images)
-        console.log('🚀 ~ products: ', products)
         if (products) {
             toast('Đăng sản phẩm thành công')
             dispatch(doanhNghiepActions.setSanPhams(products))

@@ -6,11 +6,15 @@ import { createThongBao } from '@services/thongBaoServices'
 import { toast } from '@utils/toast'
 import Button from '@components/View/Button'
 import RowComponent from '@components/View/RowComponent'
+import Loading from '@components/StatusPage/Loading'
 
 const TaoThongBao = () => {
     const [tieuDe, setTieuDe] = useState('')
     const [noiDung, setNoiDung] = useState('')
+    const [loading, setLoading] = useState(false)
+
     const handleCreate = async (type: 'all' | 'hoivien') => {
+        setLoading(true)
         const result = await createThongBao(tieuDe, noiDung, type)
         if (result) {
             toast('Tạo thông báo thành công')
@@ -18,6 +22,7 @@ const TaoThongBao = () => {
         } else {
             toast('Có lỗi xảy ra')
         }
+        setLoading(false)
     }
     return (
         <View style={styles.container}>
@@ -28,6 +33,7 @@ const TaoThongBao = () => {
                     ...stackOptions,
                 }}
             />
+            {loading && <Loading />}
             <TextInput placeholder='Tiêu đề' value={tieuDe} onChangeText={t => setTieuDe(t)} style={styles.input} />
             <TextInput
                 placeholder='Nội dung thông báo'

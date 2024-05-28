@@ -87,22 +87,28 @@ const ConversationList = () => {
             </View>
             <ScrollView>
                 {filteredItem?.map((item: Conversation) => (
-                    <Pressable
-                        onPress={() => router.push(`/chat/${item.user?.id}`)}
-                        style={styles.itemContainer}
-                        key={item.id}>
-                        <IconButton onPress={() => handleDeleteConversation(item.id)} style={styles.closeBtn}>
-                            <Ionicons name='close' size={20} color={Colors.textGray} />
-                        </IconButton>
-                        <ImageComponent uri={item?.user?.image} style={styles.itemImg} />
-                        <View style={{ gap: 4, flexShrink: 1 }}>
-                            <Text style={styles.itemName}>{item.user?.name}</Text>
-                            {/* <Text style={styles.itemDate}>Đại diện: {item.doanhNghiep?.daiDien?.tenDaiDien}</Text>
+                    <View key={item.id}>
+                        <Pressable onPress={() => router.push(`/chat/${item.user?.id}`)} style={styles.itemContainer}>
+                            <IconButton onPress={() => handleDeleteConversation(item.id)} style={styles.closeBtn}>
+                                <Ionicons name='close' size={20} color={Colors.textGray} />
+                            </IconButton>
+                            <ImageComponent uri={item?.user?.image} style={styles.itemImg} />
+                            <View style={{ gap: 4, flexShrink: 1 }}>
+                                <Text style={styles.itemName}>{item.user?.name}</Text>
+                                {/* <Text style={styles.itemDate}>Đại diện: {item.doanhNghiep?.daiDien?.tenDaiDien}</Text>
                                 <Text style={styles.itemDate}>
                                     Loại hình KD: {item.doanhNghiep?.loaiHinh?.tenLoaiHinh}
                                 </Text> */}
-                        </View>
-                    </Pressable>
+                            </View>
+                        </Pressable>
+                        <View
+                            style={{
+                                borderBottomColor: '#f5f8fd',
+                                borderBottomWidth: 2,
+                                marginHorizontal: 16,
+                            }}
+                        />
+                    </View>
                 ))}
             </ScrollView>
         </View>
@@ -123,8 +129,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 12,
         alignItems: 'center',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: Colors.blueGray,
     },
     itemImg: {
         width: 50,

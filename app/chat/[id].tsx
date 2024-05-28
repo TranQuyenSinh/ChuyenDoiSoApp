@@ -20,7 +20,6 @@ const ChatDetail = () => {
     const { conversation } = useAppSelector(state => state.chat)
 
     useLayoutEffect(() => {
-        setMessages([])
         ;(async () => {
             const conversationData = await getConversationId(+id)
             dispatch(chatActions.setConversation(conversationData))

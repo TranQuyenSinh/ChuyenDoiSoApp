@@ -32,6 +32,17 @@ export const getThacMacOfUser = async () => {
         return []
     }
 }
+export const getThacMac = async (id: number) => {
+    try {
+        const { data } = await authAxios.get(`/thacmac/${id}`)
+        return data
+    } catch (error) {
+        console.log('===> Lỗi lấy thắc mắc id: ', (error as AxiosError).response)
+        return []
+    }
+}
+
+
 
 export const createThacMac = async (noiDung: string) => {
     try {

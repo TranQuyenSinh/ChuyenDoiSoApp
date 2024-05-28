@@ -13,6 +13,7 @@ import Colors from '@constants/Colors'
 import ImageComponent from '@components/View/ImageComponent'
 import Filter, { FilterTypes } from '@components/ThacMac/Filter'
 import AdminFilter from '@components/ThacMac/AdminFilter'
+import { appIcons } from '@constants/Images'
 
 const TongHopThacMac = () => {
     const dispatch = useAppDispatch()
@@ -75,7 +76,13 @@ const TongHopThacMac = () => {
                             { backgroundColor: item.ngayTraLoi ? '#5cb85c31' : '#e3e3e330' },
                         ]}>
                         <RowComponent gap={10} align='center'>
-                            <ImageComponent uri={item.user.image} size={40} radius={50} border />
+                            <ImageComponent
+                                uri={item.user.image}
+                                defaultSource={appIcons.appLogo}
+                                size={40}
+                                radius={50}
+                                border
+                            />
                             <Text numberOfLines={2} style={itemStyles.state}>
                                 {item.doanhNghiep?.tenTiengViet}
                             </Text>

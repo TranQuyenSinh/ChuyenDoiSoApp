@@ -116,7 +116,7 @@ const Page = () => {
                         <TouchableOpacity onPress={() => loginWithPassword('antesco@antesco.com', '12345678')} style={[defaultStyles.btn, { flex: 1 }]}>
                             <Text style={[defaultStyles.btnText, { fontSize: 14 }]}>Doanh nghiệp</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => loginWithPassword('chuyengia@gmail.com', '1')} style={[defaultStyles.btn, { flex: 1 }]}>
+                        <TouchableOpacity onPress={() => loginWithPassword('chuyengia@gmail.com', '12345678')} style={[defaultStyles.btn, { flex: 1 }]}>
                             <Text style={[defaultStyles.btnText, { fontSize: 14 }]}>Chuyên gia</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => loginWithPassword('admin@gmail.com', '12345678')} style={[defaultStyles.btn, { flex: 1 }]}>

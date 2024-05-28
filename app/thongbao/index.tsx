@@ -13,6 +13,8 @@ import { AppDispatch, RootState } from '@redux/store'
 import { deleteThongBao, fetchThongBao, readThongBao } from '@redux/thongBaoSlice'
 import RequireLogin from '@components/StatusPage/RequireLogin'
 import { stackOptions } from '@configs/ScreenConfig'
+import { getThacMac } from '@services/thacMacServices'
+import { thacMacActions } from '@redux/thacMac.slice'
 const ThongBaoPage = () => {
     const dispatch = useDispatch<AppDispatch>()
     const { thongBaos } = useSelector((state: RootState) => state.thongBao)
@@ -38,6 +40,10 @@ const ThongBaoPage = () => {
                     })
                     break
                 case 'thacmac':
+                    if (item && item.loaiId) {
+                        const thacMac = await getThacMac(+item.loaiId)
+                        dispatch(thacMacActions.setThacMac(thacMac))
+                    }
                     router.push(`/thacmac/${item.loaiId}`)
                     break
             }

@@ -13,6 +13,8 @@ import thacmac from '@assets/icons/home/thacmac.png'
 //@ts-ignore
 import tintuc from '@assets/icons/home/tintuc.png'
 //@ts-ignore
+import expert from '@assets/icons/home/expert.png'
+//@ts-ignore
 import video from '@assets/icons/home/video.png'
 //@ts-ignore
 import document from '@assets/icons/home/document.png'
@@ -113,7 +115,6 @@ export default function TrangTin() {
                 <View style={styles.body}>
                     {isInRole(ROLES.DOANH_NGHIEP) && (
                         <View style={styles.contentContainer}>
-                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dịch vụ</Text>
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -130,12 +131,17 @@ export default function TrangTin() {
                                     onPress={() => router.push('/chat')}
                                     backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
+                                <HomeButtonIcon
+                                    text='Chuyên gia'
+                                    imageSource={expert}
+                                    onPress={() => router.push('/chuyengia')}
+                                    backgroundColor={['#ef3275', '#3066ed']}
+                                />
                             </ScrollView>
                         </View>
                     )}
                     {isInRole(ROLES.CHUYEN_GIA) && (
                         <View style={styles.contentContainer}>
-                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>Dành cho chuyên gia</Text>
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -144,13 +150,13 @@ export default function TrangTin() {
                                     text='Tìm kiếm doanh nghiệp'
                                     imageSource={timkiem}
                                     onPress={() => router.push('/tuvan/timkiem')}
-                                    backgroundColor={['#2eb4fe', '#20a0f9']}
+                                    backgroundColor={['#03bf5e', '#00b157']}
                                 />
                                 <HomeButtonIcon
-                                    text='Doanh nghiệp đang tư vấn'
+                                    text='Tin nhắn'
                                     imageSource={hoidap}
                                     onPress={() => router.push('/chat')}
-                                    backgroundColor={['#03bf5e', '#00b157']}
+                                    backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
                             </ScrollView>
                         </View>
@@ -158,9 +164,9 @@ export default function TrangTin() {
 
                     {isInRole(ROLES.ADMIN) && (
                         <View style={styles.contentContainer}>
-                            <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>
+                            {/* <Text style={[textStyles.title, styles.title, { marginTop: 0 }]}>
                                 Dành cho Quản trị viên
-                            </Text>
+                            </Text> */}
                             <ScrollView
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
@@ -172,7 +178,7 @@ export default function TrangTin() {
                                     backgroundColor={['#2eb4fe', '#20a0f9']}
                                 />
                                 <HomeButtonIcon
-                                    text='Thống kê doanh nghiệp'
+                                    text='Thống kê'
                                     imageSource={appIcons.thongKe}
                                     onPress={() => router.push('/thongke')}
                                     backgroundColor={['#03bf5e', '#00b157']}
